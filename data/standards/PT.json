@@ -1,0 +1,1 @@
+{"info": {"name": "Performance Timeline", "subsection_number": null, "subsection_name": null, "url": "https://www.w3.org/TR/performance-timeline"}, "features": ["Performance.prototype.getEntriesByName", "Performance.prototype.getEntriesByType"]}

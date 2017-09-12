@@ -1,0 +1,1 @@
+{"info": {"name": "User Timing Level 2", "subsection_number": null, "subsection_name": null, "url": "https://w3c.github.io/user-timing/"}, "features": ["Performance.prototype.clearMarks", "Performance.prototype.clearMeasures", "Performance.prototype.mark", "Performance.prototype.measure"]}

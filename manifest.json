@@ -1,0 +1,29 @@
+{
+  "manifest_version": 2,
+  "name": "WebAPI Manager",
+  "version": "0.1",
+  "description": "Improves browser security by restricting page access to parts of the Web API.",
+  "permissions": [
+    "*://*/*",
+    "webNavigation",
+    "storage"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["*://*/*"],
+      "js": [
+        "content_scripts/init.js",
+        "content_scripts/standards.js",
+        "content_scripts/defaults.js",
+        "content_scripts/stub.js"
+      ],
+      "all_frames": true,
+      "run_at": "document_start"
+    }
+  ],
+  "background": {
+    "scripts": [
+      "background_scripts/bootstrap.js"
+    ]
+  } 
+}

@@ -1,0 +1,1 @@
+{"info": {"name": "Web Notifications", "subsection_number": null, "subsection_name": null, "url": "https://notifications.spec.whatwg.org/"}, "features": ["DesktopNotification.prototype.show", "DesktopNotificationCenter.prototype.createNotification", "Notification.get", "Notification.prototype.close", "Notification.requestPermission"]}

@@ -1,0 +1,1 @@
+{"info": {"name": "HTML", "subsection_number": "9.5", "subsection_name": "Channel Messaging", "url": "https://html.spec.whatwg.org/multipage/comms.html#channel-messaging"}, "features": ["MessagePort.prototype.close", "MessagePort.prototype.postMessage", "MessagePort.prototype.start", "window.postMessage"]}

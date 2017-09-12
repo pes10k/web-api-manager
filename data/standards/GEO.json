@@ -1,0 +1,1 @@
+{"info": {"name": "Geolocation API Specification", "subsection_number": null, "subsection_name": null, "url": "https://www.w3.org/TR/geolocation-API/"}, "features": ["navigator.geolocation", "navigator.geolocation.getCurrentPosition", "navigator.geolocation.watchPosition", "navigator.geolocation.clearWatch"]}

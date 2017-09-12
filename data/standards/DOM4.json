@@ -1,0 +1,1 @@
+{"info": {"name": "W3C DOM4", "subsection_number": null, "subsection_name": null, "url": "https://www.w3.org/TR/dom/"}, "features": ["MutationObserver.prototype.disconnect", "MutationObserver.prototype.observe", "MutationObserver.prototype.takeRecords"]}

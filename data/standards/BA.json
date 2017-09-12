@@ -1,0 +1,1 @@
+{"info": {"name": "Battery Status API", "subsection_number": null, "subsection_name": null, "url": "https://www.w3.org/TR/battery-status/"}, "features": ["navigator.battery", "Navigator.prototype.getBattery"]}

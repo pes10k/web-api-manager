@@ -1,0 +1,1 @@
+{"info": {"name": "DeviceOrientation Event Specification", "subsection_number": null, "subsection_name": null, "url": "https://www.w3.org/TR/orientation-event/"}, "features": ["DeviceMotionEvent.prototype.initDeviceMotionEvent", "DeviceOrientationEvent.prototype.initDeviceOrientationEvent"]}

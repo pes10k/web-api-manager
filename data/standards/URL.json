@@ -1,0 +1,1 @@
+{"info": {"name": "URL", "subsection_number": null, "subsection_name": null, "url": "https://url.spec.whatwg.org/"}, "features": ["URLSearchParams.prototype.append", "URLSearchParams.prototype.delete", "URLSearchParams.prototype.get", "URLSearchParams.prototype.getAll", "URLSearchParams.prototype.has", "URLSearchParams.prototype.set"]}

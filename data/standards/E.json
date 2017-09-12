@@ -1,0 +1,1 @@
+{"info": {"name": "Encoding", "subsection_number": null, "subsection_name": null, "url": "https://encoding.spec.whatwg.org/"}, "features": ["TextDecoder.prototype.decode", "TextEncoder.prototype.encode"]}

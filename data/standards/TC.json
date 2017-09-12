@@ -1,0 +1,1 @@
+{"info": {"name": "Timing control for script-based animations", "subsection_number": null, "subsection_name": null, "url": "https://www.w3.org/TR/animation-timing"}, "features": ["window.cancelAnimationFrame"]}

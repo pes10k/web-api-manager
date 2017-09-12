@@ -1,0 +1,1 @@
+{"info": {"name": "HTML", "subsection_number": "10", "subsection_name": "Web Workers", "url": "https://html.spec.whatwg.org/multipage/workers.html"}, "features": ["Worker.prototype.postMessage", "Worker.prototype.terminate"]}
