@@ -3,6 +3,8 @@
  * overwritten, either by the extension user, or by a subscribed policy
  * list.
  */
-window.WEB_API_MANAGER.defaults = [
-    "MediaStream Recording",
-];
+window.WEB_API_MANAGER.defaults = {
+    "conservative": [
+        "MediaStream Recording"
+    ]
+};

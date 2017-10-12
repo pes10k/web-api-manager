@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-eval'; object-src 'self'">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Web API Manager Configuration</title>
+        <link href="css/config.css" rel="stylesheet">
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/bootstrap-theme.min.css" rel="stylesheet">
+    </head>
+    <body>
+        <header>
+        </header>
+        <section class="container-fluid">
+            <div class="row">
+                <div class="col-xs-4 col-md-4 well">
+                    <domain-rules :domain-names="domainNames" :selected-domain="selectedDomain"></domain-rules>
+                </div>
+
+                <div class="col-xs-8 col-md-8">
+                    <web-api-standards :standards="standards" :selected-standards="selectedStandards"></web-api-standards>
+                </div>
+            </div>
+        </section>
+        <script src="../content_scripts/init.js"></script>
+        <script src="../content_scripts/defaults.js"></script>
+        <script src="../content_scripts/standards.js"></script>
+        <script src="js/storage.js"></script>
+        <script src="js/lib/vue.js"></script>
+        <script src="js/state.js"></script>
+        <script src="js/components/domain-rules.vue.js"></script>
+        <script src="js/components/web-api-standards.vue.js"></script>
+        <script src="js/config.js"></script>
+    </body>
+</html>
