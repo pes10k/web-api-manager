@@ -1,8 +1,9 @@
 /*jslint es6: true*/
-/*global window, browser, Vue*/
+/*global window, browser, chrome, Vue*/
 (function () {
     "use strict";
 
+    const rootObject = (window.browser || window.chrome);
     const doc = window.document;
     const standards = window.WEB_API_MANAGER.standards;
     const defaultConservativeRules = window.WEB_API_MANAGER.defaults.conservative;
@@ -30,7 +31,9 @@
         });
 
         const updateStoredSettings = function () {
-            storageLib.set(state.domainRules, function () {});
+            storageLib.set(state.domainRules, function () {
+                rootObject.runtime.sendMessage(["rulesUpdate", state.domainRules]);
+            });
         };
 
         vm.$watch("selectedStandards", updateStoredSettings);
