@@ -2,9 +2,8 @@
 /*global chrome*/
 (function () {
     "use strict";
-    let onMsgHandler;
 
-    onMsgHandler = function (request, ignore, sendResponse) {
+    const onMsgHandler = function (request, ignore, sendResponse) {
 
         let requestingDoman = request.domain;
 
@@ -18,8 +17,6 @@
         });
         return false;
     };
-
-    chrome.runtime.peteStuff = "P";
 
     chrome.runtime.onMessage.addListener(onMsgHandler);
 }());

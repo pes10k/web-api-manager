@@ -11,10 +11,10 @@
     {
       "matches": ["*://*/*"],
       "js": [
-        "content_scripts/init.js",
-        "content_scripts/standards.js",
-        "content_scripts/defaults.js",
-        "content_scripts/stub.js"
+        "content_scripts/dist/init.js",
+        "content_scripts/dist/standards.js",
+        "content_scripts/dist/defaults.js",
+        "content_scripts/dist/instrument.js"
       ],
       "all_frames": true,
       "run_at": "document_start"

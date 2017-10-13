@@ -1,5 +1,8 @@
 /*jslint es6: true, browser: true*/
 /*global window*/
+// The contents of this file are programatically injected into all frames.
+// It is compiled into the src/instrument.js file to create the
+// dist/instrument.js script/
 (function () {
     "use strict";
 
