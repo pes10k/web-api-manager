@@ -9,7 +9,7 @@
         <link href="../config/css/bootstrap-theme.min.css" rel="stylesheet">
         <link href="css/popup.css" rel="stylesheet">
     </head>
-    <body>
+    <body class="not-loaded">
         <header class="container">
             <div class="row">
                 <div class="col-xs-12">
@@ -21,8 +21,15 @@
             <div class="row">
                 <div class="col-xs-12">
                     <p>The following origins are execiting code on this page.</p>
-                    <ul class="list-group">
-                    </ul>
+
+                    <div class="loading-section">
+                        <p>Querying domain information…</p>
+                    </div>
+
+                    <div class="loaded-section">
+                        <ul class="list-group">
+                        </ul>
+                    </div>
 
                     <button type="button" id="config-page-link" class="btn btn-default btn-block">
                         Configure blocking rules

@@ -31,13 +31,11 @@
             },
             function (allHosts) {
 
-                if (rootObject.runtime.lastError) {
-                    rootObject.browserAction.disable(tabId);
+                if (rootObject.runtime.lastError && !allHosts) {
+                    rootObject.browserAction.disable();
                     rootObject.browserAction.setBadgeText({text: "-"});
                     return;
                 }
-
-                rootObject.browserAction.enable(tabId);
 
                 const numFrames = allHosts
                     ? Array.from(new Set(allHosts)).length.toString()
@@ -47,6 +45,8 @@
                     text: numFrames,
                     tabId: tabId
                 });
+                rootObject.browserAction.enable();
+                
             }
         );
     };
@@ -54,7 +54,6 @@
     rootObject.windows.onFocusChanged.addListener(updateBrowserActionBadge);
     rootObject.tabs.onUpdated.addListener(updateBrowserActionBadge);
     rootObject.tabs.onActivated.addListener(updateBrowserActionBadge);
-    rootObject.windows.onFocusChanged.addListener(updateBrowserActionBadge);
 
     window.setInterval(function () {
         rootObject.tabs.getCurrent(function (currentTab) {

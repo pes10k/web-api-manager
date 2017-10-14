@@ -46,6 +46,7 @@
                 this.domainRules[newDomainRule] = [];
                 this.domainNames = Object.keys(this.domainRules);
                 this.selectedDomain = newDomainRule;
+                this.selectedStandards = this.domainRules[newDomainRule];
             }
         };
 
