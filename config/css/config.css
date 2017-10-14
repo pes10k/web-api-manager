@@ -1,3 +1,7 @@
 body {
-    width: 800px;
+    min-width: 800px;
+}
+
+.list-group-item .badge a {
+    color: white;
 }

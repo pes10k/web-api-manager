@@ -1,5 +1,14 @@
+/*jslint es6: true*/
+/*global window*/
 (function () {
     const rootObject = window.browser || window.chrome;
+    const configureButton = window.document.getElementById("config-page-link");
+
+    configureButton.addEventListener("click", function (event) {
+        rootObject.runtime.openOptionsPage();
+        event.preventDefault();
+        event.stopImmediatePropagation();
+    }, false);
 
     rootObject.tabs.executeScript(
         {
@@ -20,9 +29,13 @@
                     
                     const liElm = document.createElement("li");
                     liElm.className = "list-group-item";
+                    if (domainRule !== "(default)") {
+                        liElm.className += " list-group-item-success";
+                    }
 
                     const spanElm = document.createElement("span");
                     spanElm.className = "badge";
+
                     const badgeText = document.createTextNode(domainRule);
                     spanElm.appendChild(badgeText);
                     liElm.appendChild(spanElm);

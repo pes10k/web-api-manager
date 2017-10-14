@@ -10,16 +10,26 @@
         <link href="css/bootstrap-theme.min.css" rel="stylesheet">
     </head>
     <body>
-        <header>
-        </header>
         <section class="container">
+            <div class="row">
+                <div class="col-xs-12 col-md-12">
+                    <p>
+                        Enter regular expressions on the right, to create a new
+                        blocking rule.  On the right, select which functionality
+                        should be blocked for hosts matching each regular expression.
+                    </p>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-xs-4 col-md-4 well">
                     <domain-rules :domain-names="domainNames" :selected-domain="selectedDomain"></domain-rules>
                 </div>
 
-                <div class="col-xs-7 col-md-7 col-md-offset-1 col-xs-offset-1">
-                    <web-api-standards :standards="standards" :selected-standards="selectedStandards"></web-api-standards>
+                <div class="col-xs-8 col-md-8">
+                    <web-api-standards :standards="standards"
+                                       :selected-standards="selectedStandards"
+                                       :selected-domain="selectedDomain">
+                    </web-api-standards>
                 </div>
             </div>
         </section>

@@ -7,14 +7,30 @@
         <title>Frame listing popup</title>
         <link href="../config/css/bootstrap.min.css" rel="stylesheet">
         <link href="../config/css/bootstrap-theme.min.css" rel="stylesheet">
+        <link href="css/popup.css" rel="stylesheet">
     </head>
     <body>
-        <section>
-            This page has loaded the followng frames…
-            <ul class="list-group">
-            </ul>
+        <header class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h2>Blocking Rules</h2>
+                </div>
+            </div>
+        </header>
+        <section class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <p>The following origins are execiting code on this page.</p>
+                    <ul class="list-group">
+                    </ul>
+
+                    <button type="button" id="config-page-link" class="btn btn-default btn-block">
+                        Configure blocking rules
+                    </button>
+                </div>
+            </div>
         </section>
-        <script src="js/example.js"></script>
+        <script src="js/popup.js"></script>
     </body>
 </html>
 

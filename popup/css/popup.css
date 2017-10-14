@@ -1,0 +1,7 @@
+body, html {
+    min-width: 320px;
+}
+
+section .row {
+    margin-bottom: 1em;
+}

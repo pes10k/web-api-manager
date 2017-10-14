@@ -5,11 +5,17 @@
     const standardsDefaults = window.WEB_API_MANAGER.defaults;
 
     Vue.component("web-api-standards", {
-        props: ["standards", "selectedStandards"],
+        props: ["standards", "selectedStandards", "selectedDomain"],
         template: `
             <div class="web-api-standards-container">
-                <div class="form-horizontal">
-                    <div class="form-group">
+                <h3>Pattern: <code>{{ selectedDomain }}</code></h3>
+
+                <div class="panel panel-default form-horizontal">
+                    <div class="panel-heading">
+                        Default configurations
+                    </div>
+
+                    <div class="panel-body">
                         <button @click="onConservativeClicked">
                             Use Conservative Settings
                         </button>
@@ -18,15 +24,23 @@
                         </button>
                     </div>
                 </div>
-                <div class="checkbox" v-for="standard in standards">
-                    <label>
-                        <input type="checkbox"
-                             :value="standard.info.idenitifer"
-                            v-model="selectedStandards"
-                            @change="onStandardChecked">
-                        {{ standard.info.idenitifer }}
-                        <a href="{{ standard.info.url }}" v-if="standard.info.url">[info]</a>
-                    </label>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">Blocked standards</div>
+
+                    <ul class="list-group">
+                        <li class="list-group-item" v-for="standard in standards">
+                            <span v-if="standard.info.url" class="badge">
+                                <a href="{{ standard.info.url }}">info</a>
+                            </span>
+
+                            <input type="checkbox"
+                                :value="standard.info.idenitifer"
+                                v-model="selectedStandards"
+                                @change="onStandardChecked">
+                            {{ standard.info.idenitifer }}
+                        </li>
+                    </ul>
                 </div>
             </div>
         `,
