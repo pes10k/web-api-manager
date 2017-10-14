@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "WebAPI Manager",
-  "version": "0.5",
+  "version": "0.7",
   "description": "Improves browser security by restricting page access to parts of the Web API.",
   "icons": {
     "48": "images/uic-48.png",
@@ -37,20 +37,21 @@
     "lib/init.js",
     "lib/js.cookie.js",
     "lib/storage.js",
-    "lib/URI.js"
+    "lib/URI.js",
+    "content_scripts/dist/defaults.js"
   ],
   "background": {
     "scripts": [
       "lib/init.js",
       "lib/pack.js",
-      "lib/storage.js",
       "lib/URI.js",
       "content_scripts/dist/standards.js",
+      "content_scripts/dist/defaults.js",
+      "lib/storage.js",
       "background_scripts/background.js"
     ]
   },
   "options_ui": {
-    "page": "config/index.html",
-    "chrome_style": true
+    "page": "config/index.html"
   }
 }

@@ -3,3 +3,4 @@ node_modules/
 *.swp
 
 content_scripts/dist/*.js
+web-ext-artifacts/

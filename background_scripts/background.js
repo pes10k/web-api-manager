@@ -1,8 +1,9 @@
 /*jslint es6: true*/
-/*global chrome, browser, window, URI*/
+/*global window*/
 (function () {
+    "use strict";
 
-    const {packingLib, standards, storageLib} = window.WEB_API_MANAGER;
+    const {packingLib, standards, storageLib, domainMatcherLib} = window.WEB_API_MANAGER;
     const rootObject = window.browser || window.chrome;
     const defaultKey = "(default)";
 
@@ -11,6 +12,9 @@
     // that should be blocked on matching domains.
     let domainRules;
 
+    // The extension depends on this fetch happening before the DOM on any
+    // pages is loaded.  The Chrome and Firefox docs *do not* promise this,
+    // but in testing this is always the case.
     storageLib.get(function (loadedDomainRules) {
         domainRules = loadedDomainRules;
     });
@@ -18,7 +22,7 @@
     // Manage the state of the browser activity, by displaying the number
     // of origins / frames
     const updateBrowserActionBadge = function (activeInfo) {
-        const {tabId, windowId} = activeInfo;
+        const tabId = activeInfo.tabId;
         rootObject.tabs.executeScript(
             tabId,
             {
@@ -50,39 +54,8 @@
     rootObject.tabs.onActivated.addListener(updateBrowserActionBadge);
     rootObject.windows.onFocusChanged.addListener(updateBrowserActionBadge);
 
-    // Inject the blocking settings for each visited domain / frame.
-    const extractHostFromUrl = function (url) {
-        const uri = URI(url);
-        return uri.hostname();
-    };
-
-    const matchingUrlReduceFunction = function (domain, prev, next) {
-        if (prev) {
-            return prev;
-        }
-
-        const domainRegex = new RegExp(next);
-        if (domainRegex.test(domain)) {
-            return next;
-        }
-
-        return prev;
-    };
-
-    const whichDomainRuleMatches = function (hostName) {
-        // of the URL being requested.
-        const matchingUrlReduceFunctionBound = matchingUrlReduceFunction.bind(undefined, hostName);
-        const matchingPattern = Object
-            .keys(domainRules)
-            .filter((aRule) => aRule !== defaultKey)
-            .sort()
-            .reduce(matchingUrlReduceFunctionBound, undefined);
-
-        return matchingPattern || defaultKey;
-    };
-
     // Listen for updates to the domain rules from the config page.
-    rootObject.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+    rootObject.runtime.onMessage.addListener(function (request, ignore, sendResponse) {
         const [label, data] = request;
         if (label === "rulesUpdate") {
             domainRules = data;
@@ -90,12 +63,16 @@
         }
 
         if (label === "rulesForDomains") {
-            const ruleForDomain = data.map(whichDomainRuleMatches);
-            const mapping = {};
-            for (let i = 0; i < ruleForDomain.length; i += 1) {
-                mapping[data[i]] = ruleForDomain[i];
-            }
-            sendResponse(mapping);
+
+            const matchHostNameBound = domainMatcherLib.matchHostName.bind(undefined, Object.keys(domainRules));
+            const rulesForDomains = data.map(matchHostNameBound);
+            const domainToRuleMapping = {};
+
+            data.forEach(function (aHostName, index) {
+                domainToRuleMapping[aHostName] = rulesForDomains[index] || defaultKey;
+            });
+
+            sendResponse(domainToRuleMapping);
             return;
         }
     });
@@ -106,15 +83,15 @@
     };
     const requestOptions = ["blocking", "responseHeaders"];
 
-    chrome.webRequest.onHeadersReceived.addListener(function (details) {
+    // Inject the blocking settings for each visited domain / frame.
+    rootObject.webRequest.onHeadersReceived.addListener(function (details) {
 
         const url = details.url;
-        const hostName = extractHostFromUrl(url);
 
         // Decide which set of blocking rules to use, depending on the host
         // of the URL being requested.
-        const matchingDomainKey = whichDomainRuleMatches(hostName);
-        const standardsToBlock = domainRules[matchingDomainKey];
+        const matchingDomainRule = domainMatcherLib.matchUrl(Object.keys(domainRules), url);
+        const standardsToBlock = domainRules[matchingDomainRule || defaultKey];
 
         const options = Object.keys(standards);
         const packedValues = packingLib.pack(options, standardsToBlock);

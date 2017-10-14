@@ -1,6 +1,7 @@
-/*jslint es6: true*/
+/*jslint es6: true, this: true*/
 /*global window, browser, Vue*/
 (function () {
+    "use strict";
 
     window.WEB_API_MANAGER.stateLib = {};
 
@@ -12,27 +13,27 @@
             domainRules: {},
             domainNames: [],
             selectedStandards: [],
-    
+
             setDomainRules: function (newDomainRules) {
                 this.domainRules = newDomainRules;
                 this.domainNames = Object.keys(newDomainRules);
                 this.selectedStandards = this.domainRules[this.selectedDomain];
             },
-    
+
             setSelectedDomain: function (newDomain) {
                 this.selectedDomain = newDomain;
                 this.selectedStandards = this.domainRules[newDomain];
             },
-    
+
             setSelectedStandards: function (selectedStandards) {
                 this.selectedStandards = selectedStandards;
                 this.domainRules[this.selectedDomain] = selectedStandards;
             },
-    
+
             deleteDomainRule: function (domainToDelete) {
                 delete this.domainRules[domainToDelete];
                 this.domainNames = Object.keys(this.domainRules);
-    
+
                 // If we're deleted the domain thats currently selected, then
                 // select the default domain.
                 if (this.selectedDomain === domainToDelete) {

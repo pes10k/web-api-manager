@@ -1,5 +1,5 @@
-/*jslint es6: true*/
-/*global window, browser, Vue*/
+/*jslint es6: true, this: true*/
+/*global window, Vue*/
 (function () {
     "use strict";
 
@@ -65,6 +65,6 @@
             isDefault: function (domainName) {
                 return domainName === "(default)";
             }
-        },
+        }
     });
 }());

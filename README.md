@@ -1,6 +1,7 @@
 Web API Manager
 ===
 
+
 Overview
 ---
 This extension allows users to selectively allow different hosts on the web
@@ -8,6 +9,7 @@ to have access to different types of browser functionality. Doing so allows
 security and privacy sensitive web users to limit the attack surface presented
 to websites, and to limit websites to the functionality they actually need
 to carry out user-serving purposes.
+
 
 Background
 ---
