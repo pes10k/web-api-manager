@@ -1,1 +1,38 @@
-{"info": {"name": "WebRTC 1.0: Real-time Communication Between Browser", "subsection_number": null, "subsection_name": null, "url": "https://www.w3.org/TR/webrtc/"}, "features": ["DataChannel.prototype.close", "DataChannel.prototype.send", "mozRTCPeerConnection.generateCertificate", "mozRTCPeerConnection.prototype.addIceCandidate", "mozRTCPeerConnection.prototype.addStream", "mozRTCPeerConnection.prototype.addTrack", "mozRTCPeerConnection.prototype.close", "mozRTCPeerConnection.prototype.createAnswer", "mozRTCPeerConnection.prototype.createDataChannel", "mozRTCPeerConnection.prototype.createOffer", "mozRTCPeerConnection.prototype.getConfiguration", "mozRTCPeerConnection.prototype.getIdentityAssertion", "mozRTCPeerConnection.prototype.getLocalStreams", "mozRTCPeerConnection.prototype.getReceivers", "mozRTCPeerConnection.prototype.getRemoteStreams", "mozRTCPeerConnection.prototype.getSenders", "mozRTCPeerConnection.prototype.getStats", "mozRTCPeerConnection.prototype.getStreamById", "mozRTCPeerConnection.prototype.removeStream", "mozRTCPeerConnection.prototype.removeTrack", "mozRTCPeerConnection.prototype.setIdentityProvider", "mozRTCPeerConnection.prototype.setLocalDescription", "mozRTCPeerConnection.prototype.setRemoteDescription", "mozRTCPeerConnection.prototype.updateIce", "RTCRtpSender.prototype.replaceTrack", "RTCStatsReport.prototype.forEach", "RTCStatsReport.prototype.get", "RTCStatsReport.prototype.has"]}
+{
+  "info": {
+    "name": "WebRTC 1.0: Real-time Communication Between Browser",
+    "subsection_number": null,
+    "subsection_name": null,
+    "url": "https://www.w3.org/TR/webrtc/"
+  },
+  "features": [
+    "DataChannel.prototype.close",
+    "DataChannel.prototype.send",
+    "mozRTCPeerConnection.generateCertificate",
+    "mozRTCPeerConnection.prototype.addIceCandidate",
+    "mozRTCPeerConnection.prototype.addStream",
+    "mozRTCPeerConnection.prototype.addTrack",
+    "mozRTCPeerConnection.prototype.close",
+    "mozRTCPeerConnection.prototype.createAnswer",
+    "mozRTCPeerConnection.prototype.createDataChannel",
+    "mozRTCPeerConnection.prototype.createOffer",
+    "mozRTCPeerConnection.prototype.getConfiguration",
+    "mozRTCPeerConnection.prototype.getIdentityAssertion",
+    "mozRTCPeerConnection.prototype.getLocalStreams",
+    "mozRTCPeerConnection.prototype.getReceivers",
+    "mozRTCPeerConnection.prototype.getRemoteStreams",
+    "mozRTCPeerConnection.prototype.getSenders",
+    "mozRTCPeerConnection.prototype.getStats",
+    "mozRTCPeerConnection.prototype.getStreamById",
+    "mozRTCPeerConnection.prototype.removeStream",
+    "mozRTCPeerConnection.prototype.removeTrack",
+    "mozRTCPeerConnection.prototype.setIdentityProvider",
+    "mozRTCPeerConnection.prototype.setLocalDescription",
+    "mozRTCPeerConnection.prototype.setRemoteDescription",
+    "mozRTCPeerConnection.prototype.updateIce",
+    "RTCRtpSender.prototype.replaceTrack",
+    "RTCStatsReport.prototype.forEach",
+    "RTCStatsReport.prototype.get",
+    "RTCStatsReport.prototype.has"
+  ]
+}

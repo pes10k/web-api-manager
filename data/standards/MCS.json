@@ -1,1 +1,14 @@
-{"info": {"name": "Media Capture and Streams", "subsection_number": null, "subsection_name": null, "url": "https://www.w3.org/TR/mediacapture-streams/"}, "features": ["LocalMediaStream.prototype.stop", "MediaDevices.prototype.enumerateDevices", "MediaDevices.prototype.getUserMedia", "navigator.mediaDevices"]}
+{
+  "info": {
+    "name": "Media Capture and Streams",
+    "subsection_number": null,
+    "subsection_name": null,
+    "url": "https://www.w3.org/TR/mediacapture-streams/"
+  },
+  "features": [
+    "LocalMediaStream.prototype.stop",
+    "MediaDevices.prototype.enumerateDevices",
+    "MediaDevices.prototype.getUserMedia",
+    "navigator.mediaDevices"
+  ]
+}

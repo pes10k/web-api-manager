@@ -1,1 +1,20 @@
-{"info": {"name": "HTML", "subsection_number": "8.6.1.5", "subsection_name": "Plugins", "url": "https://html.spec.whatwg.org/multipage/webappapis.html#plugins-2"}, "features": ["document.plugins", "MimeTypeArray.prototype.item", "MimeTypeArray.prototype.namedItem", "navigator.mimeTypes", "navigator.plugins", "Plugin.prototype.item", "Plugin.prototype.namedItem", "PluginArray.prototype.item", "PluginArray.prototype.namedItem", "PluginArray.prototype.refresh"]}
+{
+  "info": {
+    "name": "HTML",
+    "subsection_number": "8.6.1.5",
+    "subsection_name": "Plugins",
+    "url": "https://html.spec.whatwg.org/multipage/webappapis.html#plugins-2"
+  },
+  "features": [
+    "document.plugins",
+    "MimeTypeArray.prototype.item",
+    "MimeTypeArray.prototype.namedItem",
+    "navigator.mimeTypes",
+    "navigator.plugins",
+    "Plugin.prototype.item",
+    "Plugin.prototype.namedItem",
+    "PluginArray.prototype.item",
+    "PluginArray.prototype.namedItem",
+    "PluginArray.prototype.refresh"
+  ]
+}

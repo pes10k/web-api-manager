@@ -1,1 +1,11 @@
-{"info": {"name": "Directory Upload", "subsection_number": null, "subsection_name": null, "url": "https://wicg.github.io/directory-upload/proposal.html"}, "features": ["Directory.prototype.getFilesAndDirectories"]}
+{
+  "info": {
+    "name": "Directory Upload",
+    "subsection_number": null,
+    "subsection_name": null,
+    "url": "https://wicg.github.io/directory-upload/proposal.html"
+  },
+  "features": [
+    "Directory.prototype.getFilesAndDirectories"
+  ]
+}

@@ -13,13 +13,13 @@
     <body>
         <header>
         </header>
-        <section class="container-fluid">
+        <section class="container">
             <div class="row">
                 <div class="col-xs-4 col-md-4 well">
                     <domain-rules :domain-names="domainNames" :selected-domain="selectedDomain"></domain-rules>
                 </div>
 
-                <div class="col-xs-8 col-md-8">
+                <div class="col-xs-7 col-md-7 col-md-offset-1 col-xs-offset-1">
                     <web-api-standards :standards="standards" :selected-standards="selectedStandards"></web-api-standards>
                 </div>
             </div>

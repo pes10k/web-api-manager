@@ -1,1 +1,11 @@
-{"info": {"name": "Shadow DOM", "subsection_number": null, "subsection_name": null, "url": "https://www.w3.org/TR/shadow-dom/"}, "features": ["HTMLContentElement.prototype.getDistributedNodes"]}
+{
+  "info": {
+    "name": "Shadow DOM",
+    "subsection_number": null,
+    "subsection_name": null,
+    "url": "https://www.w3.org/TR/shadow-dom/"
+  },
+  "features": [
+    "HTMLContentElement.prototype.getDistributedNodes"
+  ]
+}

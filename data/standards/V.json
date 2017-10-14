@@ -1,1 +1,11 @@
-{"info": {"name": "Vibration API", "subsection_number": null, "subsection_name": null, "url": "https://www.w3.org/TR/vibration/"}, "features": ["Navigator.prototype.vibrate"]}
+{
+  "info": {
+    "name": "Vibration API",
+    "subsection_number": null,
+    "subsection_name": null,
+    "url": "https://www.w3.org/TR/vibration/"
+  },
+  "features": [
+    "Navigator.prototype.vibrate"
+  ]
+}

@@ -1,1 +1,19 @@
-{"info": {"name": "Fullscreen API", "subsection_number": null, "subsection_name": null, "url": "https://fullscreen.spec.whatwg.org/"}, "features": ["document.mozFullScreen", "document.mozFullScreenElement", "document.mozFullScreenEnabled", "document.onmozfullscreenchange", "document.onmozfullscreenerror", "Document.prototype.mozCancelFullScreen", "Element.prototype.mozRequestFullScreen", "window.onmozfullscreenchange", "window.onmozfullscreenerror"]}
+{
+  "info": {
+    "name": "Fullscreen API",
+    "subsection_number": null,
+    "subsection_name": null,
+    "url": "https://fullscreen.spec.whatwg.org/"
+  },
+  "features": [
+    "document.mozFullScreen",
+    "document.mozFullScreenElement",
+    "document.mozFullScreenEnabled",
+    "document.onmozfullscreenchange",
+    "document.onmozfullscreenerror",
+    "Document.prototype.mozCancelFullScreen",
+    "Element.prototype.mozRequestFullScreen",
+    "window.onmozfullscreenchange",
+    "window.onmozfullscreenerror"
+  ]
+}

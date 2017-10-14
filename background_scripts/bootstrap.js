@@ -40,15 +40,11 @@
         return prev;
     };
 
-
     const requestFilter = {
         urls: ["<all_urls>"],
         types: ["main_frame", "sub_frame"]
     };
     const requestOptions = ["blocking", "responseHeaders"];
-
-
-
 
     chrome.webRequest.onHeadersReceived.addListener(function (details) {
 
@@ -78,5 +74,6 @@
         return {
             responseHeaders: details.responseHeaders
         };
+
     }, requestFilter, requestOptions);
 }());

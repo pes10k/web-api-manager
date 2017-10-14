@@ -1,1 +1,13 @@
-{"info": {"name": "Resource Timing", "subsection_number": null, "subsection_name": null, "url": "https://w3c.github.io/resource-timing/"}, "features": ["performance.onresourcetimingbufferfull", "Performance.prototype.clearResourceTimings", "Performance.prototype.setResourceTimingBufferSize"]}
+{
+  "info": {
+    "name": "Resource Timing",
+    "subsection_number": null,
+    "subsection_name": null,
+    "url": "https://w3c.github.io/resource-timing/"
+  },
+  "features": [
+    "performance.onresourcetimingbufferfull",
+    "Performance.prototype.clearResourceTimings",
+    "Performance.prototype.setResourceTimingBufferSize"
+  ]
+}

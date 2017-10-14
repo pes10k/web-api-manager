@@ -1,1 +1,14 @@
-{"info": {"name": "Page Visibility (Second Edition)", "subsection_number": null, "subsection_name": null, "url": "https://www.w3.org/TR/page-visibility/"}, "features": ["document.hidden", "document.mozHidden", "document.mozVisibilityState", "document.visibilityState"]}
+{
+  "info": {
+    "name": "Page Visibility (Second Edition)",
+    "subsection_number": null,
+    "subsection_name": null,
+    "url": "https://www.w3.org/TR/page-visibility/"
+  },
+  "features": [
+    "document.hidden",
+    "document.mozHidden",
+    "document.mozVisibilityState",
+    "document.visibilityState"
+  ]
+}

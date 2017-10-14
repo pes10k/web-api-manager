@@ -1,1 +1,11 @@
-{"info": {"name": "Performance Timeline Level 2", "subsection_number": null, "subsection_name": null, "url": "https://w3c.github.io/performance-timeline"}, "features": ["Performance.prototype.getEntries"]}
+{
+  "info": {
+    "name": "Performance Timeline Level 2",
+    "subsection_number": null,
+    "subsection_name": null,
+    "url": "https://w3c.github.io/performance-timeline"
+  },
+  "features": [
+    "Performance.prototype.getEntries"
+  ]
+}

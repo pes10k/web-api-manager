@@ -1,1 +1,16 @@
-{"info": {"name": "HTML 5.1", "subsection_number": null, "subsection_name": null, "url": "https://www.w3.org/TR/html51/"}, "features": ["DragEvent.prototype.initDragEvent", "External.prototype.addSearchEngine", "External.prototype.AddSearchProvider", "External.prototype.IsSearchProviderInstalled", "navigator.language", "navigator.languages"]}
+{
+  "info": {
+    "name": "HTML 5.1",
+    "subsection_number": null,
+    "subsection_name": null,
+    "url": "https://www.w3.org/TR/html51/"
+  },
+  "features": [
+    "DragEvent.prototype.initDragEvent",
+    "External.prototype.addSearchEngine",
+    "External.prototype.AddSearchProvider",
+    "External.prototype.IsSearchProviderInstalled",
+    "navigator.language",
+    "navigator.languages"
+  ]
+}

@@ -1,1 +1,31 @@
-{"info": {"name": "Fetch", "subsection_number": null, "subsection_name": null, "url": "https://fetch.spec.whatwg.org/"}, "features": ["Headers.prototype.append", "Headers.prototype.delete", "Headers.prototype.get", "Headers.prototype.getAll", "Headers.prototype.has", "Headers.prototype.set", "Request.prototype.arrayBuffer", "Request.prototype.blob", "Request.prototype.clone", "Request.prototype.formData", "Request.prototype.json", "Request.prototype.text", "Response.error", "Response.prototype.arrayBuffer", "Response.prototype.blob", "Response.prototype.clone", "Response.prototype.formData", "Response.prototype.json", "Response.prototype.text", "Response.redirect", "window.fetch"]}
+{
+  "info": {
+    "name": "Fetch",
+    "subsection_number": null,
+    "subsection_name": null,
+    "url": "https://fetch.spec.whatwg.org/"
+  },
+  "features": [
+    "Headers.prototype.append",
+    "Headers.prototype.delete",
+    "Headers.prototype.get",
+    "Headers.prototype.getAll",
+    "Headers.prototype.has",
+    "Headers.prototype.set",
+    "Request.prototype.arrayBuffer",
+    "Request.prototype.blob",
+    "Request.prototype.clone",
+    "Request.prototype.formData",
+    "Request.prototype.json",
+    "Request.prototype.text",
+    "Response.error",
+    "Response.prototype.arrayBuffer",
+    "Response.prototype.blob",
+    "Response.prototype.clone",
+    "Response.prototype.formData",
+    "Response.prototype.json",
+    "Response.prototype.text",
+    "Response.redirect",
+    "window.fetch"
+  ]
+}

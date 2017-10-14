@@ -1,1 +1,12 @@
-{"info": {"name": "HTML", "subsection_number": "9.6", "subsection_name": "Broadcasting to other browsing contexts", "url": "https://html.spec.whatwg.org/multipage/comms.html#dom-broadcastchannel-postmessage"}, "features": ["BroadcastChannel.prototype.close", "BroadcastChannel.prototype.postMessage"]}
+{
+  "info": {
+    "name": "HTML",
+    "subsection_number": "9.6",
+    "subsection_name": "Broadcasting",
+    "url": "https://html.spec.whatwg.org/multipage/comms.html#dom-broadcastchannel-postmessage"
+  },
+  "features": [
+    "BroadcastChannel.prototype.close",
+    "BroadcastChannel.prototype.postMessage"
+  ]
+}

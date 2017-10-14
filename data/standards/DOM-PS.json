@@ -1,1 +1,13 @@
-{"info": {"name": "DOM Parsing and Serialization", "subsection_number": null, "subsection_name": null, "url": "https://w3c.github.io/DOM-Parsing/"}, "features": ["DOMParser.prototype.parseFromString", "Element.prototype.insertAdjacentHTML", "XMLSerializer.prototype.serializeToString"]}
+{
+  "info": {
+    "name": "DOM Parsing and Serialization",
+    "subsection_number": null,
+    "subsection_name": null,
+    "url": "https://w3c.github.io/DOM-Parsing/"
+  },
+  "features": [
+    "DOMParser.prototype.parseFromString",
+    "Element.prototype.insertAdjacentHTML",
+    "XMLSerializer.prototype.serializeToString"
+  ]
+}

@@ -1,1 +1,46 @@
-{"info": {"name": "Document Object Model (DOM) Level 2 Traversal and Range Specification", "subsection_number": null, "subsection_name": null, "url": "https://www.w3.org/TR/DOM-Level-2-Traversal-Range/"}, "features": ["Document.prototype.createNodeIterator", "Document.prototype.createRange", "Document.prototype.createTreeWalker", "NodeIterator.prototype.detach", "NodeIterator.prototype.nextNode", "NodeIterator.prototype.previousNode", "Range.prototype.cloneContents", "Range.prototype.cloneRange", "Range.prototype.collapse", "Range.prototype.compareBoundaryPoints", "Range.prototype.comparePoint", "Range.prototype.createContextualFragment", "Range.prototype.deleteContents", "Range.prototype.detach", "Range.prototype.extractContents", "Range.prototype.getBoundingClientRect", "Range.prototype.getClientRects", "Range.prototype.insertNode", "Range.prototype.intersectsNode", "Range.prototype.isPointInRange", "Range.prototype.selectNode", "Range.prototype.selectNodeContents", "Range.prototype.setEnd", "Range.prototype.setEndAfter", "Range.prototype.setEndBefore", "Range.prototype.setStart", "Range.prototype.setStartAfter", "Range.prototype.setStartBefore", "Range.prototype.surroundContents", "TreeWalker.prototype.firstChild", "TreeWalker.prototype.lastChild", "TreeWalker.prototype.nextNode", "TreeWalker.prototype.nextSibling", "TreeWalker.prototype.parentNode", "TreeWalker.prototype.previousNode", "TreeWalker.prototype.previousSibling"]}
+{
+  "info": {
+    "name": "DOM Level 2: Traversal and Range",
+    "subsection_number": null,
+    "subsection_name": null,
+    "url": "https://www.w3.org/TR/DOM-Level-2-Traversal-Range/"
+  },
+  "features": [
+    "Document.prototype.createNodeIterator",
+    "Document.prototype.createRange",
+    "Document.prototype.createTreeWalker",
+    "NodeIterator.prototype.detach",
+    "NodeIterator.prototype.nextNode",
+    "NodeIterator.prototype.previousNode",
+    "Range.prototype.cloneContents",
+    "Range.prototype.cloneRange",
+    "Range.prototype.collapse",
+    "Range.prototype.compareBoundaryPoints",
+    "Range.prototype.comparePoint",
+    "Range.prototype.createContextualFragment",
+    "Range.prototype.deleteContents",
+    "Range.prototype.detach",
+    "Range.prototype.extractContents",
+    "Range.prototype.getBoundingClientRect",
+    "Range.prototype.getClientRects",
+    "Range.prototype.insertNode",
+    "Range.prototype.intersectsNode",
+    "Range.prototype.isPointInRange",
+    "Range.prototype.selectNode",
+    "Range.prototype.selectNodeContents",
+    "Range.prototype.setEnd",
+    "Range.prototype.setEndAfter",
+    "Range.prototype.setEndBefore",
+    "Range.prototype.setStart",
+    "Range.prototype.setStartAfter",
+    "Range.prototype.setStartBefore",
+    "Range.prototype.surroundContents",
+    "TreeWalker.prototype.firstChild",
+    "TreeWalker.prototype.lastChild",
+    "TreeWalker.prototype.nextNode",
+    "TreeWalker.prototype.nextSibling",
+    "TreeWalker.prototype.parentNode",
+    "TreeWalker.prototype.previousNode",
+    "TreeWalker.prototype.previousSibling"
+  ]
+}

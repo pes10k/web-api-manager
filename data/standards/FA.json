@@ -1,1 +1,19 @@
-{"info": {"name": "File API", "subsection_number": null, "subsection_name": null, "url": "https://w3c.github.io/FileAPI/"}, "features": ["Blob.prototype.slice", "FileList.prototype.item", "FileReader.prototype.abort", "FileReader.prototype.readAsArrayBuffer", "FileReader.prototype.readAsBinaryString", "FileReader.prototype.readAsDataURL", "FileReader.prototype.readAsText", "URL.createObjectURL", "URL.revokeObjectURL"]}
+{
+  "info": {
+    "name": "File API",
+    "subsection_number": null,
+    "subsection_name": null,
+    "url": "https://w3c.github.io/FileAPI/"
+  },
+  "features": [
+    "Blob.prototype.slice",
+    "FileList.prototype.item",
+    "FileReader.prototype.abort",
+    "FileReader.prototype.readAsArrayBuffer",
+    "FileReader.prototype.readAsBinaryString",
+    "FileReader.prototype.readAsDataURL",
+    "FileReader.prototype.readAsText",
+    "URL.createObjectURL",
+    "URL.revokeObjectURL"
+  ]
+}

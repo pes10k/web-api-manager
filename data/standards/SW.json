@@ -1,1 +1,23 @@
-{"info": {"name": "Service Workers", "subsection_number": null, "subsection_name": null, "url": "https://www.w3.org/TR/service-workers/"}, "features": ["Cache.prototype.add", "Cache.prototype.addAll", "Cache.prototype.delete", "Cache.prototype.keys", "Cache.prototype.match", "Cache.prototype.matchAll", "Cache.prototype.put", "CacheStorage.prototype.delete", "CacheStorage.prototype.has", "CacheStorage.prototype.keys", "CacheStorage.prototype.match", "CacheStorage.prototype.open", "window.caches"]}
+{
+  "info": {
+    "name": "Service Workers",
+    "subsection_number": null,
+    "subsection_name": null,
+    "url": "https://www.w3.org/TR/service-workers/"
+  },
+  "features": [
+    "Cache.prototype.add",
+    "Cache.prototype.addAll",
+    "Cache.prototype.delete",
+    "Cache.prototype.keys",
+    "Cache.prototype.match",
+    "Cache.prototype.matchAll",
+    "Cache.prototype.put",
+    "CacheStorage.prototype.delete",
+    "CacheStorage.prototype.has",
+    "CacheStorage.prototype.keys",
+    "CacheStorage.prototype.match",
+    "CacheStorage.prototype.open",
+    "window.caches"
+  ]
+}

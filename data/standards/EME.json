@@ -1,1 +1,23 @@
-{"info": {"name": "Encrypted Media Extensions", "subsection_number": null, "subsection_name": null, "url": "https://w3c.github.io/encrypted-media/"}, "features": ["MediaKeys.prototype.createSession", "MediaKeys.prototype.setServerCertificate", "MediaKeySession.prototype.close", "MediaKeySession.prototype.generateRequest", "MediaKeySession.prototype.load", "MediaKeySession.prototype.remove", "MediaKeySession.prototype.update", "MediaKeyStatusMap.prototype.entries", "MediaKeyStatusMap.prototype.keys", "MediaKeyStatusMap.prototype.values", "MediaKeySystemAccess.prototype.createMediaKeys", "MediaKeySystemAccess.prototype.getConfiguration", "Navigator.prototype.requestMediaKeySystemAccess"]}
+{
+  "info": {
+    "name": "Encrypted Media Extensions",
+    "subsection_number": null,
+    "subsection_name": null,
+    "url": "https://w3c.github.io/encrypted-media/"
+  },
+  "features": [
+    "MediaKeys.prototype.createSession",
+    "MediaKeys.prototype.setServerCertificate",
+    "MediaKeySession.prototype.close",
+    "MediaKeySession.prototype.generateRequest",
+    "MediaKeySession.prototype.load",
+    "MediaKeySession.prototype.remove",
+    "MediaKeySession.prototype.update",
+    "MediaKeyStatusMap.prototype.entries",
+    "MediaKeyStatusMap.prototype.keys",
+    "MediaKeyStatusMap.prototype.values",
+    "MediaKeySystemAccess.prototype.createMediaKeys",
+    "MediaKeySystemAccess.prototype.getConfiguration",
+    "Navigator.prototype.requestMediaKeySystemAccess"
+  ]
+}

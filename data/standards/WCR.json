@@ -1,1 +1,24 @@
-{"info": {"name": "Web Cryptography API", "subsection_number": null, "subsection_name": null, "url": "https://www.w3.org/TR/WebCryptoAPI/"}, "features": ["Crypto.prototype.getRandomValues", "SubtleCrypto.prototype.decrypt", "SubtleCrypto.prototype.deriveBits", "SubtleCrypto.prototype.deriveKey", "SubtleCrypto.prototype.digest", "SubtleCrypto.prototype.encrypt", "SubtleCrypto.prototype.exportKey", "SubtleCrypto.prototype.generateKey", "SubtleCrypto.prototype.importKey", "SubtleCrypto.prototype.sign", "SubtleCrypto.prototype.unwrapKey", "SubtleCrypto.prototype.verify", "SubtleCrypto.prototype.wrapKey", "window.crypto"]}
+{
+  "info": {
+    "name": "Web Cryptography API",
+    "subsection_number": null,
+    "subsection_name": null,
+    "url": "https://www.w3.org/TR/WebCryptoAPI/"
+  },
+  "features": [
+    "Crypto.prototype.getRandomValues",
+    "SubtleCrypto.prototype.decrypt",
+    "SubtleCrypto.prototype.deriveBits",
+    "SubtleCrypto.prototype.deriveKey",
+    "SubtleCrypto.prototype.digest",
+    "SubtleCrypto.prototype.encrypt",
+    "SubtleCrypto.prototype.exportKey",
+    "SubtleCrypto.prototype.generateKey",
+    "SubtleCrypto.prototype.importKey",
+    "SubtleCrypto.prototype.sign",
+    "SubtleCrypto.prototype.unwrapKey",
+    "SubtleCrypto.prototype.verify",
+    "SubtleCrypto.prototype.wrapKey",
+    "window.crypto"
+  ]
+}

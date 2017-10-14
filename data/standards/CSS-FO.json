@@ -1,1 +1,22 @@
-{"info": {"name": "CSS Font Loading Module Level 3", "subsection_number": null, "subsection_name": null, "url": "https://drafts.csswg.org/css-font-loading/"}, "features": ["document.fonts", "FontFace.prototype.load", "FontFaceSet.prototype.add", "FontFaceSet.prototype.check", "FontFaceSet.prototype.clear", "FontFaceSet.prototype.delete", "FontFaceSet.prototype.entries", "FontFaceSet.prototype.forEach", "FontFaceSet.prototype.has", "FontFaceSet.prototype.keys", "FontFaceSet.prototype.load", "FontFaceSet.prototype.values"]}
+{
+  "info": {
+    "name": "CSS Font Loading Module Level 3",
+    "subsection_number": null,
+    "subsection_name": null,
+    "url": "https://drafts.csswg.org/css-font-loading/"
+  },
+  "features": [
+    "document.fonts",
+    "FontFace.prototype.load",
+    "FontFaceSet.prototype.add",
+    "FontFaceSet.prototype.check",
+    "FontFaceSet.prototype.clear",
+    "FontFaceSet.prototype.delete",
+    "FontFaceSet.prototype.entries",
+    "FontFaceSet.prototype.forEach",
+    "FontFaceSet.prototype.has",
+    "FontFaceSet.prototype.keys",
+    "FontFaceSet.prototype.load",
+    "FontFaceSet.prototype.values"
+  ]
+}

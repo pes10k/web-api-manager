@@ -1,1 +1,11 @@
-{"info": {"name": "Tracking Preference Expression (DNT)", "subsection_number": null, "subsection_name": null, "url": "https://www.w3.org/TR/tracking-dnt/"}, "features": ["navigator.doNotTrack"]}
+{
+  "info": {
+    "name": "Tracking Preference Expression (DNT)",
+    "subsection_number": null,
+    "subsection_name": null,
+    "url": "https://www.w3.org/TR/tracking-dnt/"
+  },
+  "features": [
+    "navigator.doNotTrack"
+  ]
+}

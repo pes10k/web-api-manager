@@ -1,1 +1,16 @@
-{"info": {"name": "HTML", "subsection_number": "7.5.2", "subsection_name": "History Interface", "url": "https://html.spec.whatwg.org/multipage/browsers.html#the-history-interface"}, "features": ["History.prototype.back", "History.prototype.forward", "History.prototype.go", "History.prototype.pushState", "History.prototype.replaceState", "window.history"]}
+{
+  "info": {
+    "name": "HTML",
+    "subsection_number": "7.5.2",
+    "subsection_name": "History Interface",
+    "url": "https://html.spec.whatwg.org/multipage/browsers.html#the-history-interface"
+  },
+  "features": [
+    "History.prototype.back",
+    "History.prototype.forward",
+    "History.prototype.go",
+    "History.prototype.pushState",
+    "History.prototype.replaceState",
+    "window.history"
+  ]
+}

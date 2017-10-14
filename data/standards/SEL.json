@@ -1,1 +1,24 @@
-{"info": {"name": "Selection API", "subsection_number": null, "subsection_name": null, "url": "http://w3c.github.io/selection-api/"}, "features": ["HTMLDocument.prototype.getSelection", "Selection.prototype.addRange", "Selection.prototype.collapse", "Selection.prototype.collapseToEnd", "Selection.prototype.collapseToStart", "Selection.prototype.containsNode", "Selection.prototype.deleteFromDocument", "Selection.prototype.extend", "Selection.prototype.getRangeAt", "Selection.prototype.modify", "Selection.prototype.removeAllRanges", "Selection.prototype.removeRange", "Selection.prototype.selectAllChildren", "window.getSelection"]}
+{
+  "info": {
+    "name": "Selection API",
+    "subsection_number": null,
+    "subsection_name": null,
+    "url": "http://w3c.github.io/selection-api/"
+  },
+  "features": [
+    "HTMLDocument.prototype.getSelection",
+    "Selection.prototype.addRange",
+    "Selection.prototype.collapse",
+    "Selection.prototype.collapseToEnd",
+    "Selection.prototype.collapseToStart",
+    "Selection.prototype.containsNode",
+    "Selection.prototype.deleteFromDocument",
+    "Selection.prototype.extend",
+    "Selection.prototype.getRangeAt",
+    "Selection.prototype.modify",
+    "Selection.prototype.removeAllRanges",
+    "Selection.prototype.removeRange",
+    "Selection.prototype.selectAllChildren",
+    "window.getSelection"
+  ]
+}
