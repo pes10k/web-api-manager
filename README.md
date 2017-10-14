@@ -36,21 +36,21 @@ needed and/or privacy violating functionality.
 Functionality
 ---
 The extension currently includes the following functionality:
-*   Creation of domain-specifiy functionlity rules, based on host-matching
+*   Creation of domain-specific functionality rules, based on host-matching
     regular expressions.
 *   Blocking of functionality across all domains, with a fallback, "default"
     blocking rule.
 *   A novel method of blocking functionality, designed to minimize the effect
-    of removing functionlity on existing code that expects that functionlity
+    of removing functionality on existing code that expects that functionality
     to be in place.
-*   A categorization of approximatly 1,400 JavaScript methods into 74 different
+*   A categorization of approximately 1,400 JavaScript methods into 74 different
     Web API standards (and, where appropriate, sub-standards).
-*   User feedback to alert users how many hosts are executing script everytime
+*   User feedback to alert users how many hosts are executing script every time
     they visit a site, to ease the creating of new rules.
 
 The following functionality is not currently implemented, but is being considered
 for future inclusion:
-*   The ability to subscribe to blocking rulesets created by trusted third
+*   The ability to subscribe to blocking rule sets created by trusted third
     parties, similar to the EasyList / AdBlockPlus model of rule subscriptions.
 *   Blocking property accesses on non-global structures through an additional
     level of interposition on runtime created objects.
