@@ -5,3 +5,11 @@ body {
 .list-group-item .badge a {
     color: white;
 }
+
+.web-api-standards-container h3 {
+    margin-top: 0;
+}
+
+section p:first-child {
+    padding-top: 1em;
+}
