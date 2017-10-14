@@ -65,6 +65,12 @@
     }, 1000);
 
     // Listen for updates to the domain rules from the config page.
+    // The two types of messages that are sent to the background page are
+    // "rulesUpdate", which comes from the config page, indicating the domain
+    // blocking / matching rules have changed, and the "rulesForDomains"
+    // message, which comes from the browserAction popup, and is a request
+    // for information about "here are the domains of the frames on the
+    // current page, which rules are being used to match them".
     rootObject.runtime.onMessage.addListener(function (request, ignore, sendResponse) {
 
         const [label, data] = request;
@@ -95,6 +101,18 @@
     const requestOptions = ["blocking", "responseHeaders"];
 
     // Inject the blocking settings for each visited domain / frame.
+    // This needs to be done syncronously, so that the DOM of the visited
+    // page can be instrumented at "document_start" time.  This means we
+    // can't do any of the "obvious" techniques for loading the "what should"
+    // be blocked in this frame" information (ie using the storage API).
+    // So, instead, we halt at the http query point, match the domain being
+    // loaded against the current rule set, pack the set of standards
+    // that should be blocked into a base64 encoded bitfield, and then
+    // push that to the page as a cookie.
+    //
+    // The page then reads the information about what standards to block
+    // out of the cookie (by decoding and unpacking the bitfield), and then
+    // deletes the cookie, so nothing is left behind.
     rootObject.webRequest.onHeadersReceived.addListener(function (details) {
 
         const url = details.url;
