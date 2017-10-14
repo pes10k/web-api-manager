@@ -127,13 +127,18 @@
             return false;
         }
 
-        if (shouldLog === true) {
-            parentRef[lastPropertyName] = createBlockingProxy(keyPath);
-            return true;
-        }
+        try {
+            if (shouldLog === true) {
+                parentRef[lastPropertyName] = createBlockingProxy(keyPath);
+                return true;
+            }
 
-        parentRef[lastPropertyName] = defaultBlockingProxy;
-        return true;
+            parentRef[lastPropertyName] = defaultBlockingProxy;
+            return true;
+        } catch (e) {
+            console.log("Error instrumenting " + keyPath + ": " + e);
+            return false;
+        }
     };
 
     featuresToBlock.forEach(blockFeatureAtKeyPath);

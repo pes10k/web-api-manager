@@ -23,6 +23,13 @@
                         <button @click="onAggressiveClicked">
                             Use Aggressive Settings
                         </button>
+                        <button @click="onClearClicked">
+                            Clear Settings
+                        </button>
+                        <button @click="onAllClicked">
+                            Block All
+                        </button>
+
                     </div>
                 </div>
 
@@ -54,6 +61,14 @@
             },
             onAggressiveClicked: function () {
                 this.$root.$data.setSelectedStandards(standardsDefaults.aggressive);
+            },
+            onClearClicked: function () {
+                this.$root.$data.setSelectedStandards([]);
+            },
+            onAllClicked: function () {
+                const allStandards = Object.keys(this.standards)
+                    .map(aStdName => this.standards[aStdName].info.idenitifer);
+                this.$root.$data.setSelectedStandards(allStandards);
             }
         }
     });

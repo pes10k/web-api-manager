@@ -33,6 +33,7 @@
 
                 if (rootObject.runtime.lastError) {
                     rootObject.browserAction.disable(tabId);
+                    rootObject.browserAction.setBadgeText({text: "-"});
                     return;
                 }
 
@@ -40,7 +41,7 @@
 
                 const numFrames = allHosts
                     ? Array.from(new Set(allHosts)).length.toString()
-                    : "";
+                    : "-";
 
                 rootObject.browserAction.setBadgeText({
                     text: numFrames,
@@ -50,12 +51,23 @@
         );
     };
 
+    rootObject.windows.onFocusChanged.addListener(updateBrowserActionBadge);
     rootObject.tabs.onUpdated.addListener(updateBrowserActionBadge);
     rootObject.tabs.onActivated.addListener(updateBrowserActionBadge);
     rootObject.windows.onFocusChanged.addListener(updateBrowserActionBadge);
 
+    window.setInterval(function () {
+        rootObject.tabs.getCurrent(function (currentTab) {
+            if (currentTab === undefined) {
+                return;
+            }
+            updateBrowserActionBadge({tabId: currentTab.id});
+        });
+    }, 1000);
+
     // Listen for updates to the domain rules from the config page.
     rootObject.runtime.onMessage.addListener(function (request, ignore, sendResponse) {
+
         const [label, data] = request;
         if (label === "rulesUpdate") {
             domainRules = data;

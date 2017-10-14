@@ -3,9 +3,9 @@
 (function () {
     "use strict";
 
-    window.WEB_API_MANAGER.stateLib = {};
+    const defaultDomain = "(default)";
 
-    window.WEB_API_MANAGER.stateLib.generateStateObject = function (initialDomain, standards) {
+    const generateStateObject = function (initialDomain, standards) {
 
         const state = {
             selectedDomain: initialDomain,
@@ -31,14 +31,15 @@
             },
 
             deleteDomainRule: function (domainToDelete) {
-                delete this.domainRules[domainToDelete];
-                this.domainNames = Object.keys(this.domainRules);
 
                 // If we're deleted the domain thats currently selected, then
                 // select the default domain.
                 if (this.selectedDomain === domainToDelete) {
-                    this.setSelectedDomain(this.defaultDomain);
+                    this.setSelectedDomain(defaultDomain);
                 }
+
+                delete this.domainRules[domainToDelete];
+                this.domainNames = Object.keys(this.domainRules);
             },
 
             addDomainRule: function (newDomainRule) {
@@ -49,5 +50,9 @@
         };
 
         return state;
+    };
+
+    window.WEB_API_MANAGER.stateLib = {
+        generateStateObject
     };
 }());

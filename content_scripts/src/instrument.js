@@ -19,7 +19,7 @@
         window.WEB_API_MANAGER_PAGE = {
             standards: ${JSON.stringify(standards)},
             toBlock: ${JSON.stringify(standardsToBlock)},
-            shouldLog: true
+            shouldLog: false
         };
         ###-INJECTED-PROXY-BLOCKING-CODE-###
     `;
