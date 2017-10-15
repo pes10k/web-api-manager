@@ -1,5 +1,6 @@
-const gulp = require('gulp');
-const fs = require('fs');
+const gulp = require("gulp");
+const fs = require("fs");
+const UglifyJS = require("uglify-es");
 
 gulp.task('default', function () {
 
@@ -48,9 +49,11 @@ gulp.task('default', function () {
 
     const proxyBlockSrcWOComments = stripCommentsFromSource(proxyBlockSrc);
     const instrumentSrcWOComments = stripCommentsFromSource(instrumentSrc);
+
+    const proxyBlockSrcWithHeader = "/** This code is a minified version of content_scripts/src/proxyblock.js **/\n" + proxyBlockSrcWOComments;
     const instrumentSrcWithProxyInjected = instrumentSrcWOComments.replace(
         "###-INJECTED-PROXY-BLOCKING-CODE-###",
-        proxyBlockSrcWOComments
+        UglifyJS.minify(proxyBlockSrcWithHeader, {mangle: false}).code
     );
 
     fs.writeFileSync("content_scripts/dist/instrument.js", builtScriptComment + instrumentSrcWithProxyInjected);

@@ -57,6 +57,8 @@ for future inclusion:
 *   Blocking property accesses on non-global structures through an additional
     level of interposition on runtime created objects.
 *   Adding new Web API standards into the code base.
+*   Extend blocking to properties and events (currently only functions and
+    methods are interposed on).
 
 
 Background

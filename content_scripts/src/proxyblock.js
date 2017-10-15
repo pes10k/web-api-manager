@@ -12,6 +12,12 @@
     const standardDefinitions = settings.standards;
     const hostName = window.location.hostname;
 
+    // Its possible that the Web API removal code will block direct references
+    // to the following methods, so grab references to them before the
+    // DOM is instrumented (and their references are possibly blocked).
+    const removeChild = window.Element.prototype.removeChild;
+    const getElementsByTagName = window.document.getElementsByTagName;
+
     const defaultFunction = function () {};
     const funcPropNames = Object.getOwnPropertyNames(defaultFunction);
     const unconfigurablePropNames = funcPropNames.filter(function (propName) {
@@ -150,4 +156,10 @@
     };
 
     featuresToBlock.forEach(blockFeatureAtKeyPath);
+
+    // Last, remove the script tag containing this code from the document,
+    // so that the structure of the page looks like what the page author
+    // expects / intended.
+    const scriptTags = getElementsByTagName.call(window.document, "script");
+    removeChild.call(scriptTags[0].parentNode, scriptTags[0]);
 }());

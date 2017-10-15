@@ -12,7 +12,13 @@
                         <input type="checkbox"
                             v-model="shouldLog"
                             @change="shouldLogChanged">
+
                         Log blocked functionality?
+
+                        <p class="help-block">
+                            Enabling logging will print information about each
+                            blocked method to the console, for each domain.
+                        </p>
                     </label>
                 </div>
             </div>
