@@ -8,18 +8,22 @@
     const script = document.createElement('script');
     const rootElm = document.head || document.documentElement;
 
-    const cookieKey = "web-api-manager";
+    const standardsCookieKey = "wam-standards";
     const {packingLib, standards} = window.WEB_API_MANAGER;
     const options = Object.keys(standards);
-    const packedValues = Cookies.get(cookieKey);
+    const packedValues = Cookies.get(standardsCookieKey);
     const standardsToBlock = packingLib.unpack(options, packedValues);
-    Cookies.remove(cookieKey);
+    Cookies.remove(standardsCookieKey);
+
+    const shouldLogCookieKey = "wam-log";
+    const shouldLog = Cookies.get(shouldLogCookieKey);
+    Cookies.remove(shouldLogCookieKey);
 
     const code = `
         window.WEB_API_MANAGER_PAGE = {
             standards: ${JSON.stringify(standards)},
             toBlock: ${JSON.stringify(standardsToBlock)},
-            shouldLog: false
+            shouldLog: ${shouldLog}
         };
         ###-INJECTED-PROXY-BLOCKING-CODE-###
     `;

@@ -4,6 +4,7 @@
     "use strict";
 
     const defaultDomain = "(default)";
+    const {packingLib, standards} = window.WEB_API_MANAGER;
 
     const generateStateObject = function (initialDomain, standards) {
 
@@ -12,7 +13,20 @@
             standards: standards,
             domainRules: {},
             domainNames: [],
+            shouldLog: false,
             selectedStandards: [],
+
+            toStorage: function () {
+                return {
+                    domainRules: this.domainRules,
+                    shouldLog: this.shouldLog
+                };
+            },
+
+            populateFromStorage: function (storedValues) {
+                this.setDomainRules(storedValues.domainRules);
+                this.setShouldLog(storedValues.shouldLog);
+            },
 
             setDomainRules: function (newDomainRules) {
                 this.domainRules = newDomainRules;
@@ -47,6 +61,10 @@
                 this.domainNames = Object.keys(this.domainRules);
                 this.selectedDomain = newDomainRule;
                 this.selectedStandards = this.domainRules[newDomainRule];
+            },
+
+            setShouldLog: function (shouldLog) {
+                this.shouldLog = shouldLog;
             }
         };
 

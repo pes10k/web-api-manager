@@ -22,8 +22,10 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-xs-4 col-md-4 well">
+                <div class="col-xs-4 col-md-4">
                     <domain-rules :domain-names="domainNames" :selected-domain="selectedDomain"></domain-rules>
+
+                    <logging-settings :should-log="shouldLog"></logging-settings>
                 </div>
 
                 <div class="col-xs-8 col-md-8">
@@ -37,11 +39,12 @@
         <script src="../lib/init.js"></script>
         <script src="../content_scripts/dist/defaults.js"></script>
         <script src="../content_scripts/dist/standards.js"></script>
-        <script src="../lib/storage.js"></script>        
+        <script src="../lib/storage.js"></script>
         <script src="js/lib/vue.js"></script>
         <script src="js/state.js"></script>
         <script src="js/components/domain-rules.vue.js"></script>
         <script src="js/components/web-api-standards.vue.js"></script>
+        <script src="js/components/logging-settings.vue.js"></script>
         <script src="js/config.js"></script>
     </body>
 </html>

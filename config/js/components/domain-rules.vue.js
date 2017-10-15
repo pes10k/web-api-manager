@@ -6,7 +6,7 @@
     Vue.component("domain-rules", {
         props: ["domainNames", "selectedDomain"],
         template: `
-            <div class="domain-rules-container">
+            <div class="domain-rules-container well">
                 <div class="radio" v-for="aDomain in domainNames">
                     <label>
                         <input type="radio"
@@ -29,7 +29,7 @@
                     <input class="form-control" v-model.trim="newDomain" placeholder="*.example.org">
                 </div>
 
-                <button type="submit" class="btn btn-default" @click="newDomainSubmitted">Submit</button>
+                <button type="submit" class="btn btn-default btn-block" @click="newDomainSubmitted">Add Rule</button>
             </div>
         `,
         data: function () {

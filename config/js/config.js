@@ -11,9 +11,9 @@
 
     const state = stateLib.generateStateObject(defaultDomain, standards);
 
-    const onSettingsLoaded = function (loadedDomainRules) {
+    const onSettingsLoaded = function (storedSettings) {
 
-        state.setDomainRules(loadedDomainRules);
+        state.populateFromStorage(storedSettings);
 
         const vm = new Vue({
             el: doc.body,
@@ -21,18 +21,17 @@
         });
 
         const updateStoredSettings = function () {
-            storageLib.set(state.domainRules, function () {
-                rootObject.runtime.sendMessage(["rulesUpdate", state.domainRules]);
+            storageLib.set(state.toStorage(), function () {
+                rootObject.runtime.sendMessage(["stateUpdate", state.toStorage()]);
             });
         };
 
         vm.$watch("selectedStandards", updateStoredSettings);
         vm.$watch("domainNames", updateStoredSettings);
+        vm.$watch("shouldLog", updateStoredSettings);
     };
 
-    const onPageLoad = function () {
+    window.onload = function () {
         storageLib.get(onSettingsLoaded);
     };
-
-    window.onload = onPageLoad;
 }());

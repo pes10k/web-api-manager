@@ -10,6 +10,7 @@
     const shouldLog = settings.shouldLog;
     const standardsToBlock = settings.toBlock;
     const standardDefinitions = settings.standards;
+    const hostName = window.location.hostname;
 
     const defaultFunction = function () {};
     const funcPropNames = Object.getOwnPropertyNames(defaultFunction);
@@ -59,9 +60,12 @@
         let hasBeenLogged = false;
 
         const logKeyPath = function () {
-            if (keyPath !== undefined && hasBeenLogged === false) {
+
+            if (keyPath !== undefined &&
+                    hasBeenLogged === false &&
+                    shouldLog) {
                 hasBeenLogged = true;
-                console.info(keyPath);
+                console.log("Blocked '" + keyPath + "' on '" + hostName + "'");
             }
         };
 
@@ -128,6 +132,7 @@
         }
 
         try {
+
             if (shouldLog === true) {
                 parentRef[lastPropertyName] = createBlockingProxy(keyPath);
                 return true;
@@ -136,6 +141,7 @@
             parentRef[lastPropertyName] = defaultBlockingProxy;
             return true;
         } catch (e) {
+
             if (shouldLog) {
                 console.log("Error instrumenting " + keyPath + ": " + e);
             }

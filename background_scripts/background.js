@@ -11,12 +11,14 @@
     // (or the default option, "(default)"), to an array of standards
     // that should be blocked on matching domains.
     let domainRules;
+    let shouldLog;
 
     // The extension depends on this fetch happening before the DOM on any
     // pages is loaded.  The Chrome and Firefox docs *do not* promise this,
     // but in testing this is always the case.
-    storageLib.get(function (loadedDomainRules) {
-        domainRules = loadedDomainRules;
+    storageLib.get(function (storedValues) {
+        domainRules = storedValues.domainRules;
+        shouldLog = storedValues.shouldLog;
     });
 
     // Manage the state of the browser activity, by displaying the number
@@ -66,7 +68,7 @@
 
     // Listen for updates to the domain rules from the config page.
     // The two types of messages that are sent to the background page are
-    // "rulesUpdate", which comes from the config page, indicating the domain
+    // "stateUpdate", which comes from the config page, indicating the domain
     // blocking / matching rules have changed, and the "rulesForDomains"
     // message, which comes from the browserAction popup, and is a request
     // for information about "here are the domains of the frames on the
@@ -74,8 +76,9 @@
     rootObject.runtime.onMessage.addListener(function (request, ignore, sendResponse) {
 
         const [label, data] = request;
-        if (label === "rulesUpdate") {
-            domainRules = data;
+        if (label === "stateUpdate") {
+            domainRules = data.domainRules;
+            shouldLog = data.shouldLog;
             return;
         }
 
@@ -127,7 +130,12 @@
 
         details.responseHeaders.push({
             name: "Set-Cookie",
-            value: `web-api-manager=${packedValues}`
+            value: `wam-standards=${packedValues}`
+        });
+
+        details.responseHeaders.push({
+            name: "Set-Cookie",
+            value: `wam-log=${shouldLog ? "true" : "false"}`
         });
 
         return {
