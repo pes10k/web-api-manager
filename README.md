@@ -1,6 +1,13 @@
 Web API Manager
 ===
 
+Note
+---
+By default, this extension does not make any changes. No aspects of the Web
+API are affected until you start creating custom rule sets, or modifying what
+Web API standards sites have access to by default. You can start creating
+these rules through the site's configuration pane.
+
 
 Overview
 ---
