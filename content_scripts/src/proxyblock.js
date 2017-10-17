@@ -157,6 +157,13 @@
 
     featuresToBlock.forEach(blockFeatureAtKeyPath);
 
+    // Next, delete the WEB_API_MANAGER_PAGE global property.  Technically
+    // this never needed to be global, but doing so allows for easier
+    // jslinting of the code, makes things easier to understand (for me
+    // at least) and doesn't have any side effect as long as we delete
+    // it when we're done, and before the page scripts can start running.
+    delete window.WEB_API_MANAGER_PAGE;
+
     // Last, remove the script tag containing this code from the document,
     // so that the structure of the page looks like what the page author
     // expects / intended.
