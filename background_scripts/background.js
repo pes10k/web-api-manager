@@ -124,18 +124,21 @@
         // of the URL being requested.
         const matchingDomainRule = domainMatcherLib.matchUrl(Object.keys(domainRules), url);
         const standardsToBlock = domainRules[matchingDomainRule || defaultKey];
+        const shouldLogOption = ["shouldLog"];
 
-        const options = Object.keys(standards);
-        const packedValues = packingLib.pack(options, standardsToBlock);
+        const options = Object.keys(standards).concat(shouldLogOption);
+        const standardsToBlockWithShouldLogOption = shouldLog
+            ? standardsToBlock.concat(shouldLogOption)
+            : standardsToBlock;
+
+        const packedValues = packingLib.pack(
+            options,
+            standardsToBlockWithShouldLogOption
+        );
 
         details.responseHeaders.push({
             name: "Set-Cookie",
-            value: `wam-standards=${packedValues}`
-        });
-
-        details.responseHeaders.push({
-            name: "Set-Cookie",
-            value: `wam-log=${shouldLog ? "true" : "false"}`
+            value: `wam-temp-cookie=${packedValues}`
         });
 
         return {

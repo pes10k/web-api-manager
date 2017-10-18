@@ -146,11 +146,13 @@
 
             parentRef[lastPropertyName] = defaultBlockingProxy;
             return true;
+
         } catch (e) {
 
             if (shouldLog) {
                 console.log("Error instrumenting " + keyPath + ": " + e);
             }
+
             return false;
         }
     };

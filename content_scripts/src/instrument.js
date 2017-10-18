@@ -8,17 +8,26 @@
     const doc = window.document;
     const script = doc.createElement('script');
     const rootElm = doc.head || doc.documentElement;
+    const shouldLogValue = "shouldLog";
 
-    const standardsCookieKey = "wam-standards";
+    const standardsCookieKey = "wam-temp-cookie";
     const {packingLib, standards} = window.WEB_API_MANAGER;
     const options = Object.keys(standards);
+    const optionsWithShouldLog = options.concat([shouldLogValue]);
     const packedValues = Cookies.get(standardsCookieKey);
-    const standardsToBlock = packingLib.unpack(options, packedValues);
+    const unpackedValues = packingLib.unpack(optionsWithShouldLog, packedValues);
     Cookies.remove(standardsCookieKey);
 
-    const shouldLogCookieKey = "wam-log";
-    const shouldLog = Cookies.get(shouldLogCookieKey);
-    Cookies.remove(shouldLogCookieKey);
+    let shouldLog;
+    const standardsToBlock = unpackedValues;
+    const indexOfShouldLog = unpackedValues.indexOf(shouldLogValue);
+
+    if (indexOfShouldLog === -1) {
+        shouldLog = false;
+    } else {
+        shouldLog = true;
+        standardsToBlock.splice(indexOfShouldLog, 1);
+    }
 
     const code = `
         window.WEB_API_MANAGER_PAGE = {
