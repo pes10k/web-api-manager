@@ -28,7 +28,7 @@ gulp.task('default', function () {
             const standardContents = JSON.parse(fileContents);
             const nameParts = [standardContents.info.name, standardContents.info.subsection_name].filter(part => !!part);
             const standardIdenitifer = nameParts.join(": ").trim();
-            standardContents.info.idenitifer = standardIdenitifer;
+            standardContents.info.identifier = standardIdenitifer;
             prev[standardIdenitifer] = standardContents;
             return prev;
         }, {});

@@ -43,10 +43,10 @@
                             </span>
 
                             <input type="checkbox"
-                                :value="standard.info.idenitifer"
+                                :value="standard.info.identifier"
                                 v-model="selectedStandards"
                                 @change="onStandardChecked">
-                            {{ standard.info.idenitifer }}
+                            {{ standard.info.identifier }}
                         </li>
                     </ul>
                 </div>
@@ -67,7 +67,7 @@
             },
             onAllClicked: function () {
                 const allStandards = Object.keys(this.standards)
-                    .map(aStdName => this.standards[aStdName].info.idenitifer);
+                    .map(aStdName => this.standards[aStdName].info.identifier);
                 this.$root.$data.setSelectedStandards(allStandards);
             }
         }
