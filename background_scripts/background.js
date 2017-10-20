@@ -3,7 +3,9 @@
 (function () {
     "use strict";
 
-    const {packingLib, standards, storageLib, domainMatcherLib} = window.WEB_API_MANAGER;
+    const {storageLib, domainMatcherLib, constants} = window.WEB_API_MANAGER;
+    const {cookieEncodingLib, proxyBlockLib, httpHeadersLib} = window.WEB_API_MANAGER;
+    const {standards} = window.WEB_API_MANAGER;
     const rootObject = window.browser || window.chrome;
     const defaultKey = "(default)";
 
@@ -48,7 +50,6 @@
                     tabId: tabId
                 });
                 rootObject.browserAction.enable();
-                
             }
         );
     };
@@ -124,22 +125,50 @@
         // of the URL being requested.
         const matchingDomainRule = domainMatcherLib.matchUrl(Object.keys(domainRules), url);
         const standardsToBlock = domainRules[matchingDomainRule || defaultKey];
-        const shouldLogOption = ["shouldLog"];
+        const encodedOptions = cookieEncodingLib.toCookieValue(standardsToBlock, shouldLog);
 
-        const options = Object.keys(standards).concat(shouldLogOption);
-        const standardsToBlockWithShouldLogOption = shouldLog
-            ? standardsToBlock.concat(shouldLogOption)
-            : standardsToBlock;
+        // If we're on a site thats sending the "strict-dynamic"
+        // Content-Security-Policy instruction, then we need to add the
+        // injected proxy code to the list of scripts that are allowed to
+        // run in the page.
+        const cspDynamicPolicyHeaders = details.responseHeaders
+            .filter(httpHeadersLib.isHeaderCSP)
+            .filter(httpHeadersLib.isCSPHeaderSettingStrictDynamic);
 
-        const packedValues = packingLib.pack(
-            options,
-            standardsToBlockWithShouldLogOption
-        );
+        if (cspDynamicPolicyHeaders.length === 1) {
+            const [ignore, scriptHash] = proxyBlockLib.generateScriptPayload(
+                standards,
+                standardsToBlock,
+                shouldLog
+            );
+        
+            const newCSPValue = httpHeadersLib.createCSPInstructionWithHashAllowed(
+                cspDynamicPolicyHeaders[0].value,
+                "sha256-" + scriptHash
+            );
+            
+            if (newCSPValue !== false) {
+                cspDynamicPolicyHeaders[0].value = newCSPValue;
+            }
+        }
 
-        details.responseHeaders.push({
-            name: "Set-Cookie",
-            value: `wam-temp-cookie=${packedValues}`
-        });
+        // If there is already a set-cookie instruction being issued,
+        // don't overwrite it, but add our cookie to the end of it.  Otherwise,
+        // create a new set-cookie instruction header.
+        const webAPIStandardsCookie = `${constants.cookieName}=${encodedOptions}`;
+        const setCookieHeaders = details.responseHeaders.filter(httpHeadersLib.isSetCookie);
+
+        if (setCookieHeaders.length > 0) {
+
+            setCookieHeaders[0].value += "; " + webAPIStandardsCookie;
+
+        } else {
+
+            details.responseHeaders.push({
+                name: "Set-Cookie",
+                value: webAPIStandardsCookie
+            });
+        }
 
         return {
             responseHeaders: details.responseHeaders

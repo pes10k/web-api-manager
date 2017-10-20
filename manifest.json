@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "WebAPI Manager",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "Improves browser security and privacy by controlling page access to the Web API.",
   "icons": {
     "48": "images/uic-48.png",
@@ -31,32 +31,32 @@
     {
       "matches": ["*://*/*"],
       "js": [
+        "lib/vendor/js.cookie.js",
+        "lib/vendor/sjcl.js",
         "lib/init.js",
+        "data/standards.js",
         "lib/pack.js",
-        "lib/js.cookie.js",
-        "content_scripts/dist/standards.js",
-        "content_scripts/dist/instrument.js"
+        "lib/cookieencoding.js",
+        "lib/proxyblock.js",
+        "content_scripts/instrument.js"
       ],
       "all_frames": true,
       "run_at": "document_start"
     }
   ],
-  "web_accessible_resources": [
-    "lib/init.js",
-    "lib/js.cookie.js",
-    "lib/storage.js",
-    "lib/URI.js",
-    "content_scripts/dist/defaults.js"
-  ],
   "background": {
     "scripts": [
+      "lib/vendor/sjcl.js",
+      "lib/vendor/URI.js",
       "lib/init.js",
+      "data/standards.js",
       "lib/pack.js",
-      "lib/URI.js",
-      "content_scripts/dist/standards.js",
-      "content_scripts/dist/defaults.js",
+      "lib/defaults.js",
       "lib/storage.js",
       "lib/domainmatcher.js",
+      "lib/cookieencoding.js",
+      "lib/proxyblock.js",
+      "lib/httpheaders.js",
       "background_scripts/background.js"
     ]
   },

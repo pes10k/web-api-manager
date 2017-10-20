@@ -1,6 +1,5 @@
 const gulp = require("gulp");
 const fs = require("fs");
-const UglifyJS = require("uglify-es");
 
 gulp.task('default', function () {
 
@@ -36,34 +35,5 @@ gulp.task('default', function () {
 
     const renderedStandardsModule = builtScriptComment + `window.WEB_API_MANAGER.standards = ${JSON.stringify(combinedStandards)};`;
 
-    fs.writeFileSync("content_scripts/dist/standards.js", renderedStandardsModule);
-
-    const proxyBlockSrc = fs.readFileSync("content_scripts/src/proxyblock.js", "utf8");
-    const instrumentSrc = fs.readFileSync("content_scripts/src/instrument.js", "utf8");
-
-    const stripCommentsFromSource = function (source) {
-        const fileLines = source.split("\n");
-        const linesWithoutComments = fileLines.filter(aLine => !isLineAComment(aLine));
-        return linesWithoutComments.join("\n");
-    };
-
-    const proxyBlockSrcWOComments = stripCommentsFromSource(proxyBlockSrc);
-    const instrumentSrcWOComments = stripCommentsFromSource(instrumentSrc);
-
-    const proxyBlockSrcWithHeader = "/** This code is a minified version of content_scripts/src/proxyblock.js **/\n" + proxyBlockSrcWOComments;
-    const instrumentSrcWithProxyInjected = instrumentSrcWOComments.replace(
-        "###-INJECTED-PROXY-BLOCKING-CODE-###",
-        UglifyJS.minify(proxyBlockSrcWithHeader, {mangle: false}).code
-    );
-
-    fs.writeFileSync("content_scripts/dist/instrument.js", builtScriptComment + instrumentSrcWithProxyInjected);
-
-    // Last, several content script files are just copied over, unmodified,
-    // as script files to be injected.
-    const srcFilesToCopy = ["defaults.js"];
-    srcFilesToCopy.forEach(function (aSrcPath) {
-        const scriptSrc = fs.readFileSync("content_scripts/src/" + aSrcPath, "utf8");
-        const scriptSrcWOComments = stripCommentsFromSource(scriptSrc);
-        fs.writeFileSync("content_scripts/dist/" + aSrcPath, builtScriptComment + scriptSrcWOComments);
-    });
+    fs.writeFileSync("data/standards.js", renderedStandardsModule);
 });
