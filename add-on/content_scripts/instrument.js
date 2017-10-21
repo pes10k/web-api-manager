@@ -14,8 +14,14 @@
     const rootElm = doc.head || doc.documentElement;
 
     const cookieValue = cookies2.get(standardsCookieName);
+    console.log(document.cookie);
+    cookies2.remove(standardsCookieName, {path: window.document.location.pathname});
+    console.log(document.cookie);
+
+    if (!cookieValue) {
+        return;
+    }
     const [standardsToBlock, shouldLog] = cookieEncodingLib.fromCookieValue(cookieValue);
-    cookies2.remove(standardsCookieName);
 
     const [scriptToInject, scriptHash] = proxyBlockLib.generateScriptPayload(
         standards,

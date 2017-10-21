@@ -133,7 +133,7 @@
         // run in the page.
         const cspDynamicPolicyHeaders = details.responseHeaders
             .filter(httpHeadersLib.isHeaderCSP)
-            .filter(httpHeadersLib.isCSPHeaderSettingStrictDynamic);
+            .filter(httpHeadersLib.isCSPHeaderSettingScriptSrc);
 
         if (cspDynamicPolicyHeaders.length === 1) {
             const [ignore, scriptHash] = proxyBlockLib.generateScriptPayload(
@@ -141,12 +141,12 @@
                 standardsToBlock,
                 shouldLog
             );
-        
+
             const newCSPValue = httpHeadersLib.createCSPInstructionWithHashAllowed(
                 cspDynamicPolicyHeaders[0].value,
                 "sha256-" + scriptHash
             );
-            
+
             if (newCSPValue !== false) {
                 cspDynamicPolicyHeaders[0].value = newCSPValue;
             }
@@ -155,20 +155,15 @@
         // If there is already a set-cookie instruction being issued,
         // don't overwrite it, but add our cookie to the end of it.  Otherwise,
         // create a new set-cookie instruction header.
-        const webAPIStandardsCookie = `${constants.cookieName}=${encodedOptions}`;
-        const setCookieHeaders = details.responseHeaders.filter(httpHeadersLib.isSetCookie);
+        const pathForCookie = window.URI(details.url).pathname();
+        details.responseHeaders.push({
+            name: "Set-Cookie",
+            value: `${constants.cookieName}=${encodedOptions};path=${pathForCookie}`
+        });
 
-        if (setCookieHeaders.length > 0) {
-
-            setCookieHeaders[0].value += "; " + webAPIStandardsCookie;
-
-        } else {
-
-            details.responseHeaders.push({
-                name: "Set-Cookie",
-                value: webAPIStandardsCookie
-            });
-        }
+        details.responseHeaders.forEach((header) => {
+            console.log(header.name + ": " + header.value);
+        });
 
         return {
             responseHeaders: details.responseHeaders

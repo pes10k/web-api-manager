@@ -5,7 +5,7 @@
     "use strict";
     window.WEB_API_MANAGER = {
         constants: {
-            cookieName: "wam-temp-cookie",
+            cookieName: "__wamtc",
             shouldLogKey: "shouldLogKey"
         }
     };

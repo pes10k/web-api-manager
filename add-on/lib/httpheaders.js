@@ -18,11 +18,20 @@
      *   in all other cases.
      */
     const isSetCookie = function (header) {
-        
+
         return (
             header &&
             header.name &&
             header.name.toLowerCase().indexOf("set-cookie") !== -1
+        );
+    };
+
+    const isNotHTTPOnlySetCookie = function (header) {
+
+        return (
+            header &&
+            header.value &&
+            header.value.toLowerCase().indexOf("httponly") === -1
         );
     };
 
@@ -63,12 +72,12 @@
      *   true if the given object is a CSP header that defines a
      *   "strict-dynamic" policy, and false in all other cases.
      */
-    const isCSPHeaderSettingStrictDynamic = function (header) {
+    const isCSPHeaderSettingScriptSrc = function (header) {
 
         return (
             header &&
-            header.name &&
-            header.value.indexOf("'strict-dynamic'") !== -1
+            header.value &&
+            header.value.indexOf("script-src") !== -1
         );
     };
 
@@ -98,7 +107,7 @@
         }
 
         const preSrcScript = cspInstruction.substring(0, indexOfScriptSrc);
-        const postScriptSrc = cspInstruction.substring(indexOfScriptSrc + 10);
+        const postScriptSrc = cspInstruction.substring(indexOfScriptSrc + 11);
         const newInstruction = preSrcScript + "script-src '" + scriptHash + "' " + postScriptSrc;
 
         return newInstruction;
@@ -106,8 +115,9 @@
 
     window.WEB_API_MANAGER.httpHeadersLib = {
         isSetCookie,
+        isNotHTTPOnlySetCookie,
         isHeaderCSP,
-        isCSPHeaderSettingStrictDynamic,
+        isCSPHeaderSettingScriptSrc,
         createCSPInstructionWithHashAllowed
     };
 }());

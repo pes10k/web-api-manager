@@ -35,5 +35,5 @@ gulp.task('default', function () {
 
     const renderedStandardsModule = builtScriptComment + `window.WEB_API_MANAGER.standards = ${JSON.stringify(combinedStandards)};`;
 
-    fs.writeFileSync("data/standards.js", renderedStandardsModule);
+    fs.writeFileSync("add-on/lib/standards.js", renderedStandardsModule);
 });

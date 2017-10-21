@@ -14,7 +14,7 @@
 
             // If there are no currently saved domain rules, then create
             // a stubbed out one, using an empty blocking rule set.
-            if (!loadedValues || 
+            if (!loadedValues ||
                     !loadedValues.domainRules ||
                     Object.keys(loadedValues.domainRules).length === 0) {
 

@@ -16,7 +16,7 @@
     // just to make it easier to write and deploy (ie vim highlights
     // it just like any other JS).
     const proxyBlockingFunction = function () {
-        console.log("well it runs");
+
         const settings = window.WEB_API_MANAGER_PAGE;
         const shouldLog = settings.shouldLog;
         const standardsToBlock = settings.toBlock;
@@ -177,7 +177,6 @@
         // it when we're done, and before the page scripts can start running.
         delete window.WEB_API_MANAGER_PAGE;
 
-        console.log("well its done");
         // Last, remove the script tag containing this code from the document,
         // so that the structure of the page looks like what the page author
         // expects / intended.
