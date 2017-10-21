@@ -27,9 +27,9 @@ gulp.task('default', function () {
             const fileContents = fs.readFileSync(standardsDefDir + "/" + next, {encoding: "utf8"});
             const standardContents = JSON.parse(fileContents);
             const nameParts = [standardContents.info.name, standardContents.info.subsection_name].filter(part => !!part);
-            const standardIdenitifer = nameParts.join(": ").trim();
-            standardContents.info.identifier = standardIdenitifer;
-            prev[standardIdenitifer] = standardContents;
+            const standardIdentifier = nameParts.join(": ").trim();
+            standardContents.info.identifier = standardIdentifier;
+            prev[standardIdentifier] = standardContents;
             return prev;
         }, {});
 
