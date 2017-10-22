@@ -180,7 +180,7 @@
             url: details.url,
             name: constants.cookieName,
             value: encodedOptions
-        })
+        });
 
         return {
             responseHeaders: details.responseHeaders

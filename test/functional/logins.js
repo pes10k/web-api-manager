@@ -1,7 +1,7 @@
 "use strict";
 
 const utils = require("./lib/utils");
-let testParams
+let testParams;
 try {
     testParams = require("../../test.config.js");
 } catch (e) {

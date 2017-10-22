@@ -19,7 +19,7 @@ module.exports.constants = {
 
 module.exports.pause = function (ms = 2000) {
     return new Promise(function (resolve) {
-        setTimeout(resolve, ms)
+        setTimeout(resolve, ms);
     });
 };
 
@@ -63,7 +63,7 @@ module.exports.promiseExtensionConfigPage = function (driver) {
             const extensionId = match[1];
             driver.setContext(Context.CONTENT);
             return driver.get(`moz-extension://${extensionId}/config/index.html`);
-        })
+        });
 };
 
 module.exports.promiseAddonConfigButton = function (driver) {

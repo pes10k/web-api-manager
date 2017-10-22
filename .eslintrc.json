@@ -12,6 +12,7 @@
     "rules": {
         "no-console": "off",
         "no-trailing-spaces": "error",
-        "no-unused-vars": ["error", {"varsIgnorePattern": "ignore"}]
+        "no-unused-vars": ["error", {"varsIgnorePattern": "ignore"}],
+        "semi": ["error", "always"]
     }
 }
