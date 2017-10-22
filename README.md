@@ -79,7 +79,7 @@ To run the tests, give the following a try:
 
 ```
 # install the development libraries
-npm install dev
+npm install
 
 # copy the skelleton config file to where the test scripts expect it to be.
 cp test.config.example.js test.config.js
