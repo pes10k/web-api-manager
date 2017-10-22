@@ -16,7 +16,8 @@
                         {{ aDomain }}
                         <span class="glyphicon glyphicon-remove"
                                v-if="!isDefault(aDomain)"
-                             @click="onRemoveClick(aDomain)"></span>
+                        data-domain="{{ aDomain }}"
+                             @click="onRemoveClick"></span>
                     </label>
                 </div>
 
@@ -59,8 +60,12 @@
             onRadioChange: function () {
                 this.$root.$data.setSelectedDomain(this.selectedDomain);
             },
-            onRemoveClick: function (aDomain) {
-                this.$root.$data.deleteDomainRule(aDomain);
+            onRemoveClick: function (event) {
+                const targetElement = event.target;
+                const domain = targetElement.dataset.domain;
+                event.stopPropagation();
+                event.preventDefault();
+                this.$root.$data.deleteDomainRule(domain);
             },
             isDefault: function (domainName) {
                 return domainName === "(default)";
