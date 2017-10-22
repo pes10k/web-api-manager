@@ -36,7 +36,7 @@
             function (allHosts) {
 
                 if (rootObject.runtime.lastError && !allHosts) {
-                    rootObject.browserAction.disable();
+                    // rootObject.browserAction.disable();
                     rootObject.browserAction.setBadgeText({text: "-"});
                     return;
                 }

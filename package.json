@@ -4,10 +4,7 @@
   "description": "Tools to generate Web API managing browser extensions for Firefox and Chrome.",
   "author": "Peter Snyder <psnyde2@uic.edu> (https://www.cs.uic.edu/~psnyder/)",
   "license": "GPL-3.0",
-  "dependencies": {
-    "gulp": "^3.9.1",
-    "web-ext": "^2.2.2"
-  },
+  "dependencies": {},
   "homepage": "https://github.com/snyderp/web-api-manager",
   "bugs": {
     "url": "https://github.com/snyderp/web-api-manager/issues",
@@ -24,7 +21,15 @@
   ],
   "contributors": [],
   "scripts": {
-    "bundle": "web-ext -s add-on -a dist build --overwrite-dest",
-    "firefox": "web-ext -s add-on run"
+    "bundle": "gulp && web-ext -s add-on -a dist build --overwrite-dest",
+    "firefox": "web-ext -s add-on run",
+    "test": "rm dist/* && npm run bundle && ln -s `ls dist/` dist/webapi_manager.zip && node_modules/mocha/bin/mocha test/functional/*.js"
+  },
+  "devDependencies": {
+    "geckodriver": "^1.9.0",
+    "gulp": "^3.9.1",
+    "mocha": "^4.0.1",
+    "selenium-webdriver": "^3.6.0",
+    "web-ext": "^2.2.2"
   }
 }
