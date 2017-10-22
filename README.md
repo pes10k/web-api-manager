@@ -68,6 +68,30 @@ for future inclusion:
     methods are interposed on).
 
 
+Testing and Development
+---
+There is a [Mocha](https://mochajs.org/) and [Selenium](http://docs.seleniumhq.org/)
+based test suite in place now.  To run it you'll need to provide the test suite
+with some GitHub and YouTube credentials (to make check for previous regressions
+related to cookies and logging into sites).
+
+To run the tests, give the following a try:
+
+```
+# install the development libraries
+npm install dev
+
+# copy the skelleton config file to where the test scripts expect it to be.
+cp test.config.example.js test.config.js
+
+# edit the new test config file to add github and google account credentials
+vim test.config.js
+
+# Run the test suite
+npm run test
+```
+
+
 Background
 ---
 This extension is based on research conducted at the [BITSLab](https://www.cs.uic.edu/Bits/)
