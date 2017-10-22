@@ -1,5 +1,3 @@
-/*jslint es6: true*/
-/*global window*/
 (function () {
     "use strict";
     const {packingLib, standards, constants} = window.WEB_API_MANAGER;
@@ -38,7 +36,7 @@
 
         // Last, replace "=" with "-" in the base64 string, to avoid
         // silly ambiguities in the cookie value.
-        return packedValues.replace(/\=/g, "-");
+        return packedValues.replace(/=/g, "-");
     };
 
     /**

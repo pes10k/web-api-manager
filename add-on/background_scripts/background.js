@@ -36,7 +36,6 @@
             function (allHosts) {
 
                 if (rootObject.runtime.lastError && !allHosts) {
-                    // rootObject.browserAction.disable();
                     rootObject.browserAction.setBadgeText({text: "-"});
                     return;
                 }
@@ -49,7 +48,6 @@
                     text: numFrames,
                     tabId: tabId
                 });
-                rootObject.browserAction.enable();
             }
         );
     };
@@ -102,7 +100,33 @@
         urls: ["<all_urls>"],
         types: ["main_frame", "sub_frame"]
     };
-    const requestOptions = ["blocking", "responseHeaders"];
+
+    const cookieRemoverRegex = new RegExp(constants.cookieName + "=.*?;");
+
+    // Make sure we never send the cookie value that contains what
+    // standards should be blocked to any server, anytime.  In the common
+    // case this will be a NOOP (since the cookie is deleted after being
+    // read), but there are some inconsitancy / timing situations where
+    // making multiple, simultanious requests to the same domain where
+    // we might make a request before deleting the cookie, so the below
+    // adds at least some (incertain) extra protection.
+    rootObject.webRequest.onBeforeSendHeaders.addListener(function (details) {
+
+        const newHeaders = details.requestHeaders.map(function (header) {
+
+            if (header.name.indexOf("Cookie") === -1) {
+                header;
+            }
+
+            const cookieValue = header.value;
+            header.value = cookieValue.replace(cookieRemoverRegex, "").trim();
+            return header;
+        });
+
+        return {
+            requestHeaders: newHeaders
+        };
+    }, requestFilter, ["blocking", "requestHeaders"]);
 
     // Inject the blocking settings for each visited domain / frame.
     // This needs to be done syncronously, so that the DOM of the visited
@@ -152,22 +176,15 @@
             }
         }
 
-        // If there is already a set-cookie instruction being issued,
-        // don't overwrite it, but add our cookie to the end of it.  Otherwise,
-        // create a new set-cookie instruction header.
-        const pathForCookie = window.URI(details.url).pathname();
-        details.responseHeaders.push({
-            name: "Set-Cookie",
-            value: `${constants.cookieName}=${encodedOptions};path=${pathForCookie}`
-        });
-
-        details.responseHeaders.forEach((header) => {
-            console.log(header.name + ": " + header.value);
-        });
+        rootObject.cookies.set({
+            url: details.url,
+            name: constants.cookieName,
+            value: encodedOptions
+        })
 
         return {
             responseHeaders: details.responseHeaders
         };
 
-    }, requestFilter, requestOptions);
+    }, requestFilter, ["blocking", "responseHeaders"]);
 }());

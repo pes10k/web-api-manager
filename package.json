@@ -23,9 +23,12 @@
   "scripts": {
     "bundle": "gulp && web-ext -s add-on -a dist build --overwrite-dest",
     "firefox": "web-ext -s add-on run",
-    "test": "rm dist/* && npm run bundle && ln -s `ls dist/` dist/webapi_manager.zip && node_modules/mocha/bin/mocha test/functional/*.js"
+    "test:lint": "node_modules/eslint/bin/eslint.js test/functional/*.js test/functional/**/*.js add-on/background_scripts/*.js add-on/config/js/*.js add-on/config/js/components/*.js add-on/lib/*.js add-on/content_scripts/*.js",
+    "test:func": "rm dist/* && npm run bundle && ln -s `ls dist/` dist/webapi_manager.zip && node_modules/mocha/bin/mocha test/functional/*.js",
+    "test": "npm run test:lint && npm run test:func"
   },
   "devDependencies": {
+    "eslint": "^4.9.0",
     "geckodriver": "^1.9.0",
     "gulp": "^3.9.1",
     "mocha": "^4.0.1",

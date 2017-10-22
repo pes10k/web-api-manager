@@ -11,37 +11,37 @@
         if (typeof aString !== 'string') {
             throw new TypeError('Expected a string');
         }
-    
+
         return aString.replace(matchOperatorsRe, '\\$&');
     };
 
     // From https://www.npmjs.com/package/matcher
     const reCache = new Map();
-    
+
     const makeRe = function (pattern, shouldNegate) {
 
         const cacheKey = pattern + shouldNegate;
-    
+
         if (reCache.has(cacheKey)) {
             return reCache.get(cacheKey);
         }
-    
+
         const negated = pattern[0] === '!';
-    
+
         if (negated) {
             pattern = pattern.slice(1);
         }
-    
+
         pattern = escapeStringRegexp(pattern).replace(/\\\*/g, '.*');
-    
+
         if (negated && shouldNegate) {
             pattern = `(?!${pattern})`;
         }
-    
+
         const re = new RegExp(`^${pattern}$`, 'i');
         re.negated = negated;
         reCache.set(cacheKey, re);
-    
+
         return re;
     };
 
@@ -83,5 +83,4 @@
         matchHostName,
         matchUrl
     };
-
 }());

@@ -1,6 +1,5 @@
 "use strict";
 
-const assert = require("assert");
 const http = require("http");
 const utils = require("./lib/utils");
 const injected = require("./lib/injected");
@@ -40,22 +39,22 @@ describe("Basic", function () {
         httpServer.close();
     });
 
-    describe("Blocking", function () {
+    describe("blocking", function () {
 
         it("SVG Not Blocking", function (done) {
             const standardsToBlock = [];
             let driverReference;
 
             utils.promiseGetDriver()
-                .then(function (driver, addonId) {
+                .then(function (driver) {
                     driverReference = driver;
                     return utils.promiseSetBlockingRules(driver, standardsToBlock);
                 })
-                .then(function (result) {
-                    return driverReference.get(testUrl);
-                })
+                .then(() => driverReference.get(testUrl))
+                .then(() => driverReference.executeAsyncScript(svgTestScript))
                 .then(function () {
-                    return driverReference.executeAsyncScript(svgTestScript);
+                    driverReference.quit();
+                    done(new Error("SVG acted as if it was being blocked"));
                 })
                 .catch(function () {
                     // Since we're not blocking the SVG API, then the sample
@@ -65,24 +64,25 @@ describe("Basic", function () {
                 });
         });
 
-        it("SVG Blocking", function (done) {
-            const standardsToBlock = ["Scalable Vector Graphics (SVG) 1.1 (Second Edition)"];
+        it("SVG blocking", function (done) {
+
+            const standardsToBlock = utils.constants.svgBlockRule;
             let driverReference;
-            
+
             utils.promiseGetDriver()
-                .then(function (driver, addonId) {
+                .then(function (driver) {
                     driverReference = driver;
                     return utils.promiseSetBlockingRules(driver, standardsToBlock);
                 })
-                .then(function (result) {
-                    return driverReference.get(testUrl);
-                })
-                .then(function () {
-                    return driverReference.executeAsyncScript(svgTestScript);
-                })
+                .then(() => driverReference.get(testUrl))
+                .then(() => driverReference.executeAsyncScript(svgTestScript))
                 .then(function () {
                     driverReference.quit();
                     done();
+                })
+                .catch(function (e) {
+                    driverReference.quit();
+                    done(e);
                 });
         });
     });

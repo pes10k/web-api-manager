@@ -20,28 +20,29 @@ module.exports.temporaryAddOnInstallScript = (function () {
 
     const funcToInject = function () {
 
-        let fileUtils = Components.utils.import('resource://gre/modules/FileUtils.jsm'); 
-        let FileUtils = fileUtils.FileUtils; 
-        let callback = arguments[arguments.length - 1]; 
-        Components.utils.import('resource://gre/modules/AddonManager.jsm'); 
+        const {Components, AddonManager} = window;
+        let fileUtils = Components.utils.import('resource://gre/modules/FileUtils.jsm');
+        let FileUtils = fileUtils.FileUtils;
+        let callback = arguments[arguments.length - 1];
+        Components.utils.import('resource://gre/modules/AddonManager.jsm');
 
-        let listener = { 
-            onInstallEnded: function(install, addon) { 
-                callback([addon.id, 0]); 
+        let listener = {
+            onInstallEnded: function(install, addon) {
+                callback([addon.id, 0]);
             },
-            onInstallFailed: function(install) { 
-                callback([null, install.error]); 
+            onInstallFailed: function(install) {
+                callback([null, install.error]);
             },
-            onInstalled: function(addon) { 
-                AddonManager.removeAddonListener(listener); 
-                callback([addon.id, 0]); 
-            } 
+            onInstalled: function(addon) {
+                AddonManager.removeAddonListener(listener);
+                callback([addon.id, 0]);
+            }
         };
 
-        let file = new FileUtils.File(arguments[0]); 
+        let file = new FileUtils.File(arguments[0]);
 
-        AddonManager.addAddonListener(listener); 
-        AddonManager.installTemporaryAddon(file).catch(error => { 
+        AddonManager.addAddonListener(listener);
+        AddonManager.installTemporaryAddon(file).catch(error => {
             Components.utils.reportError(error);
             callback([null, error]);
         });
@@ -84,8 +85,8 @@ module.exports.testSVGTestScript = (function () {
     };
 
     const funcSource = stripFuncFromSource(funcToInject.toString());
-    
-    return function (standardsToBlock) {
+
+    return function () {
         return funcSource;
-    };    
+    };
 }());

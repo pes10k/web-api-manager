@@ -1,10 +1,7 @@
-/*jslint es6: true, this: true*/
-/*global window, browser, Vue*/
 (function () {
     "use strict";
 
     const defaultDomain = "(default)";
-    const {packingLib, standards} = window.WEB_API_MANAGER;
 
     const generateStateObject = function (initialDomain, standards) {
 

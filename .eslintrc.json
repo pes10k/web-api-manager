@@ -1,0 +1,17 @@
+{
+    "env": {
+        "browser": true,
+        "es6": true,
+        "webextensions": true,
+        "node": true,
+        "mocha": true
+    },
+    "extends": [
+      "eslint:recommended"
+    ],
+    "rules": {
+        "no-console": "off",
+        "no-trailing-spaces": "error",
+        "no-unused-vars": ["error", {"varsIgnorePattern": "ignore"}]
+    }
+}

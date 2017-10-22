@@ -14,13 +14,18 @@
     const rootElm = doc.head || doc.documentElement;
 
     const cookieValue = cookies2.get(standardsCookieName);
-    console.log(document.cookie);
+
+    if (!cookieValue) {
+        window.console.log(`Unable to find the Web API Manager settings for ${doc.location.href}`);
+        return;
+    }
+
     cookies2.remove(standardsCookieName, {path: window.document.location.pathname});
-    console.log(document.cookie);
 
     if (!cookieValue) {
         return;
     }
+
     const [standardsToBlock, shouldLog] = cookieEncodingLib.fromCookieValue(cookieValue);
 
     const [scriptToInject, scriptHash] = proxyBlockLib.generateScriptPayload(

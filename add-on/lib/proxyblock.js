@@ -109,7 +109,7 @@
                     logKeyPath();
                     return blockingProxy;
                 },
-                ownKeys: function (ignore) {
+                ownKeys: function () {
                     return unconfigurablePropNames;
                 },
                 has: function (ignore, property) {

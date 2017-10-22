@@ -6,18 +6,51 @@ require("geckodriver");
 
 const firefox = require("selenium-webdriver/firefox");
 const webdriver = require("selenium-webdriver");
-const FxRunnerUtils = require("fx-runner/lib/utils");
 const injectedScripts = require("./injected");
-const fs = require("fs");
-const By = webdriver.By;
+const by = webdriver.By;
 const Context = firefox.Context;
 const until = webdriver.until;
+const keys = webdriver.Key;
 const path = require("path");
+
+module.exports.constants = {
+    svgBlockRule: ["Scalable Vector Graphics (SVG) 1.1 (Second Edition)"]
+};
+
+module.exports.pause = function (ms = 2000) {
+    return new Promise(function (resolve) {
+        setTimeout(resolve, ms)
+    });
+};
+
+module.exports.promiseSetFormAndSubmit = function (driver, values) {
+    driver.setContext(Context.CONTENT);
+    const numberOfPairs = values.length;
+
+    const setFormValue = function (index = 0) {
+
+        const [name, value] = values[index];
+
+        if (index === numberOfPairs - 1) {
+
+            return driver.findElement(by.name(name))
+                .sendKeys(value, keys.ENTER);
+
+        } else {
+
+            return driver.findElement(by.name(name))
+                .sendKeys(value)
+                .then(() => setFormValue(index + 1));
+        }
+    };
+
+    return setFormValue();
+};
 
 module.exports.promiseAddonButton = function (driver) {
     driver.setContext(Context.CHROME);
     return driver.wait(until.elementLocated(
-        By.css("[tooltiptext='WebAPI Manager']")
+        by.css("[tooltiptext='WebAPI Manager']")
     ), 2000);
 };
 
@@ -36,7 +69,7 @@ module.exports.promiseExtensionConfigPage = function (driver) {
 module.exports.promiseAddonConfigButton = function (driver) {
     driver.setContext(Context.CHROME);
     return driver.wait(until.elementLocated(
-            By.id("config-page-link")
+            by.id("config-page-link")
         ), 2000);
 };
 
@@ -48,7 +81,7 @@ module.exports.promiseSetBlockingRules = function (driver, standardsToBlock) {
         .then(driver.executeAsyncScript(setStandardsScript));
 };
 
-module.exports.promiseGetDriver = function (callback) {
+module.exports.promiseGetDriver = function () {
 
     let driver = new webdriver.Builder()
         .forBrowser('firefox')
@@ -74,6 +107,7 @@ module.exports.promiseGetDriver = function (callback) {
                 });
             }
 
+            driver.setContext(Context.CONTENT);
             return Promise.resolve(driver, result[0]);
         });
 };
