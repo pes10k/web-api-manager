@@ -87,7 +87,7 @@ Testing and Development
 ---
 There is a [Mocha](https://mochajs.org/) and [Selenium](http://docs.seleniumhq.org/)
 based test suite in place now.  To run it you'll need to provide the test suite
-with some GitHub and YouTube credentials (to make check for previous regressions
+with some social networking credentials (to make check for previous regressions
 related to cookies and logging into sites).
 
 To run the tests, give the following a try:

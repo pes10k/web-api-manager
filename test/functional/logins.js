@@ -18,6 +18,11 @@ describe("Logging into popular sites", function () {
 
     describe("GitHub", function () {
 
+        if (!testParams.github.username) {
+            console.log(" * No Github account information in test.config.js, skipping these tests.");
+            return;
+        }
+
         const formValues = [
             ["login", testParams.github.username],
             ["password", testParams.github.password]
@@ -93,6 +98,12 @@ describe("Logging into popular sites", function () {
     });
 
     describe("Facebook", function () {
+
+        if (!testParams.facebook.username) {
+            console.log(" * No Facebook account information in test.config.js, skipping these tests.");
+            return;
+        }
+
         this.timeout = function () {
             return 20000;
         };
@@ -136,8 +147,13 @@ describe("Logging into popular sites", function () {
 
     describe("YouTube", function () {
 
+        if (!testParams.google.username) {
+            console.log(" * No Google/YouTube account information in test.config.js, skipping these tests.");
+            return;
+        }
+
         this.timeout = function () {
-            return 20000;
+            return 30000;
         };
 
         it("Log in", function (done) {
@@ -159,7 +175,7 @@ describe("Logging into popular sites", function () {
                 .then(function () {
                     return driverReference.wait(until.elementLocated(
                         by.name("identifier")
-                    ), 3000);
+                    ), 5000);
                 })
                 .then(identifierElm => driverReference.wait(until.elementIsVisible(identifierElm)))
                 .then(identifierElm => identifierElm.sendKeys(testParams.google.username, keys.ENTER))
@@ -167,7 +183,7 @@ describe("Logging into popular sites", function () {
                 .then(function () {
                     return driverReference.wait(until.elementLocated(
                         by.name("password")
-                    ), 3000);
+                    ), 5000);
                 })
                 .then(passwordElm => driverReference.wait(until.elementIsVisible(passwordElm)))
                 .then(passwordElm => passwordElm.sendKeys(testParams.google.password, keys.ENTER))
