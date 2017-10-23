@@ -6,7 +6,7 @@
     const storageObject = rootObject.storage;
 
     const get = function (callback) {
-        storageObject.local.get(webApiManagerKeySettingsKey, function (results) {
+        storageObject.sync.get(webApiManagerKeySettingsKey, function (results) {
 
             let loadedValues = results && results[webApiManagerKeySettingsKey];
 
@@ -31,7 +31,7 @@
     const set = function (object, callback) {
         const valueToStore = {};
         valueToStore[webApiManagerKeySettingsKey] = object;
-        storageObject.local.set(valueToStore, callback);
+        storageObject.sync.set(valueToStore, callback);
     };
 
     window.WEB_API_MANAGER.storageLib = {
