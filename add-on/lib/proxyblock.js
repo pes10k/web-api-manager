@@ -39,6 +39,19 @@
             return prev.concat(standardDefinitions[cur].features);
         }, []);
 
+        // A mapping of feature keypaths to the standards that contain them,
+        // to make the logs more useful (ie so the log can mention the standard
+        // that contains the blocked feature).
+        const featureToStandardMapping = Object
+            .keys(standardDefinitions)
+            .reduce(function (mapping, standardName) {
+                const featuresInStandard = standardDefinitions[standardName].features;
+                featuresInStandard.forEach(function (featureName) {
+                    mapping[featureName] = standardName;
+                });
+                return mapping;
+            }, {});
+
         const toPrimitiveFunc = function (hint) {
             if (hint === "number" || hint === "default") {
                 return 0;
@@ -81,7 +94,9 @@
                         hasBeenLogged === false &&
                         shouldLog) {
                     hasBeenLogged = true;
-                    console.log("Blocked '" + keyPath + "' on '" + hostName + "'");
+                    const standard = featureToStandardMapping[keyPath];
+                    const message = `Blocked '${keyPath}' from '${standard}' on '${hostName}'`;
+                    console.log(message);
                 }
             };
 
