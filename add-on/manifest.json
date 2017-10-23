@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "applications": {
     "gecko": {
-      "id": "webapimanager@peteresnyder.com",
+      "id": "{fb986c76-c042-49b8-85b5-c3dd68e83440}",
       "strict_min_version": "54.0"
     }
   },
