@@ -68,6 +68,21 @@ for future inclusion:
     methods are interposed on).
 
 
+Contributing
+---
+Pull requests and contributions of all kinds are greatly appreciated. One
+thing that would be extremely helpful is help compiling information about
+new browser standards, such as [WebVR](https://github.com/w3c/webvr) and
+[Web Speech API](https://w3c.github.io/speech-api/webspeechapi.html) that are
+not currently part of the extension. If you are interested in building
+new standard spec files, such as the ~74 that
+[already exist](https://github.com/snyderp/web-api-manager/tree/master/data/standards),
+that would be a terrific, low technical difficulty, high impact improvement.
+
+If thats of interest, please feel free to email (psnyde2@uic.edu) or open an
+issue for the standard that you're interested in.
+
+
 Testing and Development
 ---
 There is a [Mocha](https://mochajs.org/) and [Selenium](http://docs.seleniumhq.org/)
