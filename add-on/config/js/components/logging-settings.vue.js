@@ -1,7 +1,7 @@
-/*jslint es6: true, this: true*/
-/*global window, Vue*/
 (function () {
     "use strict";
+
+    const Vue = window.Vue;
 
     Vue.component("logging-settings", {
         props: ["shouldLog"],

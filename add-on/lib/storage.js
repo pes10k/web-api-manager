@@ -1,5 +1,3 @@
-/*jslint es6: true*/
-/*global window*/
 (function () {
     "use strict";
 

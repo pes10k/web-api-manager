@@ -92,6 +92,48 @@ describe("Logging into popular sites", function () {
         });
     });
 
+    describe("Facebook", function () {
+        this.timeout = function () {
+            return 20000;
+        };
+
+        it("Log in", function (done) {
+
+            const formValues = [
+                ["email", testParams.facebook.username],
+                ["pass", testParams.facebook.password]
+            ];
+
+            let driverReference;
+
+            utils.promiseGetDriver()
+                .then(function (driver) {
+                    driverReference = driver;
+                    return driverReference.get("https://www.facebook.com/");
+                })
+                .then(function () {
+                    return driverReference.wait(until.elementsLocated(
+                        by.name("email")
+                    ), 5000);
+                })
+                .then(() => utils.promiseSetFormAndSubmit(driverReference, formValues))
+                .then(function () {
+                    return driverReference.wait(until.elementLocated(
+                        by.css("div[data-click='profile_icon']")
+                    ), 10000);
+                })
+                .then(function () {
+                    driverReference.quit();
+                    done();
+                })
+                .catch(function (e) {
+                    driverReference.quit();
+                    console.log(e);
+                    done(new Error("Was not able to log in"));
+                });
+        });
+    });
+
     describe("YouTube", function () {
 
         this.timeout = function () {
@@ -110,7 +152,7 @@ describe("Logging into popular sites", function () {
                 .then(function () {
                     return driverReference.wait(until.elementsLocated(
                         by.css("#buttons ytd-button-renderer a")
-                    ), 2000);
+                    ), 5000);
                 })
                 .then(anchors => anchors[anchors.length - 1].click())
                 .then(() => utils.pause(2000))
@@ -132,7 +174,7 @@ describe("Logging into popular sites", function () {
                 .then(function () {
                     return driverReference.wait(until.elementLocated(
                         by.css("ytd-app")
-                    ), 40000);
+                    ), 10000);
                 })
                 .then(function () {
                     driverReference.quit();

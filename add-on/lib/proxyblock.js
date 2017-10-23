@@ -1,5 +1,4 @@
-/*jslint es6: true, browser: true*/
-/*global window, sjcl*/
+/*globals sjcl*/
 // This module generates JavaScript code for instrumenting the DOM
 // to prevent pages from accessing Web API standards.  This code
 // is generated programatically so that both the background and content

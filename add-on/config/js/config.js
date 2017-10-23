@@ -1,5 +1,3 @@
-/*jslint es6: true*/
-/*global window, browser, chrome, Vue*/
 (function () {
     "use strict";
 
@@ -8,6 +6,7 @@
     const standards = window.WEB_API_MANAGER.standards;
     const {storageLib, stateLib} = window.WEB_API_MANAGER;
     const defaultDomain = "(default)";
+    const Vue = window.Vue;
 
     const state = stateLib.generateStateObject(defaultDomain, standards);
 

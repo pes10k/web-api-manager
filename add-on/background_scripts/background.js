@@ -1,5 +1,3 @@
-/*jslint es6: true*/
-/*global window*/
 (function () {
     "use strict";
 
@@ -156,8 +154,7 @@
         // injected proxy code to the list of scripts that are allowed to
         // run in the page.
         const cspDynamicPolicyHeaders = details.responseHeaders
-            .filter(httpHeadersLib.isHeaderCSP)
-            .filter(httpHeadersLib.isCSPHeaderSettingScriptSrc);
+            .filter(httpHeadersLib.isHeaderCSPScriptSrcWithOutUnsafeInline);
 
         if (cspDynamicPolicyHeaders.length === 1) {
             const [ignore, scriptHash] = proxyBlockLib.generateScriptPayload(

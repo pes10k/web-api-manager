@@ -1,5 +1,3 @@
-/*jslint es6: true, for: true, bitwise: true*/
-/*global window*/
 // Functions to represent a selection of options out of a bigger set
 // in a compact, base64 representation.
 //

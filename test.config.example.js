@@ -12,5 +12,9 @@ module.exports = {
     google: {
         username: "",
         password: ""
+    },
+    facebook: {
+        username: "",
+        password: ""
     }
 };

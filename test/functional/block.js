@@ -1,42 +1,28 @@
 "use strict";
 
-const http = require("http");
 const utils = require("./lib/utils");
 const injected = require("./lib/injected");
+const testServer = require("./lib/server");
 
 describe("Basic", function () {
 
-    const testPort = 8989;
-    const testUrl = `http://localhost:${testPort}`;
     const svgTestScript = injected.testSVGTestScript();
 
     let httpServer;
+    let testUrl;
 
     this.timeout = function () {
         return 10000;
     };
 
     beforeEach(function () {
-        httpServer = http.createServer(function (req, res) {
-            const staticResponse = `<!DOCTYPE "html">
-                <html>
-                    <head>
-                        <title>Test Page</title>
-                    </head>
-                    <body>
-                        <p>Test Content</p>
-                    </body>
-                </html>
-            `;
-            res.writeHead(200, {"Content-Type": "text/html"});
-            res.write(staticResponse);
-            res.end();
-        });
-        httpServer.listen(8989);
+        const [server, url] = testServer.start();
+        testUrl = url;
+        httpServer = server;
     });
 
     afterEach(function () {
-        httpServer.close();
+        testServer.stop(httpServer);
     });
 
     describe("blocking", function () {

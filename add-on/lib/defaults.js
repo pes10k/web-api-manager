@@ -1,5 +1,3 @@
-/*jslint es6: true, browser: true*/
-/*global window*/
 /**
  * This file defines default blocking rules for domains that haven't been
  * overwritten, either by the extension user, or by a subscribed policy

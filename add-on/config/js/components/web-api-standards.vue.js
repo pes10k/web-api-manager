@@ -1,9 +1,8 @@
-/*jslint es6: true, this: true*/
-/*global window, Vue*/
 (function () {
     "use strict";
 
     const standardsDefaults = window.WEB_API_MANAGER.defaults;
+    const Vue = window.Vue;
 
     Vue.component("web-api-standards", {
         props: ["standards", "selectedStandards", "selectedDomain"],
