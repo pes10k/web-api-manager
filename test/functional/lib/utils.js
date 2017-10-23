@@ -74,7 +74,8 @@ module.exports.promiseSetBlockingRules = function (driver, standardsToBlock) {
     driver.setContext(Context.CONTENT);
 
     return this.promiseExtensionConfigPage(driver)
-        .then(driver.executeAsyncScript(setStandardsScript));
+        .then(driver.executeAsyncScript(setStandardsScript))
+        .then(() => module.exports.pause(1000));
 };
 
 module.exports.promiseGetDriver = function () {
