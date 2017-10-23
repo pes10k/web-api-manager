@@ -5,7 +5,7 @@ let testParams;
 try {
     testParams = require("../../test.config.js");
 } catch (e) {
-    throw "Unable to load a test.config.js module in the project root.  Copy test.config.example.js to test.config.js and try again";
+    throw "Unable to load a test.config.js module in the project root. Copy test.config.example.js to test.config.js.";
 }
 const injected = require("./lib/injected");
 const webdriver = require("selenium-webdriver");
@@ -42,15 +42,11 @@ describe("Logging into popular sites", function () {
                     return driverReference.get("https://github.com/login");
                 })
                 .then(function () {
-                    return driverReference.wait(until.elementLocated(
-                        by.name("password")
-                    ), 2000);
+                    return driverReference.wait(until.elementLocated(by.name("password")), 2000);
                 })
                 .then(() => utils.promiseSetFormAndSubmit(driverReference, formValues))
                 .then(function () {
-                    return driverReference.wait(until.elementLocated(
-                        by.css("body.logged-in")
-                    ), 2000);
+                    return driverReference.wait(until.elementLocated(by.css("body.logged-in")), 2000);
                 })
                 .then(function () {
                     driverReference.quit();
@@ -75,15 +71,11 @@ describe("Logging into popular sites", function () {
                 })
                 .then(() => driverReference.get("https://github.com/login"))
                 .then(function () {
-                    return driverReference.wait(until.elementLocated(
-                        by.name("password")
-                    ), 2000);
+                    return driverReference.wait(until.elementLocated(by.name("password")), 2000);
                 })
                 .then(() => utils.promiseSetFormAndSubmit(driverReference, formValues))
                 .then(function () {
-                    return driverReference.wait(until.elementLocated(
-                        by.css("body.logged-in")
-                    ), 2000);
+                    return driverReference.wait(until.elementLocated(by.css("body.logged-in")), 2000);
                 })
                 .then(() => driverReference.executeAsyncScript(svgTestScript))
                 .then(function () {
@@ -123,15 +115,11 @@ describe("Logging into popular sites", function () {
                     return driverReference.get("https://www.facebook.com/");
                 })
                 .then(function () {
-                    return driverReference.wait(until.elementsLocated(
-                        by.name("email")
-                    ), 5000);
+                    return driverReference.wait(until.elementsLocated(by.name("email")), 5000);
                 })
                 .then(() => utils.promiseSetFormAndSubmit(driverReference, formValues))
                 .then(function () {
-                    return driverReference.wait(until.elementLocated(
-                        by.css("div[data-click='profile_icon']")
-                    ), 10000);
+                    return driverReference.wait(until.elementLocated(by.css("div[data-click='profile_icon']")), 10000);
                 })
                 .then(function () {
                     driverReference.quit();
@@ -158,47 +146,38 @@ describe("Logging into popular sites", function () {
 
         it("Log in", function (done) {
 
-            let driverReference;
+            let driver;
 
             utils.promiseGetDriver()
-                .then(function (driver) {
-                    driverReference = driver;
-                    return driverReference.get("https://www.youtube.com");
+                .then(function (testDriver) {
+                    driver = testDriver;
+                    return driver.get("https://www.youtube.com");
                 })
                 .then(function () {
-                    return driverReference.wait(until.elementsLocated(
-                        by.css("#buttons ytd-button-renderer a")
-                    ), 5000);
+                    return driver.wait(until.elementsLocated(by.css("#buttons ytd-button-renderer a")), 5000);
                 })
                 .then(anchors => anchors[anchors.length - 1].click())
                 .then(() => utils.pause(2000))
                 .then(function () {
-                    return driverReference.wait(until.elementLocated(
-                        by.name("identifier")
-                    ), 5000);
+                    return driver.wait(until.elementLocated(by.name("identifier")), 5000);
                 })
-                .then(identifierElm => driverReference.wait(until.elementIsVisible(identifierElm)))
-                .then(identifierElm => identifierElm.sendKeys(testParams.google.username, keys.ENTER))
+                .then(idElm => driver.wait(until.elementIsVisible(idElm)))
+                .then(idElm => idElm.sendKeys(testParams.google.username, keys.ENTER))
                 .then(() => utils.pause(2000))
                 .then(function () {
-                    return driverReference.wait(until.elementLocated(
-                        by.name("password")
-                    ), 5000);
+                    return driver.wait(until.elementLocated(by.name("password")), 5000);
                 })
-                .then(passwordElm => driverReference.wait(until.elementIsVisible(passwordElm)))
+                .then(passwordElm => driver.wait(until.elementIsVisible(passwordElm)))
                 .then(passwordElm => passwordElm.sendKeys(testParams.google.password, keys.ENTER))
                 .then(function () {
-                    return driverReference.wait(until.elementLocated(
-                        by.css("ytd-app")
-                    ), 10000);
+                    return driver.wait(until.elementLocated(by.css("ytd-app")), 10000);
                 })
                 .then(function () {
-                    driverReference.quit();
+                    driver.quit();
                     done();
                 })
-                .catch(function (e) {
-                    driverReference.quit();
-                    console.log(e);
+                .catch(function () {
+                    driver.quit();
                     done(new Error("Was not able to log in"));
                 });
         });

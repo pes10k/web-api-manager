@@ -85,8 +85,7 @@
                 }
             };
 
-            let blockingProxy;
-            blockingProxy = new Proxy(defaultFunction, {
+            const blockingProxy = new Proxy(defaultFunction, {
                 get: function (ignore, property) {
                     logKeyPath();
 
@@ -189,16 +188,16 @@
      * but with the window.WEB_API_MANAGER_PAGE object set up
      * correctly to block the desired functions.
      *
-     * @param object standards
+     * @param {object} standards
      *   A mapping of standard names to information about those standards.
      *   The structure of this object should match whats in data/standards.js
-     * @param array standardNamesToBlock
+     * @param {array} standardNamesToBlock
      *   An array of strings, which must be a subset of the keys of the
      *   standards object.
-     * @param bool shouldLog
+     * @param {boolean} shouldLog
      *   Whether to log the behavior of the blocking proxy.
      *
-     * @return [string, hash]
+     * @return {[string, string]}
      *   Returns an array containing two values.  First, JavaScript code
      *   that instruments the DOM of page's its injected into to render the
      *   standardNamesToBlock standards un-reachable, and second, a

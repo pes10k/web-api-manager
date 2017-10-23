@@ -15,12 +15,12 @@
      * The `standardsToBlock` array must be a subset of all the standards
      * documented in data/standards.
      *
-     * @param array standardsToBlock
+     * @param {array} standardsToBlock
      *   An array of strings, each a standard that should be blocked.
-     * @param bool shouldLog
+     * @param {boolean} shouldLog
      *   Whether logging should be enabled.
      *
-     * @return string
+     * @return {string}
      *   A cookie safe string encoding the above values.
      */
     const toCookieValue = function (standardsToBlock, shouldLog) {
@@ -45,10 +45,10 @@
      * standard names, and two, a boolean flag of whether the logging option
      * is enabled.
      *
-     * @param string data
+     * @param {string} data
      *   A string created from `toCookieValue`
      *
-     * @return [array, bool]
+     * @return {[array, bool]}
      *   An array of strings of standard names (representing standards to
      *   block), and a boolean describing whether to log blocking
      *   behavior.

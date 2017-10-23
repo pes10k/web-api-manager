@@ -10,7 +10,7 @@
     const standardsCookieName = constants.cookieName;
 
     const doc = window.document;
-    const script = doc.createElement('script');
+    const script = doc.createElement("script");
     const rootElm = doc.head || doc.documentElement;
 
     // First see if we can read the standards to block out of the cookie

@@ -1,0 +1,5 @@
+node_modules/
+add-on/lib/third_party/
+add-on/lib/standards.js
+add-on/config/js/third_party/
+test.config.js

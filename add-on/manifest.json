@@ -37,8 +37,8 @@
     {
       "matches": ["*://*/*"],
       "js": [
-        "lib/vendor/js.cookie.js",
-        "lib/vendor/sjcl.js",
+        "lib/third_party/js.cookie.js",
+        "lib/third_party/sjcl.js",
         "lib/init.js",
         "lib/standards.js",
         "lib/pack.js",
@@ -52,8 +52,8 @@
   ],
   "background": {
     "scripts": [
-      "lib/vendor/URI.js",
-      "lib/vendor/sjcl.js",
+      "lib/third_party/URI.js",
+      "lib/third_party/sjcl.js",
       "lib/init.js",
       "lib/standards.js",
       "lib/pack.js",

@@ -27,10 +27,15 @@
 
                 <div class="form-group" v-bind:class="{ 'has-error': errorMessage }">
                     <label for="newDomainName">Add New Domain Rule</label>
-                    <input class="form-control" v-model.trim="newDomain" placeholder="*.example.org">
+                    <input
+                        class="form-control"
+                 v-model.trim="newDomain"
+                  placeholder="*.example.org">
                 </div>
 
-                <button type="submit" class="btn btn-default btn-block" @click="newDomainSubmitted">Add Rule</button>
+                <button type="submit"
+                       class="btn btn-default btn-block"
+                      @click="newDomainSubmitted">Add Rule</button>
             </div>
         `,
         data: function () {

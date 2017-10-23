@@ -14,7 +14,16 @@ describe("Content-Security-Protocol tests", function () {
 
             const [server, testUrl] = testServer.start(function (headers) {
                 // Add the CSP header to every request
-                headers['Content-Security-Protocol'] = "default-src https: data: 'unsafe-inline' 'unsafe-eval'; child-src https: data: blob:; connect-src https: data: blob:; font-src https: data:; img-src https: data: blob:; media-src https: data: blob:; object-src https:; script-src https: data: blob: 'unsafe-inline' 'unsafe-eval'; style-src https: 'unsafe-inline'; block-all-mixed-content; upgrade-insecure-requests; report-uri https://capture.condenastdigital.com/csp/pitchfork;";
+                const pitchforkCSP = [
+                    "default-src https: data: 'unsafe-inline' 'unsafe-eval';",
+                    "child-src https: data: blob:; connect-src https: data: blob:;",
+                    "font-src https: data:; img-src https: data: blob:;",
+                    "media-src https: data: blob:;",
+                    "object-src https:;",
+                    "script-src https: data: blob: 'unsafe-inline' 'unsafe-eval';",
+                    "style-src https: 'unsafe-inline';",
+                ];
+                headers["Content-Security-Protocol"] = pitchforkCSP.join(" ");
             });
 
             const svgTestScript = injected.testSVGTestScript();

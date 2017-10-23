@@ -81,7 +81,8 @@
 
         if (label === "rulesForDomains") {
 
-            const matchHostNameBound = domainMatcherLib.matchHostName.bind(undefined, Object.keys(domainRules));
+            const matchHostName = domainMatcherLib.matchHostName;
+            const matchHostNameBound = matchHostName.bind(undefined, Object.keys(domainRules));
             const rulesForDomains = data.map(matchHostNameBound);
             const domainToRuleMapping = {};
 
@@ -113,7 +114,7 @@
         const newHeaders = details.requestHeaders.map(function (header) {
 
             if (header.name.indexOf("Cookie") === -1) {
-                header;
+                return header;
             }
 
             const cookieValue = header.value;

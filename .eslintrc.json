@@ -7,12 +7,22 @@
         "mocha": true
     },
     "extends": [
-      "eslint:recommended"
+        "eslint:recommended"
     ],
     "rules": {
         "no-console": "off",
-        "no-trailing-spaces": "error",
         "no-unused-vars": ["error", {"varsIgnorePattern": "ignore"}],
-        "semi": ["error", "always"]
+        "semi": ["error", "always"],
+        "indent": ["error", 4],
+        "eol-last": "error",
+        "quotes": ["error", "double"],
+        "comma-dangle": ["error", "only-multiline"],
+        "function-paren-newline": ["error"],
+        "max-len": ["error", {"ignoreStrings": true, "code": 100}],
+        "require-jsdoc": "error",
+        "valid-jsdoc": "error",
+        "prefer-const": "error",
+        "no-template-curly-in-string": "error",
+        "no-unused-expressions": "error"
     }
 }

@@ -18,10 +18,19 @@
 
     const bucketSize = 8;
 
+    /**
+     * Encodes a buffer (such as a Uint8Array) to a base64 encoded string.
+     * 
+     * @param {ArrayBuffer} buf
+     *   A buffer of binary data.
+     *
+     * @return {string}
+     *   A base64 encoded string.
+     */
     const bufferToBase64 = function (buf) {
         const binstr = Array.prototype.map.call(buf, function (ch) {
             return String.fromCharCode(ch);
-        }).join('');
+        }).join("");
         return window.btoa(binstr);
     };
 
@@ -61,12 +70,12 @@
      *
      * This function is the inverse of the `unpack` function from this module.
      *
-     * @param array options
+     * @param {array} options
      *   An array of all possible options that might need to be encoded.
-     * @param array selected
+     * @param {array} selected
      *   An array containing zero or more elements from option.
      *
-     * @return string
+     * @return {string}
      *   A base64 encoded string, which encodes which elements in `options`
      *   were in the provided `selected` array.
      */
@@ -83,11 +92,11 @@
 
         for (i = 0; i < numBuckets; i += 1) {
             let bitfield = 0;
-            let currentBucket = binnedOptions[i];
+            const currentBucket = binnedOptions[i];
 
             for (j = 0; j < currentBucket.length; j += 1) {
 
-                let currentOption = currentBucket[j];
+                const currentOption = currentBucket[j];
                 if (selected.indexOf(currentOption) !== -1) {
                     bitfield |= 1 << j;
                 }
@@ -108,13 +117,13 @@
      *
      * This function is the inverse of the `pack` function from this module.
      *
-     * @param array options
+     * @param {array} options
      *   An array of all possible options that might need to be encoded.
-     * @param string data
+     * @param {string} data
      *   A base64 encoded string, generated from the `pack` function in
      *   this module.
      *
-     * @return array
+     * @return {array}
      *   An array of zero or more elements, each of which will be in the
      *   options array.
      */
@@ -131,12 +140,12 @@
         let i, j;
 
         for (i = 0; i < bitFields.length; i += 1) {
-            let currentBitField = bitFields[i];
-            let currentOptionsBin = binnedOptions[i];
+            const currentBitField = bitFields[i];
+            const currentOptionsBin = binnedOptions[i];
 
             for (j = 0; j < bucketSize; j += 1) {
                 if (currentBitField & (1 << j)) {
-                    let currentOption = currentOptionsBin[j];
+                    const currentOption = currentOptionsBin[j];
                     result.push(currentOption);
                 }
             }

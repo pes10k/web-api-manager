@@ -17,7 +17,7 @@ window.WEB_API_MANAGER.defaults.lite = [
     "WebRTC 1.0: Real-time Communication Between Browser",
     "WebGL Specification",
     "Geometry Interfaces Module Level 1",
-    "Web Notifications",
+    "Web Notifications"
 ];
 
 window.WEB_API_MANAGER.defaults.conservative = [
@@ -35,7 +35,7 @@ window.WEB_API_MANAGER.defaults.conservative = [
     "UI Events Specification",
     "WebGL Specification",
     "Web Audio API",
-    "Scalable Vector Graphics (SVG) 1.1 (Second Edition)",
+    "Scalable Vector Graphics (SVG) 1.1 (Second Edition)"
 ];
 
 window.WEB_API_MANAGER.defaults.aggressive = window.WEB_API_MANAGER.defaults.conservative.concat([

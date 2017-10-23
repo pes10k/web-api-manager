@@ -9,7 +9,7 @@
     const configureButton = doc.getElementById("config-page-link");
     const listGroupElm = doc.querySelector("ul.list-group");
 
-    const addDomainRuleToListElm = function (hostToRuleMapping, listElm, aHostName) {
+    const addRuleToList = function (hostToRuleMapping, listElm, aHostName) {
 
         const domainRule = hostToRuleMapping[aHostName];
 
@@ -53,9 +53,9 @@
                 doc.body.className = "loaded";
 
                 const domainNames = Object.keys(response);
-                const addDomainRuleToListElmBound = addDomainRuleToListElm.bind(undefined, response, listGroupElm);
+                const addRuleToListBound = addRuleToList.bind(undefined, response, listGroupElm);
 
-                domainNames.forEach(addDomainRuleToListElmBound);
+                domainNames.forEach(addRuleToListBound);
             });
         }
     );

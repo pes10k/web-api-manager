@@ -21,12 +21,12 @@ module.exports.temporaryAddOnInstallScript = (function () {
     const funcToInject = function () {
 
         const {Components, AddonManager} = window;
-        let fileUtils = Components.utils.import('resource://gre/modules/FileUtils.jsm');
-        let FileUtils = fileUtils.FileUtils;
-        let callback = arguments[arguments.length - 1];
-        Components.utils.import('resource://gre/modules/AddonManager.jsm');
+        const fileUtils = Components.utils.import("resource://gre/modules/FileUtils.jsm");
+        const FileUtils = fileUtils.FileUtils;
+        const callback = arguments[arguments.length - 1];
+        Components.utils.import("resource://gre/modules/AddonManager.jsm");
 
-        let listener = {
+        const listener = {
             onInstallEnded: function(install, addon) {
                 callback([addon.id, 0]);
             },
@@ -39,7 +39,7 @@ module.exports.temporaryAddOnInstallScript = (function () {
             }
         };
 
-        let file = new FileUtils.File(arguments[0]);
+        const file = new FileUtils.File(arguments[0]);
 
         AddonManager.addAddonListener(listener);
         AddonManager.installTemporaryAddon(file).catch(error => {
@@ -73,7 +73,7 @@ module.exports.setStandardsAsBlockedScript = (function () {
     const funcSource = stripFuncFromSource(funcToInject.toString());
 
     return function (standardsToBlock) {
-        return funcSource.replace('"###REPLACE###"', JSON.stringify(standardsToBlock));
+        return funcSource.replace("\"###REPLACE###\"", JSON.stringify(standardsToBlock));
     };
 }());
 

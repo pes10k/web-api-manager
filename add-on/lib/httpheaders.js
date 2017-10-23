@@ -16,10 +16,10 @@
      * @see https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/webRequest/HttpHeaders
      * @see https://w3c.github.io/webappsec-csp/
      *
-     * @param object header
+     * @param {object} header
      *   An object describing a HTTP header
      *
-     * @return boolean
+     * @return {boolean}
      *   true if the given object depicts a CSP policy with the above stated
      *   properties, and false in all other cases.
      */
@@ -63,13 +63,13 @@
      * @see https://w3c.github.io/webappsec-csp/#strict-dynamic-usage
      * @see https://w3c.github.io/webappsec-csp/#grammardef-hash-source
      *
-     * @param string cspInstruction
+     * @param {string} cspInstruction
      *   The value of a HTTP header defining a CSP instruction.
-     * @param string scriptHash
+     * @param {string} scriptHash
      *   A hash value, in the form of "sha256-<some hash>", that is a valid
      *   hash source description.
      *
-     * @return string|false
+     * @return {string|false}
      *   Returns false if the CSP instruction looks malformed (ie we
      *   couldn't find either a "script-src" or "default-src" section),
      *   otherwise, a new value CSP instruction with the given hash allowed.

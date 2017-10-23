@@ -20,7 +20,7 @@ module.exports.start = function (callback) {
 
     const httpServer = http.createServer(function (req, res) {
 
-        let headers = {"Content-Type": "text/html; charset=utf-8"};
+        const headers = {"Content-Type": "text/html; charset=utf-8"};
 
         if (callback !== undefined) {
             callback(headers);

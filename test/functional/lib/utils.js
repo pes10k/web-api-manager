@@ -49,9 +49,7 @@ module.exports.promiseSetFormAndSubmit = function (driver, values) {
 
 module.exports.promiseAddonButton = function (driver) {
     driver.setContext(Context.CHROME);
-    return driver.wait(until.elementLocated(
-        by.css("[tooltiptext='WebAPI Manager']")
-    ), 2000);
+    return driver.wait(until.elementLocated(by.css("[tooltiptext='WebAPI Manager']")), 2000);
 };
 
 module.exports.promiseExtensionConfigPage = function (driver) {
@@ -68,9 +66,7 @@ module.exports.promiseExtensionConfigPage = function (driver) {
 
 module.exports.promiseAddonConfigButton = function (driver) {
     driver.setContext(Context.CHROME);
-    return driver.wait(until.elementLocated(
-            by.id("config-page-link")
-        ), 2000);
+    return driver.wait(until.elementLocated(by.id("config-page-link")), 2000);
 };
 
 module.exports.promiseSetBlockingRules = function (driver, standardsToBlock) {
@@ -83,18 +79,18 @@ module.exports.promiseSetBlockingRules = function (driver, standardsToBlock) {
 
 module.exports.promiseGetDriver = function () {
 
-    let driver = new webdriver.Builder()
-        .forBrowser('firefox')
+    const driver = new webdriver.Builder()
+        .forBrowser("firefox")
         .build();
 
     driver.setContext(Context.CHROME);
 
-    let fileLocation = path.join(process.cwd(), "dist", "webapi_manager.zip");
+    const fileLocation = path.join(process.cwd(), "dist", "webapi_manager.zip");
 
     // This manually installs the add-on as a temporary add-on.
     // Hopefully selenium/geckodriver will get a way to do this soon:
     // https://bugzilla.mozilla.org/show_bug.cgi?id=1298025
-    let installAddOnPromise = driver.executeAsyncScript(
+    const installAddOnPromise = driver.executeAsyncScript(
         injectedScripts.temporaryAddOnInstallScript(),
         fileLocation
     );

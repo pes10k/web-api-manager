@@ -24,7 +24,8 @@
     "clean": "rm -Rf dist/",
     "bundle": "gulp && web-ext -s add-on -a dist build --overwrite-dest",
     "firefox": "web-ext -s add-on run",
-    "test:lint": "node_modules/eslint/bin/eslint.js test/functional/*.js test/functional/**/*.js add-on/background_scripts/*.js add-on/config/js/*.js add-on/config/js/components/*.js add-on/lib/*.js add-on/content_scripts/*.js",
+    "test:lint": "node_modules/eslint/bin/eslint.js .",
+    "test:lint:fix": "node_modules/eslint/bin/eslint.js --fix .",
     "test:func": "npm run clean; npm run bundle && ln -s `ls dist/` dist/webapi_manager.zip && node_modules/mocha/bin/mocha test/functional/*.js",
     "test": "npm run test:lint && npm run test:func"
   },
