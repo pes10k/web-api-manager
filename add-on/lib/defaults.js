@@ -5,7 +5,23 @@
  */
 window.WEB_API_MANAGER.defaults = {};
 
+window.WEB_API_MANAGER.defaults.lite = [
+    "Beacon",
+    "Ambient Light Sensor API",
+    "Scalable Vector Graphics (SVG) 1.1 (Second Edition)",
+    "Geolocation API",
+    "Gamepad",
+    "Web Audio API",
+    "Battery Status API",
+    "WebVTT: The Web Video Text Tracks Format",
+    "WebRTC 1.0: Real-time Communication Between Browser",
+    "WebGL Specification",
+    "Geometry Interfaces Module Level 1",
+    "Web Notifications",
+];
+
 window.WEB_API_MANAGER.defaults.conservative = [
+    "Beacon",
     "MediaStream Recording",
     "DOM Parsing and Serialization",
     "Fullscreen API",
@@ -16,10 +32,10 @@ window.WEB_API_MANAGER.defaults.conservative = [
     "Indexed Database API",
     "Performance Timeline Level 2",
     "Resource Timing",
-    "Scalable Vector Graphics 1.1",
     "UI Events Specification",
+    "WebGL Specification",
     "Web Audio API",
-    "WebGL Specification"
+    "Scalable Vector Graphics (SVG) 1.1 (Second Edition)",
 ];
 
 window.WEB_API_MANAGER.defaults.aggressive = window.WEB_API_MANAGER.defaults.conservative.concat([
@@ -52,5 +68,5 @@ window.WEB_API_MANAGER.defaults.aggressive = window.WEB_API_MANAGER.defaults.con
     "User Timing Level 2",
     "W3C DOM4",
     "Web Notifications",
-    "WebRTC 1.0"
+    "WebRTC 1.0: Real-time Communication Between Browser"
 ]);

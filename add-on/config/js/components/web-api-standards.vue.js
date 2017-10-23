@@ -16,6 +16,9 @@
                     </div>
 
                     <div class="panel-body">
+                        <button @click="onLiteClicked">
+                            Use Lite Settings
+                        </button>
                         <button @click="onConservativeClicked">
                             Use Conservative Settings
                         </button>
@@ -28,7 +31,15 @@
                         <button @click="onAllClicked">
                             Block All
                         </button>
+                    </div>
 
+                    <div class="panel-footer">
+                        <strong>Lite</strong> is designed to have a minimal
+                        impact on typical browsing while still providing
+                        security and privacy improvements.
+                        <strong>Conservative</strong> and <strong>Aggressive</strong>
+                        provide extra protections, though will impact the
+                        functionaltiy more sites.
                     </div>
                 </div>
 
@@ -54,6 +65,9 @@
         methods: {
             onStandardChecked: function () {
                 this.$root.$data.setSelectedStandards(this.selectedStandards);
+            },
+            onLiteClicked: function () {
+                this.$root.$data.setSelectedStandards(standardsDefaults.lite);
             },
             onConservativeClicked: function () {
                 this.$root.$data.setSelectedStandards(standardsDefaults.conservative);
