@@ -15,19 +15,15 @@ describe("Basic", function () {
         return 10000;
     };
 
-    beforeEach(function () {
-        const [server, url] = testServer.start();
-        testUrl = url;
-        httpServer = server;
-    });
-
-    afterEach(function () {
-        testServer.stop(httpServer);
-    });
-
     describe("blocking", function () {
 
         it("SVG Not Blocking", function (done) {
+
+            const [server, url] = testServer.start();
+
+            testUrl = url;
+            httpServer = server;
+    
             const standardsToBlock = [];
             let driverReference;
 
@@ -40,17 +36,24 @@ describe("Basic", function () {
                 .then(() => driverReference.executeAsyncScript(svgTestScript))
                 .then(function () {
                     driverReference.quit();
+                    testServer.stop(httpServer);
                     done(new Error("SVG acted as if it was being blocked"));
                 })
                 .catch(function () {
                     // Since we're not blocking the SVG API, then the sample
                     // SVG code should throw an exception.
                     driverReference.quit();
+                    testServer.stop(httpServer);
                     done();
                 });
         });
 
         it("SVG blocking", function (done) {
+
+            const [server, url] = testServer.start();
+
+            testUrl = url;
+            httpServer = server;
 
             const standardsToBlock = utils.constants.svgBlockRule;
             let driverReference;
@@ -64,12 +67,55 @@ describe("Basic", function () {
                 .then(() => driverReference.executeAsyncScript(svgTestScript))
                 .then(function () {
                     driverReference.quit();
+                    testServer.stop(httpServer);
                     done();
                 })
                 .catch(function (e) {
                     driverReference.quit();
+                    testServer.stop(httpServer);
                     done(e);
                 });
         });
+
+        it("iFrame contentWindow without src", function (done) {
+
+            const testHtml = `<!DOCTYPE "html">
+                <html>
+                    <head>
+                        <title>Test Page</title>
+                    </head>
+                    <body>
+                        <iframe></iframe>
+                    </body>
+                </html>`;
+            
+            const iframeContentWindowScript = 'document.getElementsByTagName("iframe")[0].contentWindow.SVGGraphicsElement.prototype.getBBox().bartSimpson';
+
+            const [server, url] = testServer.start(undefined, testHtml);
+
+            testUrl = url;
+            httpServer = server;
+
+            const standardsToBlock = utils.constants.svgBlockRule;
+            let driverReference;
+
+            utils.promiseGetDriver()
+                .then(function (driver) {
+                    driverReference = driver;
+                    return utils.promiseSetBlockingRules(driver, standardsToBlock);
+                })
+                .then(() => driverReference.get(testUrl))
+                .then(() => driverReference.executeAsyncScript(iframeContentWindowScript))
+                .then(function (output) {
+                    driverReference.quit();
+                    testServer.stop(httpServer);
+                    done();
+                })
+                .catch(function (e) {
+                    driverReference.quit();
+                    testServer.stop(httpServer);
+                    done(e);
+                });
+        })
     });
 });

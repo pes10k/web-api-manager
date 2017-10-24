@@ -16,7 +16,7 @@ const staticResponse = `<!DOCTYPE "html">
 </html>
 `;
 
-module.exports.start = function (callback) {
+module.exports.start = function (callback, html) {
 
     const httpServer = http.createServer(function (req, res) {
 
@@ -27,7 +27,7 @@ module.exports.start = function (callback) {
         }
 
         res.writeHead(200, headers);
-        res.write(staticResponse);
+        res.write(html || staticResponse);
         res.end();
     });
     httpServer.listen(8989);
