@@ -1,8 +1,13 @@
 Web API Manager
 ===
 
-Note
+
+Running the Extension
 ---
+Download built versions of the extension from each browsers' extension stores:
+*   [Firefox](https://addons.mozilla.org/en-US/firefox/addon/webapi-manager/)
+*   [Chrome](https://chrome.google.com/webstore/detail/webapi-manager/hojoljbhkebfjalcbnfmoiljfidcmcmj)
+
 By default, this extension does not make any changes. No aspects of the Web
 API are affected until you start creating custom rule sets, or modifying what
 Web API standards sites have access to by default. You can start creating
