@@ -1,6 +1,6 @@
 {
   "name": "web-api-manager",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "description": "Tools to generate Web API managing browser extensions for Firefox and Chrome.",
   "author": "Peter Snyder <psnyde2@uic.edu> (https://www.cs.uic.edu/~psnyder/)",
   "license": "GPL-3.0",
@@ -27,9 +27,11 @@
     "test:lint": "node_modules/eslint/bin/eslint.js .",
     "test:lint:fix": "node_modules/eslint/bin/eslint.js --fix .",
     "test:func": "npm run clean; npm run bundle && ln -s `ls dist/` dist/webapi_manager.zip && node_modules/mocha/bin/mocha test/functional/*.js",
+    "test:func:block": "npm run clean; npm run bundle && ln -s `ls dist/` dist/webapi_manager.zip && node_modules/mocha/bin/mocha test/functional/block.js",
     "test": "npm run test:lint && npm run test:func"
   },
   "devDependencies": {
+    "assert": "^1.4.1",
     "eslint": "^4.9.0",
     "geckodriver": "^1.9.0",
     "gulp": "^3.9.1",

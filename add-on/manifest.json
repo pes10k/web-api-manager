@@ -1,13 +1,7 @@
 {
   "manifest_version": 2,
-  "applications": {
-    "gecko": {
-      "id": "{fb986c76-c042-49b8-85b5-c3dd68e83440}",
-      "strict_min_version": "54.0"
-    }
-  },
   "name": "WebAPI Manager",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "description": "Improves browser security and privacy by controlling page access to the Web API.",
   "icons": {
     "48": "images/uic-48.png",
@@ -35,7 +29,6 @@
   ],
   "content_scripts": [
     {
-      "matches": ["*://*/*"],
       "js": [
         "lib/third_party/js.cookie.js",
         "lib/third_party/sjcl.js",
@@ -46,8 +39,12 @@
         "lib/proxyblock.js",
         "content_scripts/instrument.js"
       ],
-      "all_frames": true,
-      "run_at": "document_start"
+      "matches": [
+        "<all_urls>"
+      ],
+      "run_at": "document_start",
+      "match_about_blank": true,
+      "all_frames": true
     }
   ],
   "background": {
@@ -69,5 +66,11 @@
   "options_ui": {
     "page": "config/index.html",
     "open_in_tab": true
+  },
+  "applications": {
+    "gecko": {
+      "id": "{fb986c76-c042-49b8-85b5-c3dd68e83440}",
+      "strict_min_version": "52.0"
+    }
   }
 }
