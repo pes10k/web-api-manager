@@ -4,7 +4,7 @@ const utils = require("./lib/utils");
 const injected = require("./lib/injected");
 const testServer = require("./lib/server");
 
-describe("Content-Security-Protocol tests", function () {
+describe("Content-Security-Protocol Issues", function () {
 
     describe("script-src", function () {
 

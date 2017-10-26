@@ -13,7 +13,6 @@ const keys = webdriver.Key;
 const by = webdriver.By;
 const until = webdriver.until;
 
-
 describe("Logging into popular sites", function () {
 
     describe("GitHub", function () {

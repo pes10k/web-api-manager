@@ -4,20 +4,24 @@ const utils = require("./lib/utils");
 const injected = require("./lib/injected");
 const testServer = require("./lib/server");
 
-describe("Basic", function () {
+describe("Basic Functionality", function () {
 
     const svgTestScript = injected.testSVGTestScript();
 
     let httpServer;
     let testUrl;
 
-    this.timeout = function () {
-        return 10000;
-    };
-
     describe("blocking", function () {
 
+        this.timeout = function () {
+            return 20000;
+        };
+
         it("SVG Not Blocking", function (done) {
+
+            this.timeout = function () {
+                return 10000;
+            };
 
             const [server, url] = testServer.start();
 
@@ -50,6 +54,10 @@ describe("Basic", function () {
 
         it("SVG blocking", function (done) {
 
+            this.timeout = function () {
+                return 10000;
+            };
+        
             const [server, url] = testServer.start();
 
             testUrl = url;
@@ -77,8 +85,12 @@ describe("Basic", function () {
                 });
         });
 
-        it("iFrame contentWindow without src", function (done) {
+        it("iframe contentWindow without src", function (done) {
 
+            this.timeout = function () {
+                return 10000;
+            };
+        
             const testHtml = `<!DOCTYPE "html">
                 <html>
                     <head>
@@ -89,7 +101,7 @@ describe("Basic", function () {
                     </body>
                 </html>`;
             
-            const iframeContentWindowScript = 'document.getElementsByTagName("iframe")[0].contentWindow.SVGGraphicsElement.prototype.getBBox().bartSimpson';
+            const iframeContentWindowScript = "document.getElementsByTagName('iframe')[0].contentWindow.SVGGraphicsElement.prototype.getBBox()";
 
             const [server, url] = testServer.start(undefined, testHtml);
 
@@ -105,8 +117,8 @@ describe("Basic", function () {
                     return utils.promiseSetBlockingRules(driver, standardsToBlock);
                 })
                 .then(() => driverReference.get(testUrl))
-                .then(() => driverReference.executeAsyncScript(iframeContentWindowScript))
-                .then(function (output) {
+                .then(() => driverReference.executeScript(iframeContentWindowScript))
+                .then(function () {
                     driverReference.quit();
                     testServer.stop(httpServer);
                     done();
@@ -116,6 +128,7 @@ describe("Basic", function () {
                     testServer.stop(httpServer);
                     done(e);
                 });
-        })
+        });
+
     });
 });
