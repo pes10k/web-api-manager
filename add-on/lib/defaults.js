@@ -17,7 +17,8 @@ window.WEB_API_MANAGER.defaults.lite = [
     "WebRTC 1.0: Real-time Communication Between Browser",
     "WebGL Specification",
     "Geometry Interfaces Module Level 1",
-    "Web Notifications"
+    "Web Notifications",
+    "Vibration API"
 ];
 
 window.WEB_API_MANAGER.defaults.conservative = [
