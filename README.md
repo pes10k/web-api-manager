@@ -13,7 +13,7 @@ API are affected until you start creating custom rule sets, or modifying what
 Web API standards sites have access to by default. You can start creating
 these rules through the site's configuration pane.
 
-You can find some suggested page configurations in the [Wiki](https://github.com/snyderp/web-api-manager/wiki)
+You can find some suggested page configurations in the [Wiki](https://github.com/snyderp/web-api-manager/wiki).
 
 
 Overview
