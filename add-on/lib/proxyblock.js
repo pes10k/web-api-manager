@@ -22,6 +22,10 @@
         const standardDefinitions = settings.standards;
         const hostName = window.location.hostname;
 
+        if (standardsToBlock.length === 0) {
+            return;
+        }
+
         // Its possible that the Web API removal code will block direct references
         // to the following methods, so grab references to them before the
         // DOM is instrumented (and their references are possibly blocked).
@@ -190,11 +194,27 @@
         // it when we're done, and before the page scripts can start running.
         delete window.WEB_API_MANAGER_PAGE;
 
-        // Last, remove the script tag containing this code from the document,
+        // Next, remove the script tag containing this code from the document,
         // so that the structure of the page looks like what the page author
         // expects / intended.
         const scriptTags = getElementsByTagName.call(window.document, "script");
-        removeChild.call(scriptTags[0].parentNode, scriptTags[0]);
+        const thisScript = scriptTags[0];
+        removeChild.call(thisScript.parentNode, thisScript);
+
+        // Next, prevent access to frame's contentDocument / contentWindow
+        // properties, to prevent the parent frame from pulling unblocked
+        // references to blocked standards from injected frames.
+        // This will break some sites, but, fingers crossed, its not too much.
+        const frameTypesToModify = [HTMLIFrameElement, HTMLFrameElement];
+        const propertiesToBlock = ["contentDocument", "contentWindow"];
+
+        frameTypesToModify.forEach(function (frameType) {
+            propertiesToBlock.forEach(function (propertyName) {
+                Object.defineProperty(frameType.prototype, propertyName, {
+                    get: () => defaultBlockingProxy
+                });
+            });
+        });
     };
 
     /**
