@@ -62,6 +62,13 @@
 
             setShouldLog: function (shouldLog) {
                 this.shouldLog = shouldLog;
+            },
+
+            setStandardsForDomain: function (domain, standards) {
+                this.domainRules[domain] = standards;
+                if (domain === this.selectedDomain) {
+                    this.selectedStandards = standards;
+                }
             }
         };
 

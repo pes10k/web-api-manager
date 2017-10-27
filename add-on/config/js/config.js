@@ -13,10 +13,19 @@
     const onSettingsLoaded = function (storedSettings) {
 
         state.populateFromStorage(storedSettings);
+        state.activeTab = "domain-rules";
 
         const vm = new Vue({
-            el: doc.body,
-            data: state
+            el: doc.querySelector("section.container"),
+            data: state,
+            methods: {
+                setActiveTab: function (event) {
+                    const targetElement = event.target;
+                    this.activeTab = targetElement.hash.replace("#", "");
+                    event.stopPropagation();
+                    event.preventDefault();
+                }
+            }
         });
 
         const updateStoredSettings = function () {

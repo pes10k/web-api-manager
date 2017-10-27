@@ -11,28 +11,56 @@
     </head>
     <body>
         <section class="container">
-            <div class="row">
-                <div class="col-xs-12 col-md-12">
-                    <p>
-                        Enter <a href="https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Match_patterns">domain matching rules</a>
-                        on the right, to create a new blocking rule.  On the
-                        right, select which functionality should be blocked for
-                        hosts matching each rule.
-                    </p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-4 col-md-4">
-                    <domain-rules :domain-names="domainNames" :selected-domain="selectedDomain"></domain-rules>
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" :class="activeTab === 'domain-rules' ? 'active' : ''">
+                    <a href="#domain-rules" @click="setActiveTab">Domain Rules</a>
+                </li>
+                <li role="presentation" :class="activeTab === 'import-export' ? 'active' : ''">
+                    <a href="#import-export" @click="setActiveTab">Import / Export</a>
+                </li>
+            </ul>
 
-                    <logging-settings :should-log="shouldLog"></logging-settings>
+            <div class="tab-content">
+                <div role="tabpanel" :class="['tab-pane', activeTab === 'domain-rules' ? 'active' : '']" id="domain-rules">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                            <p>
+                                Enter <a href="https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Match_patterns">domain matching rules</a>
+                                on the right, to create a new blocking rule.  On the
+                                right, select which functionality should be blocked for
+                                hosts matching each rule.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-4 col-md-4">
+                            <domain-rules
+                                :domain-names="domainNames"
+                                :selected-domain="selectedDomain"
+                            ></domain-rules>
+
+                            <logging-settings :should-log="shouldLog"></logging-settings>
+                        </div>
+
+                        <div class="col-xs-8 col-md-8">
+                            <web-api-standards
+                                :standards="standards"
+                                :selected-standards="selectedStandards"
+                                :selected-domain="selectedDomain">
+                            </web-api-standards>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="col-xs-8 col-md-8">
-                    <web-api-standards :standards="standards"
-                                       :selected-standards="selectedStandards"
-                                       :selected-domain="selectedDomain">
-                    </web-api-standards>
+                <div role="tabpanel" :class="['tab-pane', activeTab === 'import-export' ? 'active' : '']" id="import-export">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                            <import-export
+                                :domain-names="domainNames"
+                                :selected-standards="selectedStandards">
+                            </import-export>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -43,6 +71,7 @@
         <script src="js/third_party/vue.js"></script>
         <script src="js/state.js"></script>
         <script src="js/components/domain-rules.vue.js"></script>
+        <script src="js/components/import-export.vue.js"></script>
         <script src="js/components/web-api-standards.vue.js"></script>
         <script src="js/components/logging-settings.vue.js"></script>
         <script src="js/config.js"></script>
