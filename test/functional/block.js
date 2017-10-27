@@ -84,51 +84,5 @@ describe("Basic Functionality", function () {
                     done(e);
                 });
         });
-
-        it("iframe contentWindow without src", function (done) {
-
-            this.timeout = function () {
-                return 10000;
-            };
-        
-            const testHtml = `<!DOCTYPE "html">
-                <html>
-                    <head>
-                        <title>Test Page</title>
-                    </head>
-                    <body>
-                        <iframe></iframe>
-                    </body>
-                </html>`;
-            
-            const iframeContentWindowScript = "document.getElementsByTagName('iframe')[0].contentWindow.SVGGraphicsElement.prototype.getBBox()";
-
-            const [server, url] = testServer.start(undefined, testHtml);
-
-            testUrl = url;
-            httpServer = server;
-
-            const standardsToBlock = utils.constants.svgBlockRule;
-            let driverReference;
-
-            utils.promiseGetDriver()
-                .then(function (driver) {
-                    driverReference = driver;
-                    return utils.promiseSetBlockingRules(driver, standardsToBlock);
-                })
-                .then(() => driverReference.get(testUrl))
-                .then(() => driverReference.executeScript(iframeContentWindowScript))
-                .then(function () {
-                    driverReference.quit();
-                    testServer.stop(httpServer);
-                    done();
-                })
-                .catch(function (e) {
-                    driverReference.quit();
-                    testServer.stop(httpServer);
-                    done(e);
-                });
-        });
-
     });
 });
