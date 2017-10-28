@@ -66,6 +66,7 @@
 
             setStandardsForDomain: function (domain, standards) {
                 this.domainRules[domain] = standards;
+                this.domainNames = Object.keys(this.domainRules);
                 if (domain === this.selectedDomain) {
                     this.selectedStandards = standards;
                 }
