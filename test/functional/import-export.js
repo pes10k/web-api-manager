@@ -8,7 +8,7 @@ const until = webdriver.until;
 
 const emptyRuleSet = "[{\"pattern\":\"(default)\",\"standards\":[]}]";
 const blockingSVGandBeacon = "[{\"pattern\":\"(default)\",\"standards\":[\"Beacon\",\"Scalable Vector Graphics (SVG) 1.1 (Second Edition)\"]}]";
-const newDomainImport = `[{"pattern":"*.example.com","standards":["Ambient Light Sensor API","WebGL Specification"]}]`;
+const newDomainImport = "[{\"pattern\":\"*.example.com\",\"standards\":[\"Ambient Light Sensor API\",\"WebGL Specification\"]}]";
 
 const promiseOpenImportExportTab = function (driver) {
 
