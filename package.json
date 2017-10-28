@@ -26,8 +26,8 @@
         "firefox": "web-ext -s add-on run",
         "lint": "node_modules/eslint/bin/eslint.js .",
         "lint:fix": "node_modules/eslint/bin/eslint.js --fix .",
-        "test": "npm run clean; npm run bundle && ln -s `ls dist/` dist/webapi_manager.zip && node_modules/mocha/bin/mocha test/functional/*.js",
-        "test:watch": "npm test --watch"
+        "test": "npm run clean; npm run bundle && ln -s `ls dist/` dist/webapi_manager.zip && cross-env node_modules/mocha/bin/mocha test/functional/*.js",
+        "test:watch": "cross-env npm test --watch"
     },
     "pre-push": {
         "run": [
@@ -37,6 +37,7 @@
     },
     "devDependencies": {
         "assert": "^1.4.1",
+        "cross-env": "^5.1.1",
         "eslint": "^4.9.0",
         "geckodriver": "^1.9.0",
         "gulp": "^3.9.1",

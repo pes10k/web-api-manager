@@ -75,7 +75,7 @@ module.exports.promiseSetBlockingRules = function (driver, standardsToBlock) {
 
     return this.promiseExtensionConfigPage(driver)
         .then(driver.executeAsyncScript(setStandardsScript))
-        .then(() => module.exports.pause(1000));
+        .then(() => module.exports.pause(500));
 };
 
 module.exports.promiseGetDriver = function () {

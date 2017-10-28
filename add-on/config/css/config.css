@@ -13,3 +13,11 @@ body {
 section p:first-child {
     padding-top: 1em;
 }
+
+section.container {
+    margin-top: 2em;
+}
+
+section {
+    margin-bottom: 5em;
+}
