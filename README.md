@@ -110,7 +110,10 @@ cp test.config.example.js test.config.js
 vim test.config.js
 
 # Run the test suite
-npm run test
+npm test
+
+# Or, if you want to watch the tests run...
+npm run test:watch
 ```
 
 

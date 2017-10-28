@@ -80,8 +80,15 @@ module.exports.promiseSetBlockingRules = function (driver, standardsToBlock) {
 
 module.exports.promiseGetDriver = function () {
 
+    const binary = new firefox.Binary();
+
+    if (process.argv.indexOf("--watch") === -1) {
+        binary.addArguments("--headless");
+    }
+
     const driver = new webdriver.Builder()
         .forBrowser("firefox")
+        .setFirefoxOptions(new firefox.Options().setBinary(binary))
         .build();
 
     driver.setContext(Context.CHROME);
