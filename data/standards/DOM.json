@@ -39,6 +39,7 @@
     "Element.prototype.getElementsByClassName",
     "Element.prototype.matches",
     "Element.prototype.mozMatchesSelector",
+    "Element.prototype.webkitMatchesSelector",
     "Element.prototype.remove",
     "window.clearInterval",
     "window.clearTimeout"

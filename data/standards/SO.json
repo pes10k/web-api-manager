@@ -6,8 +6,8 @@
     "url": "https://w3c.github.io/screen-orientation/"
   },
   "features": [
-    "screen.mozOrientation",
     "screen.onmozorientationchange",
+    "screen.mozOrientation",
     "screen.orientation",
     "Screen.prototype.mozLockOrientation",
     "Screen.prototype.mozUnlockOrientation",

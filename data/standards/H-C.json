@@ -59,6 +59,7 @@
     "Path2D.prototype.moveTo",
     "Path2D.prototype.quadraticCurveTo",
     "Path2D.prototype.rect",
+    "window.webkitRequestAnimationFrame",
     "window.requestAnimationFrame"
   ]
 }

@@ -6,9 +6,11 @@
     "url": "https://www.w3.org/TR/page-visibility/"
   },
   "features": [
-    "document.hidden",
     "document.mozHidden",
+    "document.webkitHidden",
+    "document.hidden",
     "document.mozVisibilityState",
+    "document.webkitVisibilityState",
     "document.visibilityState"
   ]
 }

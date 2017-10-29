@@ -7,10 +7,15 @@
   },
   "features": [
     "document.mozPointerLockElement",
+    "document.pointerLockElement",
     "document.onmozpointerlockchange",
+    "document.onpointerlockchange",
     "document.onmozpointerlockerror",
+    "document.onpointerlockerror",
     "Document.prototype.mozExitPointerLock",
+    "Document.prototype.exitPointerLock",
     "Element.prototype.mozRequestPointerLock",
+    "Element.prototype.requestPointerLock",
     "window.onmozpointerlockchange",
     "window.onmozpointerlockerror"
   ]

@@ -9,6 +9,8 @@
     "LocalMediaStream.prototype.stop",
     "MediaDevices.prototype.enumerateDevices",
     "MediaDevices.prototype.getUserMedia",
+    "Navigator.prototype.mozGetUserMedia",
+    "Navigator.prototype.webkitGetUserMedia",
     "navigator.mediaDevices"
   ]
 }
