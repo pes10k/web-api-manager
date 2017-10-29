@@ -1,0 +1,17 @@
+{
+    "info": {
+      "name": "Payment Request",
+      "subsection_number": null,
+      "subsection_name": null,
+      "url": "https://w3c.github.io/payment-request/"
+    },
+    "features": [
+      "PaymentRequest.prototype.show",
+      "PaymentRequest.prototype.abort",
+      "PaymentRequest.prototype.canMakePayment",
+      "PaymentAddress.prototype.toJSON",
+      "PaymentResponse.prototype.complete",
+      "PaymentResponse.prototype.toJSON",
+      "PaymentRequestUpdateEvent.prototype.updateWith"
+    ]
+  }
