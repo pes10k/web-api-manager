@@ -1,9 +1,9 @@
 {
     "info": {
-      "name": "Payment Request API",
+      "name": "WebUSB API",
       "subsection_number": null,
       "subsection_name": null,
-      "url": "https://w3c.github.io/payment-request/"
+      "url": "https://wicg.github.io/webusb/#idl-index"
     },
     "features": [
         "USB.prototype.getDevices",
