@@ -3,7 +3,7 @@
       "name": "WebUSB API",
       "subsection_number": null,
       "subsection_name": null,
-      "url": "https://wicg.github.io/webusb/#idl-index"
+      "url": "https://wicg.github.io/webusb/"
     },
     "features": [
         "USB.prototype.getDevices",
