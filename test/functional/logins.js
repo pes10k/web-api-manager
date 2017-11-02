@@ -13,7 +13,13 @@ const keys = webdriver.Key;
 const by = webdriver.By;
 const until = webdriver.until;
 
+
 describe("Logging into popular sites", function () {
+
+    if (utils.shouldRunRemoteTests === false) {
+        // Skipping remote tests because of --only-local-tests flag
+        return;
+    }
 
     describe("GitHub", function () {
 

@@ -15,7 +15,13 @@ gulp.task("default", function () {
             }
 
             const fileContents = fs.readFileSync(standardsDefDir + "/" + next, {encoding: "utf8"});
-            const standardContents = JSON.parse(fileContents);
+            let standardContents;
+            try {
+                standardContents = JSON.parse(fileContents);
+            } catch (e) {
+                console.log("Invalid JSON in " + next);
+                throw e;
+            }
 
             const stdName = standardContents.info.name;
             const stdSubName = standardContents.info.subsection_name;

@@ -5,13 +5,15 @@
 require("geckodriver");
 
 const firefox = require("selenium-webdriver/firefox");
-const webdriver = require("selenium-webdriver");
 const injectedScripts = require("./injected");
-const by = webdriver.By;
 const Context = firefox.Context;
+const webdriver = require("selenium-webdriver");
+const by = webdriver.By;
 const until = webdriver.until;
 const keys = webdriver.Key;
 const path = require("path");
+
+module.exports.shouldRunRemoteTests = process.argv.indexOf("--only-local-tests") === -1;
 
 module.exports.constants = {
     svgBlockRule: ["Scalable Vector Graphics (SVG) 1.1 (Second Edition)"]

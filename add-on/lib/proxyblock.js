@@ -104,9 +104,21 @@
                 }
             };
 
+            // Every time the proxy has been called 1000 times, return
+            // undefined instead of the proxy object, to ensure that the
+            // proxy doesn't get stuck in an infinite loop.
+            let recursionGuardCounter = 0;
+
             const blockingProxy = new Proxy(defaultFunction, {
                 get: function (ignore, property) {
                     logKeyPath();
+
+                    if (recursionGuardCounter === 1000) {
+                        recursionGuardCounter = 0;
+                        return undefined;
+                    }
+
+                    recursionGuardCounter += 1;
 
                     if (property === Symbol.toPrimitive) {
                         return toPrimitiveFunc;

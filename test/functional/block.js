@@ -3,6 +3,9 @@
 const utils = require("./lib/utils");
 const injected = require("./lib/injected");
 const testServer = require("./lib/server");
+const webdriver = require("selenium-webdriver");
+const by = webdriver.By;
+const until = webdriver.until;
 
 describe("Basic Functionality", function () {
 
@@ -27,7 +30,7 @@ describe("Basic Functionality", function () {
 
             testUrl = url;
             httpServer = server;
-    
+
             const standardsToBlock = [];
             let driverReference;
 
@@ -54,10 +57,8 @@ describe("Basic Functionality", function () {
 
         it("SVG blocking", function (done) {
 
-            this.timeout = function () {
-                return 10000;
-            };
-        
+            this.timeout = () => 10000;
+
             const [server, url] = testServer.start();
 
             testUrl = url;
@@ -73,6 +74,35 @@ describe("Basic Functionality", function () {
                 })
                 .then(() => driverReference.get(testUrl))
                 .then(() => driverReference.executeAsyncScript(svgTestScript))
+                .then(function () {
+                    driverReference.quit();
+                    testServer.stop(httpServer);
+                    done();
+                })
+                .catch(function (e) {
+                    driverReference.quit();
+                    testServer.stop(httpServer);
+                    done(e);
+                });
+        });
+
+        it("Proxyblock does not get stuck in infinite loop", function (done) {
+
+            const [server, url] = testServer.startWithFile("infinite-loop.html");
+
+            testUrl = url;
+            httpServer = server;
+
+            const standardsToBlock = ["Selectors API Level 1"];
+            let driverReference;
+
+            utils.promiseGetDriver()
+                .then(function (driver) {
+                    driverReference = driver;
+                    return utils.promiseSetBlockingRules(driver, standardsToBlock);
+                })
+                .then(() => driverReference.get(testUrl))
+                .then(() => driverReference.wait(until.elementLocated(by.css("div.success-case")), 2000))
                 .then(function () {
                     driverReference.quit();
                     testServer.stop(httpServer);

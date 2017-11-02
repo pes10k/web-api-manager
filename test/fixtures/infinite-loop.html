@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Testing Infinite Loop Case</title>
+    </head>
+    <body>
+        <div id="example-div">
+            <p>A child node</p>
+        </div>
+        <script>
+            // For testing when "Selectors API Level 1" is being blocked.
+            const exampleDiv = document.querySelector("example-div");
+            let childNode = exampleDiv.childNode;
+            let nextSibling;
+
+            // Will be stuck in an infinite loop, as nextSibling will keep
+            // returning the blockign proxy.
+            while (childNode) {
+                nextSibling = childNode.nextSibling;
+                exampleDiv.removeChild(childNode);
+                childNode = nextSibling;
+            }
+        </script>
+        <script>
+            // This will only trigger if the above infinite loop is broken.
+            const elementToInsert = document.createElement("div");
+            elementToInsert.className = "success-case";
+            document.body.appendChild(elementToInsert);
+        </script>
+    </body>
+</html>
