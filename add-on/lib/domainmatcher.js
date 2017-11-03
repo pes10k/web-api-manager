@@ -58,6 +58,14 @@
             return next;
         }
 
+        // Also apply a slightly looser match, to make rules in the form
+        // of *.example.com match example.com.
+        if (next.startsWith("*.") &&
+                next.endsWith(hostName) &&
+                next.length === hostName.length + 2) {
+            return next;
+        }
+
         return prev;
     };
 
