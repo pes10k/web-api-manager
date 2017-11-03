@@ -13,8 +13,8 @@ const addonLibPath = path.join(__dirname, "..", "..", "add-on", "lib");
 
 // These will end up not returing anything, but will instead populate
 // window.WEB_API_MANAGER
-const webAPIInitStub = require(path.join(addonLibPath, "init.js"));
-const domainMatcherStub = require(path.join(addonLibPath, "domainmatcher.js"));
+require(path.join(addonLibPath, "init.js"));
+require(path.join(addonLibPath, "domainmatcher.js"));
 const domainMatcherLib = window.WEB_API_MANAGER.domainMatcherLib;
 
 describe("Host Pattern Matching", function () {
