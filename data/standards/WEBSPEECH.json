@@ -1,0 +1,21 @@
+{
+    "info": {
+      "name": "Web Speech API Specification",
+      "subsection_number": null,
+      "subsection_name": null,
+      "url": "https://w3c.github.io/speech-api/webspeechapi.html"
+    },
+    "features": [
+        "webkitSpeechRecognition.prototype.start",
+        "webkitSpeechRecognition.prototype.stop",
+        "webkitSpeechRecognition.prototype.abort",
+        "webkitSpeechGrammarList.prototype.item",
+        "webkitSpeechGrammarList.prototype.addFromString",
+        "webkitSpeechGrammarList.prototype.addFromUri",
+        "speechSynthesis.speak",
+        "speechSynthesis.cancel",
+        "speechSynthesis.pause",
+        "speechSynthesis.resume",
+        "speechSynthesis.getVoices"
+    ]
+  }
