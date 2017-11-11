@@ -76,6 +76,11 @@ gulp.task("default", function () {
 
     fs.writeFileSync(path.join("add-on", "lib", "standards.js"), renderedStandardsModule);
 
+    const thirdPartyConfigDirPath = path.join("add-on", "config", "js", "third_party");
+    if (!fs.existsSync(thirdPartyConfigDirPath)) {
+        fs.mkdirSync(thirdPartyConfigDirPath);
+    }
+
     const sjclSourcePath = path.join("node_modules", "sjcl", "sjcl.js");
     const sjclDestPath = path.join("add-on", "lib", "third_party", "sjcl.js");
     fs.copyFileSync(sjclSourcePath, sjclDestPath);
@@ -86,14 +91,13 @@ gulp.task("default", function () {
 
     const uriSourcePath = path.join("node_modules", "uri-js", "dist", "es5", "uri.all.min.js");
     const uriDestPath = path.join("add-on", "lib", "third_party", "uri.all.min.js");
+
     fs.copyFileSync(uriSourcePath, uriDestPath);
 
     // Now compile the vue templates into render functions, so that we
     // can run in the CSP safe, VUE runtime.
     const vueTemplatesSourcePath = path.join("sources", "vue");
     const vueTemplatesDestPath = path.join("add-on", "config", "js", "vue_compiled_templates");
-
-
     if (!fs.existsSync(vueTemplatesDestPath)) {
         fs.mkdirSync(vueTemplatesDestPath);
     }
