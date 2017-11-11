@@ -1,6 +1,6 @@
 {
     "name": "web-api-manager",
-    "version": "0.9.9",
+    "version": "0.9.10",
     "description": "Tools to generate Web API managing browser extensions for Firefox and Chrome.",
     "author": "Peter Snyder <psnyde2@uic.edu> (https://www.cs.uic.edu/~psnyder/)",
     "license": "GPL-3.0",
@@ -23,7 +23,7 @@
     "scripts": {
         "clean": "rm -Rf dist/",
         "bundle": "node_modules/gulp/bin/gulp.js clean && node_modules/gulp/bin/gulp.js && node_modules/web-ext/bin/web-ext -s add-on -a dist build --overwrite-dest",
-        "firefox": "node_modules/cross-env/dist/bin/cross-env.js npm run bundle && node_modules/web-ext/bin/web-ext -s add-on run",
+        "firefox": "node_modules/cross-env/dist/bin/cross-env.js npm run bundle && node_modules/web-ext/bin/web-ext -s add-on run --ignore-files '**/*.js'",
         "lint": "node_modules/eslint/bin/eslint.js .",
         "lint:fix": "node_modules/eslint/bin/eslint.js --fix .",
         "test": "npm run clean; npm run bundle && ln -s `ls dist/` dist/webapi_manager.zip && node_modules/cross-env/dist/bin/cross-env.js node_modules/mocha/bin/mocha test/unit/*.js test/functional/*.js --only-local-tests",
