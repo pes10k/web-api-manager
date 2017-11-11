@@ -90,6 +90,18 @@ If thats of interest, please feel free to email (psnyde2@uic.edu) or open an
 issue for the standard that you're interested in.
 
 
+Building
+---
+You can build the extension with the following steps:
+
+```
+npm install
+npm run bundle
+
+# You'll then have a zip'ed up version of the extension at `dist/webapi_manager.zip`
+```
+
+
 Testing and Development
 ---
 There is a [Mocha](https://mochajs.org/) and [Selenium](http://docs.seleniumhq.org/)
