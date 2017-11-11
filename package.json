@@ -1,6 +1,6 @@
 {
     "name": "web-api-manager",
-    "version": "0.9.8",
+    "version": "0.9.9",
     "description": "Tools to generate Web API managing browser extensions for Firefox and Chrome.",
     "author": "Peter Snyder <psnyde2@uic.edu> (https://www.cs.uic.edu/~psnyder/)",
     "license": "GPL-3.0",
@@ -22,8 +22,8 @@
     "contributors": [],
     "scripts": {
         "clean": "rm -Rf dist/",
-        "bundle": "gulp && web-ext -s add-on -a dist build --overwrite-dest",
-        "firefox": "web-ext -s add-on run",
+        "bundle": "node_modules/gulp/bin/gulp.js clean && node_modules/gulp/bin/gulp.js && web-ext -s add-on -a dist build --overwrite-dest",
+        "firefox": "node_modules/web-ext/bin/web-ext -s add-on run",
         "lint": "node_modules/eslint/bin/eslint.js .",
         "lint:fix": "node_modules/eslint/bin/eslint.js --fix .",
         "test": "npm run clean; npm run bundle && ln -s `ls dist/` dist/webapi_manager.zip && cross-env node_modules/mocha/bin/mocha test/unit/*.js test/functional/*.js --only-local-tests",
@@ -44,6 +44,10 @@
         "mocha": "^4.0.1",
         "pre-commit": "^1.2.2",
         "selenium-webdriver": "^3.6.0",
+        "sjcl": "^1.0.7",
+        "uri-js": "^3.0.2",
+        "vue-template-compiler": "^2.5.3",
+        "vue.js": "^0.3.2",
         "web-ext": "^2.2.2"
     }
 }

@@ -16,7 +16,9 @@
         state.activeTab = "domain-rules";
 
         const vm = new Vue({
-            el: doc.querySelector("section.container"),
+            el: doc.querySelector("#config-root"),
+            render: window.WEB_API_MANAGER.vueComponents["config-root"].render,
+            staticRenderFns: window.WEB_API_MANAGER.vueComponents["config-root"].staticRenderFns,
             data: state,
             methods: {
                 setActiveTab: function (event) {

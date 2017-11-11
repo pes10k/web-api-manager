@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "WebAPI Manager",
-  "version": "0.9.8",
+  "version": "0.9.9 ",
   "description": "Improves browser security and privacy by controlling page access to the Web API.",
   "icons": {
     "48": "images/uic-48.png",
@@ -49,7 +49,7 @@
   ],
   "background": {
     "scripts": [
-      "lib/third_party/URI.js",
+      "lib/third_party/uri.all.min.js",
       "lib/third_party/sjcl.js",
       "lib/init.js",
       "lib/standards.js",

@@ -3,3 +3,8 @@ node_modules/
 *.swp
 test.config.js
 dist/
+add-on/lib/standards.js
+add-on/lib/third_party/sjcl.js
+add-on/lib/third_party/uri.all.min.js
+add-on/config/js/third_party/vue.runtime.min.js
+add-on/config/js/vue_compiled_templates/

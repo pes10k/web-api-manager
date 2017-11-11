@@ -44,8 +44,8 @@
     };
 
     const extractHostNameFromUrl = function (url) {
-        const uri = window.URI(url);
-        return uri.hostname();
+        const uri = window.URI.parse(url);
+        return uri.host;
     };
 
     const matchingUrlReduceFunction = function (hostName, prev, next) {
