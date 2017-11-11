@@ -34,8 +34,39 @@
         storageObject.sync.set(valueToStore, callback);
     };
 
+    const onChange = (function () {
+
+        const queue = [];
+
+        storageObject.onChanged.addListener(function (changes) {
+
+            if (changes[webApiManagerKeySettingsKey] === undefined) {
+                return;
+            }
+
+            const {newValue, oldValue} = changes[webApiManagerKeySettingsKey];
+
+            if (JSON.stringify(newValue) === JSON.stringify(oldValue)) {
+                return;
+            }
+
+            queue.forEach(function (callback) {
+                try {
+                    callback(newValue);
+                } catch (e) {
+                    // Intentionally left blank...
+                }
+            });
+        });
+
+        return function (callback) {
+            queue.push(callback);
+        };
+    }());
+
     window.WEB_API_MANAGER.storageLib = {
         get,
-        set
+        set,
+        onChange
     };
 }());

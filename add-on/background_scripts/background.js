@@ -54,14 +54,14 @@
     rootObject.tabs.onUpdated.addListener(updateBrowserActionBadge);
     rootObject.tabs.onActivated.addListener(updateBrowserActionBadge);
 
-    window.setInterval(function () {
-        rootObject.tabs.getCurrent(function (currentTab) {
-            if (currentTab === undefined) {
-                return;
-            }
-            updateBrowserActionBadge({tabId: currentTab.id});
-        });
-    }, 1000);
+    // window.setInterval(function () {
+    //     rootObject.tabs.getCurrent(function (currentTab) {
+    //         if (currentTab === undefined) {
+    //             return;
+    //         }
+    //         updateBrowserActionBadge({tabId: currentTab.id});
+    //     });
+    // }, 1000);
 
     // Listen for updates to the domain rules from the config page.
     // The two types of messages that are sent to the background page are
@@ -73,25 +73,55 @@
     rootObject.runtime.onMessage.addListener(function (request, ignore, sendResponse) {
 
         const [label, data] = request;
+
+        // Sent from the config page, when the "which APIs should be
+        // blocked for which domains" has been changed on the config page.
         if (label === "stateUpdate") {
             domainRules = data.domainRules;
             shouldLog = data.shouldLog;
             return;
         }
 
+        // Sent from the popup / browser action, asking for infromation about
+        // which blocking rules are being applied to which domains in the
+        // tab.
         if (label === "rulesForDomains") {
 
             const matchHostName = domainMatcherLib.matchHostName;
             const matchHostNameBound = matchHostName.bind(undefined, Object.keys(domainRules));
-            const rulesForDomains = data.map(matchHostNameBound);
             const domainToRuleMapping = {};
 
-            data.forEach(function (aHostName, index) {
-                domainToRuleMapping[aHostName] = rulesForDomains[index] || defaultKey;
+            data.forEach(function (aHostName) {
+                const ruleNameForHost = matchHostNameBound(aHostName) || defaultKey;
+                domainToRuleMapping[aHostName] = {
+                    "ruleName": ruleNameForHost,
+                    "numRules": domainRules[ruleNameForHost].length
+                };
             });
 
             sendResponse(domainToRuleMapping);
             return;
+        }
+
+        // Sent from the popup / browser action, saying that a given
+        // host name should have the default blocking rule applied
+        // (action === "block", or all APIs allowed
+        // (action === "allow").
+        if (label === "toggleBlocking") {
+
+            const {action, hostName} = data;
+            if (action === "block") {
+                delete domainRules[hostName];
+                sendResponse(["toggleBlockingResponse", domainRules[defaultKey].length]);
+            } else if (action === "allow") {
+                domainRules[hostName] = [];
+                sendResponse(["toggleBlockingResponse", 0]);
+            }
+
+            storageLib.set({
+                domainRules,
+                shouldLog
+            });
         }
     });
 

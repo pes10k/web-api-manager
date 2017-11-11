@@ -28,7 +28,8 @@
         "lint:fix": "node_modules/eslint/bin/eslint.js --fix .",
         "test": "npm run clean; npm run bundle && ln -s `ls dist/` dist/webapi_manager.zip && node_modules/cross-env/dist/bin/cross-env.js node_modules/mocha/bin/mocha test/unit/*.js test/functional/*.js --only-local-tests",
         "test:watch": "node_modules/cross-env/dist/bin/cross-env.js npm test --watch",
-        "test:all": "npm run clean; npm run bundle && ln -s `ls dist/` dist/webapi_manager.zip && node_modules/cross-env/dist/bin/cross-env.js node_modules/mocha/bin/mocha test/unit/*.js test/functional/*.js"
+        "test:all": "npm run clean; npm run bundle && ln -s `ls dist/` dist/webapi_manager.zip && node_modules/cross-env/dist/bin/cross-env.js node_modules/mocha/bin/mocha test/unit/*.js test/functional/*.js",
+        "test:unit": "npm run clean; npm run bundle && ln -s `ls dist/` dist/webapi_manager.zip && node_modules/cross-env/dist/bin/cross-env.js node_modules/mocha/bin/mocha test/unit/*.js"
     },
     "pre-push": {
         "run": [

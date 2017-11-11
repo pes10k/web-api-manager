@@ -6,6 +6,7 @@ const testServer = require("./lib/server");
 const webdriver = require("selenium-webdriver");
 const by = webdriver.By;
 const until = webdriver.until;
+const Context = require("selenium-webdriver/firefox").Context;
 
 describe("Basic Functionality", function () {
 

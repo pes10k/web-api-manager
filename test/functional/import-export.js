@@ -19,7 +19,7 @@ const promiseOpenImportExportTab = function (driver) {
 
 describe("Import / Export", function () {
 
-    this.timeout = () => 10000;
+    this.timeout = () => 20000;
 
     describe("Exporting", function () {
 
@@ -35,10 +35,14 @@ describe("Import / Export", function () {
                 .then(() => driverReference.findElement(by.css(".export-section select option:nth-child(1)")).click())
                 .then(() => driverReference.findElement(by.css(".export-section textarea")).getAttribute("value"))
                 .then(function (exportValue) {
+                    driverReference.quit();
                     assert.equal(exportValue.trim(), emptyRuleSet, "Exported ruleset does not match expected value.");
                     done();
                 })
-                .catch(done);
+                .catch(function (e) {
+                    driverReference.quit();
+                    done(e);
+                });
         });
 
         it("Exporting SVG and Beacon blocking rules", function (done) {
@@ -55,9 +59,13 @@ describe("Import / Export", function () {
                 .then(() => driverReference.findElement(by.css(".export-section textarea")).getAttribute("value"))
                 .then(function (exportValue) {
                     assert.equal(exportValue.trim(), blockingSVGandBeacon, "Exported ruleset does not match expected value.");
+                    driverReference.quit();
                     done();
                 })
-                .catch(done);
+                .catch(function (e) {
+                    driverReference.quit();
+                    done(e);
+                });
         });
     });
 
@@ -89,10 +97,13 @@ describe("Import / Export", function () {
                 })
                 .then(function (secondCheckboxValue) {
                     assert.equal(secondCheckboxValue, utils.constants.svgBlockRule[0], "The second blocked standard should be the SVG standard.");
-                    driverReference.close();
+                    driverReference.quit();
                     done();
                 })
-                .catch(done);
+                .catch(function (e) {
+                    driverReference.quit();
+                    done(e);
+                });
         });
 
         it("Importing rules for new domain", function (done) {
@@ -112,7 +123,7 @@ describe("Import / Export", function () {
                 .then(() => driverReference.findElements(by.css("#domain-rules input[type='radio']")))
                 .then(function (radioElms) {
                     assert.equal(radioElms.length, 2, "There should be two domain rules in place.");
-                    return radioElms[1].click();
+                    return radioElms[0].click();
                 })
                 .then(() => driverReference.findElements(by.css("#domain-rules input[type='checkbox']:checked")))
                 .then(function (checkboxElms) {
@@ -126,10 +137,13 @@ describe("Import / Export", function () {
                 })
                 .then(function (secondCheckboxValue) {
                     assert.equal(secondCheckboxValue, "WebGL Specification", "The second blocked standard should be 'WebGL Specification'.");
-                    driverReference.close();
+                    driverReference.quit();
                     done();
                 })
-                .catch(done);
+                .catch(function (e) {
+                    driverReference.quit();
+                    done(e);
+                });
         });
     });
 });

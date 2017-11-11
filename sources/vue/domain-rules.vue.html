@@ -1,5 +1,6 @@
 <div class="domain-rules-container well">
-    <div class="radio" v-for="aDomain in domainNames">
+    <h3>Domains</h3>
+    <div class="radio" v-for="aDomain in blockingRules()">
         <label>
             <input type="radio"
                  :value="aDomain"
@@ -13,16 +14,31 @@
         </label>
     </div>
 
+    <h3>Whitelisted Domains</h3>
+    <div class="radio" v-for="aDomain in allowingRules()">
+        <label>
+            <input type="radio"
+                 :value="aDomain"
+                v-model="selectedDomain"
+                @change="onRadioChange">
+            {{ aDomain }}
+            <span class="glyphicon glyphicon-remove"
+                   v-if="!isDefault(aDomain)"
+           :data-domain="aDomain"
+                 @click="onRemoveClick"></span>
+        </label>
+    </div>
+
+
     <div class="alert alert-danger" role="alert" v-if="errorMessage">
         {{ errorMessage }}
     </div>
 
     <div class="form-group" v-bind:class="{ 'has-error': errorMessage }">
         <label for="newDomainName">Add New Domain Rule</label>
-        <input
-            class="form-control"
-     v-model.trim="newDomain"
-      placeholder="*.example.org">
+        <input class="form-control"
+        v-model.trim="newDomain"
+         placeholder="*.example.org">
     </div>
 
     <button type="submit"

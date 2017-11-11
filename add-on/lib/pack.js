@@ -20,7 +20,7 @@
 
     /**
      * Encodes a buffer (such as a Uint8Array) to a base64 encoded string.
-     * 
+     *
      * @param {ArrayBuffer} buf
      *   A buffer of binary data.
      *

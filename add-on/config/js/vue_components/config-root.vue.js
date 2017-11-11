@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    const rootObject = (window.browser || window.chrome);
+    const rootObject = window.browser || window.chrome;
     const doc = window.document;
     const standards = window.WEB_API_MANAGER.standards;
     const {storageLib, stateLib} = window.WEB_API_MANAGER;
@@ -10,12 +10,14 @@
 
     const state = stateLib.generateStateObject(defaultDomain, standards);
 
+    let globalVmInstance;
+
     const onSettingsLoaded = function (storedSettings) {
 
         state.populateFromStorage(storedSettings);
         state.activeTab = "domain-rules";
 
-        const vm = new Vue({
+        globalVmInstance = new Vue({
             el: doc.querySelector("#config-root"),
             render: window.WEB_API_MANAGER.vueComponents["config-root"].render,
             staticRenderFns: window.WEB_API_MANAGER.vueComponents["config-root"].staticRenderFns,
@@ -36,12 +38,15 @@
             });
         };
 
-        vm.$watch("selectedStandards", updateStoredSettings);
-        vm.$watch("domainNames", updateStoredSettings);
-        vm.$watch("shouldLog", updateStoredSettings);
+        globalVmInstance.$watch("selectedStandards", updateStoredSettings);
+        globalVmInstance.$watch("domainNames", updateStoredSettings);
+        globalVmInstance.$watch("shouldLog", updateStoredSettings);
     };
 
     window.onload = function () {
         storageLib.get(onSettingsLoaded);
+        storageLib.onChange(function (newStoredValues) {
+            globalVmInstance.$data.setDomainRules(newStoredValues.domainRules);
+        });
     };
 }());

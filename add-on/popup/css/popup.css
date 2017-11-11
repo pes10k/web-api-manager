@@ -1,5 +1,6 @@
 body, html {
     min-width: 320px;
+    width: 640px;
 }
 
 section .row {

@@ -1,7 +1,7 @@
 /**
  * Tests to ensure that the pattern matching code (what determins which
  * standard blocking rules should be applied to which domain) is correct.
- * 
+ *
  * The code being tested here mostly lives in (from the project root)
  * add-on/lib/domainmatcher.js
  */

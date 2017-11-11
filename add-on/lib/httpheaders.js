@@ -55,7 +55,7 @@
     /**
      * Returns a new CSP instruction, with source with the given hash
      * whitelisted.
-     * 
+     *
      * If the CSP instruction has a "script-src" rule, then the hash-value
      * will be inserted there.  Otherwise, it will be inserted in the
      * default-src section.

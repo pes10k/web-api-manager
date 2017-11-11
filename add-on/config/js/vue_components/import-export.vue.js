@@ -51,7 +51,7 @@
                 const logMessages = newDomainRules.map(function (newDomainRule) {
                     const {pattern, standards} = newDomainRule;
                     if (currentDomainRules[pattern] !== undefined && shouldOverwrite === false) {
-                        return ` ! ${pattern}: Skipped. Set to not override.\n`; 
+                        return ` ! ${pattern}: Skipped. Set to not override.\n`;
                     }
 
                     stateObject.setStandardsForDomain(pattern, standards);

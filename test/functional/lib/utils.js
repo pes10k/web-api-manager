@@ -66,11 +66,6 @@ module.exports.promiseExtensionConfigPage = function (driver) {
         });
 };
 
-module.exports.promiseAddonConfigButton = function (driver) {
-    driver.setContext(Context.CHROME);
-    return driver.wait(until.elementLocated(by.id("config-page-link")), 2000);
-};
-
 module.exports.promiseSetBlockingRules = function (driver, standardsToBlock) {
     const setStandardsScript = injectedScripts.setStandardsAsBlockedScript(standardsToBlock);
     driver.setContext(Context.CONTENT);

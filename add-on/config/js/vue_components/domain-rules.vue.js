@@ -14,6 +14,12 @@
             };
         },
         methods: {
+            blockingRules: function () {
+                return this.$root.$data.domainsBlockingStandards();
+            },
+            allowingRules: function () {
+                return this.$root.$data.domainsBlockingNoStandards();
+            },
             newDomainSubmitted: function () {
 
                 const state = this.$root.$data;
