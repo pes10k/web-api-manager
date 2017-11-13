@@ -1,16 +1,16 @@
 {
-    "info": {
-      "name": "Push API",
-      "subsection_number": null,
-      "subsection_name": null,
-      "url": "https://w3c.github.io/push-api/"
-    },
-    "features": [
-      "PushManager.prototype.subscribe",
-      "PushManager.prototype.getSubscription",
-      "PushManager.prototype.permissionState",
-      "PushSubscription.prototype.getKey",
-      "PushSubscription.prototype.unsubscribe",
-      "PushSubscription.prototype.toJSON"
-    ]
-  }
+  "info": {
+    "name": "Push API",
+    "subsection_number": null,
+    "subsection_name": null,
+    "url": "https://w3c.github.io/push-api/"
+  },
+  "features": [
+    "PushManager.prototype.subscribe",
+    "PushManager.prototype.getSubscription",
+    "PushManager.prototype.permissionState",
+    "PushSubscription.prototype.getKey",
+    "PushSubscription.prototype.unsubscribe",
+    "PushSubscription.prototype.toJSON"
+  ]
+}

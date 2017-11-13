@@ -18,7 +18,10 @@ window.WEB_API_MANAGER.defaults.lite = [
     "WebGL Specification",
     "Geometry Interfaces Module Level 1",
     "Web Notifications",
-    "Vibration API"
+    "Vibration API",
+    "WebVR",
+    "WebUSB API",
+    "Web Speech API"
 ];
 
 window.WEB_API_MANAGER.defaults.conservative = [
@@ -36,7 +39,11 @@ window.WEB_API_MANAGER.defaults.conservative = [
     "UI Events Specification",
     "WebGL Specification",
     "Web Audio API",
-    "Scalable Vector Graphics (SVG) 1.1 (Second Edition)"
+    "Scalable Vector Graphics (SVG) 1.1 (Second Edition)",
+    "WebVR",
+    "WebVTT: The Web Video Text Tracks Format",
+    "WebUSB API",
+    "Web Speech API"
 ];
 
 window.WEB_API_MANAGER.defaults.aggressive = window.WEB_API_MANAGER.defaults.conservative.concat([

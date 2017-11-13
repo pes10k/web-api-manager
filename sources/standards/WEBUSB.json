@@ -1,26 +1,26 @@
 {
-    "info": {
-      "name": "WebUSB API",
-      "subsection_number": null,
-      "subsection_name": null,
-      "url": "https://wicg.github.io/webusb/"
-    },
-    "features": [
-        "USB.prototype.getDevices",
-        "USB.prototype.requestDevice",
-        "USBDevice.prototype.open",
-        "USBDevice.prototype.close",
-        "USBDevice.prototype.selectConfiguration",
-        "USBDevice.prototype.claimInterface",
-        "USBDevice.prototype.releaseInterface",
-        "USBDevice.prototype.selectAlternateInterface",
-        "USBDevice.prototype.controlTransferIn",
-        "USBDevice.prototype.controlTransferOut",
-        "USBDevice.prototype.clearHalt",
-        "USBDevice.prototype.transferIn",
-        "USBDevice.prototype.transferOut",
-        "USBDevice.prototype.isochronousTransferIn",
-        "USBDevice.prototype.isochronousTransferOut",
-        "USBDevice.prototype.reset"
-    ]
-  }
+  "info": {
+    "name": "WebUSB API",
+    "subsection_number": null,
+    "subsection_name": null,
+    "url": "https://wicg.github.io/webusb/"
+  },
+  "features": [
+      "USB.prototype.getDevices",
+      "USB.prototype.requestDevice",
+      "USBDevice.prototype.open",
+      "USBDevice.prototype.close",
+      "USBDevice.prototype.selectConfiguration",
+      "USBDevice.prototype.claimInterface",
+      "USBDevice.prototype.releaseInterface",
+      "USBDevice.prototype.selectAlternateInterface",
+      "USBDevice.prototype.controlTransferIn",
+      "USBDevice.prototype.controlTransferOut",
+      "USBDevice.prototype.clearHalt",
+      "USBDevice.prototype.transferIn",
+      "USBDevice.prototype.transferOut",
+      "USBDevice.prototype.isochronousTransferIn",
+      "USBDevice.prototype.isochronousTransferOut",
+      "USBDevice.prototype.reset"
+  ]
+}

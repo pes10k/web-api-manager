@@ -1,21 +1,21 @@
 {
-    "info": {
-      "name": "WebVR",
-      "subsection_number": null,
-      "subsection_name": null,
-      "url": "https://w3c.github.io/webvr/spec/1.1/"
-    },
-    "features": [
-        "VRDisplay.prototype.getEyeParameters",
-        "VRDisplay.prototype.getFrameData",
-        "VRDisplay.prototype.getPose",
-        "VRDisplay.prototype.resetPose",
-        "VRDisplay.prototype.requestAnimationFrame",
-        "VRDisplay.prototype.cancelAnimationFrame",
-        "VRDisplay.prototype.requestPresent",
-        "VRDisplay.prototype.exitPresent",
-        "VRDisplay.prototype.getLayers",
-        "VRDisplay.prototype.submitFrame",
-        "Navigator.prototype.getVRDisplays"
-    ]
-  }
+  "info": {
+    "name": "WebVR",
+    "subsection_number": null,
+    "subsection_name": null,
+    "url": "https://w3c.github.io/webvr/spec/1.1/"
+  },
+  "features": [
+      "VRDisplay.prototype.getEyeParameters",
+      "VRDisplay.prototype.getFrameData",
+      "VRDisplay.prototype.getPose",
+      "VRDisplay.prototype.resetPose",
+      "VRDisplay.prototype.requestAnimationFrame",
+      "VRDisplay.prototype.cancelAnimationFrame",
+      "VRDisplay.prototype.requestPresent",
+      "VRDisplay.prototype.exitPresent",
+      "VRDisplay.prototype.getLayers",
+      "VRDisplay.prototype.submitFrame",
+      "Navigator.prototype.getVRDisplays"
+  ]
+}
