@@ -1,7 +1,7 @@
 /*globals sjcl*/
 // This module generates JavaScript code for instrumenting the DOM
 // to prevent pages from accessing Web API standards.  This code
-// is generated programatically so that both the background and content
+// is generated programmatically so that both the background and content
 // scripts can determine the SHA256 hash of the injected code, so that
 // we can set the CSP policy as needed.
 (function () {
@@ -78,6 +78,7 @@
                 const currentLeaf = (numNodes === 0)
                     ? window
                     : prev[numNodes - 1];
+
                 const nextLeaf = currentLeaf[cur];
 
                 if (nextLeaf === undefined) {
@@ -201,7 +202,7 @@
 
         // Next, delete the WEB_API_MANAGER_PAGE global property.  Technically
         // this never needed to be global, but doing so allows for easier
-        // jslinting of the code, makes things easier to understand (for me
+        // linting of the code, makes things easier to understand (for me
         // at least) and doesn't have any side effect as long as we delete
         // it when we're done, and before the page scripts can start running.
         delete window.WEB_API_MANAGER_PAGE;
@@ -264,10 +265,9 @@
         const completeScriptCode = proxyBlockingSettings + "\n" + proxyingBlockingSrc;
 
         // Use the SJ Crypto library, instead of the WebCrypto library,
-        // because we need to compute hashes syncronously (so we can
+        // because we need to compute hashes synchronously (so we can
         // be sure the hash operation will complete before we let page
         // script run).
-        // https://bitwiseshiftleft.github.io/sjcl/doc/sjcl.hash.sha256.html
         const hash = sjcl.hash.sha256.hash(completeScriptCode);
         const hashBase64 = sjcl.codec.base64.fromBits(hash);
 

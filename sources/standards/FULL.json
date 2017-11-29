@@ -7,9 +7,6 @@
   },
   "features": [
     "document.mozFullScreen",
-    "document.mozFullScreenElement",
-    "document.webkitFullScreenElement",
-    "document.fullScreenElement",
     "document.mozFullScreenEnabled",
     "document.webkitFullscreenEnabled",
     "document.onmozfullscreenchange",
@@ -18,7 +15,6 @@
     "document.onwebkitfullscreenerror",
     "Document.prototype.mozCancelFullScreen",
     "Document.prototype.webkitCancelFullScreen",
-    "Document.prototype.webkitCurrentFullScreenElement",
     "Document.prototype.mozExitFullscreen",
     "Document.prototype.webkitExitFullscreen",
     "Document.prototype.exitFullscreen",
