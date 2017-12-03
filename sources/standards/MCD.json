@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "Media Capture from DOM Elements",
     "name": "Media Capture from DOM Elements",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://w3c.github.io/mediacapture-fromelement/"
+    "url": "https://w3c.github.io/mediacapture-fromelement/",
+    "category": "media"
   },
   "features": [
     "CanvasCaptureMediaStream.prototype.requestFrame",

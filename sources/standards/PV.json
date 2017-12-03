@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "Page Visibility (Second Edition)",
     "name": "Page Visibility (Second Edition)",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://www.w3.org/TR/page-visibility/"
+    "url": "https://www.w3.org/TR/page-visibility/",
+    "category": "presentation"
   },
   "features": [
     "document.mozHidden",

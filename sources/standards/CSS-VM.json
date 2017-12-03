@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "CSSOM View Module",
     "name": "CSSOM View Module",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://drafts.csswg.org/cssom-view/"
+    "url": "https://drafts.csswg.org/cssom-view/",
+    "category": "presentation"
   },
   "features": [
     "CaretPosition.prototype.getClientRect",

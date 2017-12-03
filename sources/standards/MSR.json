@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "MediaStream Recording",
     "name": "MediaStream Recording",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://www.w3.org/TR/mediastream-recording/"
+    "url": "https://www.w3.org/TR/mediastream-recording/",
+    "category": "media"
   },
   "features": [
     "MediaRecorder.prototype.pause",

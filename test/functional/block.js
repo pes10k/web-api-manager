@@ -6,7 +6,6 @@ const testServer = require("./lib/server");
 const webdriver = require("selenium-webdriver");
 const by = webdriver.By;
 const until = webdriver.until;
-const Context = require("selenium-webdriver/firefox").Context;
 
 describe("Basic Functionality", function () {
 
@@ -17,15 +16,11 @@ describe("Basic Functionality", function () {
 
     describe("blocking", function () {
 
-        this.timeout = function () {
-            return 20000;
-        };
+        this.timeout = () => 20000;
 
         it("SVG Not Blocking", function (done) {
 
-            this.timeout = function () {
-                return 10000;
-            };
+            this.timeout = () => 10000;
 
             const [server, url] = testServer.start();
 

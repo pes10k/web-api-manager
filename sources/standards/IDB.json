@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "Indexed Database API",
     "name": "Indexed Database API",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://www.w3.org/TR/IndexedDB/"
+    "url": "https://www.w3.org/TR/IndexedDB/",
+    "category": "storage"
   },
   "features": [
     "IDBCursor.prototype.advance",

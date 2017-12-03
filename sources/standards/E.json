@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "Encoding",
     "name": "Encoding",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://encoding.spec.whatwg.org/"
+    "url": "https://encoding.spec.whatwg.org/",
+    "category": "core"
   },
   "features": [
     "TextDecoder.prototype.decode",

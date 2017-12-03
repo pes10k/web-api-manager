@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "Fullscreen API",
     "name": "Fullscreen API",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://fullscreen.spec.whatwg.org/"
+    "url": "https://fullscreen.spec.whatwg.org/",
+    "category": "presentation"
   },
   "features": [
     "document.mozFullScreen",

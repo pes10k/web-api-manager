@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "Battery Status API",
     "name": "Battery Status API",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://www.w3.org/TR/battery-status/"
+    "url": "https://www.w3.org/TR/battery-status/",
+    "category": "hardware"
   },
   "features": [
     "navigator.battery",

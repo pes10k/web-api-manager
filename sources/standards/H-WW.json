@@ -1,9 +1,9 @@
 {
   "info": {
-    "name": "HTML",
-    "subsection_number": "10",
-    "subsection_name": "Web Workers",
-    "url": "https://html.spec.whatwg.org/multipage/workers.html"
+    "id": "HTML: Web Workers",
+    "name": "HTML: Web Workers",
+    "url": "https://html.spec.whatwg.org/multipage/workers.html",
+    "category": "computation"
   },
   "features": [
     "Worker.prototype.postMessage",

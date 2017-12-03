@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "Encrypted Media Extensions",
     "name": "Encrypted Media Extensions",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://w3c.github.io/encrypted-media/"
+    "url": "https://w3c.github.io/encrypted-media/",
+    "category": "media"
   },
   "features": [
     "MediaKeys.prototype.createSession",

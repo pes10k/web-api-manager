@@ -1,9 +1,9 @@
 {
   "info": {
     "name": "XMLHttpRequest",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://xhr.spec.whatwg.org/"
+    "id": "XMLHttpRequest",
+    "url": "https://xhr.spec.whatwg.org/",
+    "category": "networking"
   },
   "features": [
     "FormData.prototype.append",

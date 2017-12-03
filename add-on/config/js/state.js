@@ -76,7 +76,7 @@
 
         const state = {
             selectedDomain: initialDomain,
-            standards: standards,
+            standards: JSON.parse(JSON.stringify(standards)),
             domainRules: {},
             domainNames: [],
             shouldLog: false,

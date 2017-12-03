@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "URL",
     "name": "URL",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://url.spec.whatwg.org/"
+    "url": "https://url.spec.whatwg.org/",
+    "category": "core"
   },
   "features": [
     "URLSearchParams.prototype.append",
@@ -11,6 +11,7 @@
     "URLSearchParams.prototype.get",
     "URLSearchParams.prototype.getAll",
     "URLSearchParams.prototype.has",
-    "URLSearchParams.prototype.set"
+    "URLSearchParams.prototype.set",
+    "URL.prototype.toJSON"
   ]
 }

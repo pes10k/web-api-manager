@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "Fetch",
     "name": "Fetch",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://fetch.spec.whatwg.org/"
+    "url": "https://fetch.spec.whatwg.org/",
+    "category": "networking"
   },
   "features": [
     "Headers.prototype.append",

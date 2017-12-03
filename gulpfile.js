@@ -60,13 +60,7 @@ gulp.task("default", function () {
                 throw e;
             }
 
-            const stdName = standardContents.info.name;
-            const stdSubName = standardContents.info.subsection_name;
-            const nameParts = [stdName, stdSubName].filter(part => !!part);
-
-            const standardIdentifier = nameParts.join(": ").trim();
-            standardContents.info.identifier = standardIdentifier;
-            prev[standardIdentifier] = standardContents;
+            prev[standardContents.info.id] = standardContents;
             return prev;
         }, {});
 

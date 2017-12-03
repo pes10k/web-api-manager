@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "DOM Parsing and Serialization",
     "name": "DOM Parsing and Serialization",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://w3c.github.io/DOM-Parsing/"
+    "url": "https://w3c.github.io/DOM-Parsing/",
+    "category": "core"
   },
   "features": [
     "DOMParser.prototype.parseFromString",

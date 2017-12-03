@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "Directory Upload",
     "name": "Directory Upload",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://wicg.github.io/directory-upload/proposal.html"
+    "url": "https://wicg.github.io/directory-upload/proposal.html",
+    "category": "media"
   },
   "features": [
     "Directory.prototype.getFilesAndDirectories"

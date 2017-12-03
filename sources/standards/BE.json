@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "Beacon",
     "name": "Beacon",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://www.w3.org/TR/beacon/"
+    "url": "https://www.w3.org/TR/beacon/",
+    "category": "networking"
   },
   "features": [
     "Navigator.prototype.sendBeacon"

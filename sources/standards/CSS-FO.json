@@ -1,9 +1,9 @@
 {
   "info": {
-    "name": "CSS Font Loading Module Level 3",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://drafts.csswg.org/css-font-loading/"
+    "id": "CSS Font Loading Module Level 3",
+    "name": "CSS Font Loading (Level 3)",
+    "url": "https://drafts.csswg.org/css-font-loading/",
+    "category": "presentation"
   },
   "features": [
     "document.fonts",

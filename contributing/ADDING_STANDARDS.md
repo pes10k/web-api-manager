@@ -7,10 +7,10 @@ The process for adding a standard for blocking to the extension is pretty
 simple.  All the standards are documented in the `sources/standards` directory
 in the [repo](https://github.com/snyderp/web-api-manager/tree/master/sources).
 Each JSON file in this directory describes a standard.  The structure of the
-JSON file is mostly self-explanatory, except for the `subsection_number` and
-`subsection_name` keys, which are used for enabling blocking just a subsection
-of a larger standard (e.g. the canvas API, which is part of the larger HTML5
-standard).
+JSON file is mostly self-explanatory, except for the `id` key (which is a fixed
+identifier for the standard, so that the user-facing name of the standard can
+be changed if needed without effecting stored values) and the `category` key
+(which is a reference to a category defined in `add-on/lib/categories.js`).
 
 Adding a new standard starts by creating a new JSON file in `sources/standards`.
 If we were going to describe a new standard called `Example API`, we'd create

@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "Performance Timeline",
     "name": "Performance Timeline",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://www.w3.org/TR/performance-timeline"
+    "url": "https://www.w3.org/TR/performance-timeline",
+    "category": "timing"
   },
   "features": [
     "Performance.prototype.getEntriesByName",

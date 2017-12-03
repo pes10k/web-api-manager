@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "Selection API",
     "name": "Selection API",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "http://w3c.github.io/selection-api/"
+    "url": "http://w3c.github.io/selection-api/",
+    "category": "presentation"
   },
   "features": [
     "HTMLDocument.prototype.getSelection",

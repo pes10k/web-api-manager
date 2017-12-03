@@ -30,25 +30,31 @@
             security and privacy improvements.
             <strong>Conservative</strong> and <strong>Aggressive</strong>
             provide extra protections, though will impact the
-            functionaltiy more sites.
+            functionality of more sites.
         </div>
     </div>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">Blocked standards</div>
+    <div class="panel panel-default" v-for="category in categories">
+        <div class="panel-heading">
+            {{ categoryStrings[category].title }}
+        </div>
 
         <ul class="list-group">
-            <li class="list-group-item" v-for="standard in standards">
+            <li class="list-group-item" v-for="standard in standardsByCategory[category]">
                 <span v-if="standard.info.url" class="badge">
                     <a :href="standard.info.url">info</a>
                 </span>
 
                 <input type="checkbox"
-                    :value="standard.info.identifier"
+                    :value="standard.info.id"
                     v-model="selectedStandards"
                     @change="onStandardChecked">
-                {{ standard.info.identifier }}
+                {{ standard.info.name }}
             </li>
         </ul>
+
+        <div class="panel-footer">
+            {{ categoryStrings[category].desc }}
+        </div>
     </div>
 </div>

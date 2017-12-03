@@ -1,9 +1,9 @@
 {
   "info": {
-    "name": "HTML",
-    "subsection_number": "9.3",
-    "subsection_name": "Web Sockets",
-    "url": "https://html.spec.whatwg.org/multipage/comms.html#network"
+    "id": "HTML: Web Sockets",
+    "name": "HTML: Web Sockets",
+    "url": "https://html.spec.whatwg.org/multipage/comms.html#network",
+    "category": "networking"
   },
   "features": [
     "WebSocket.prototype.close",

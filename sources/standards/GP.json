@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "Gamepad",
     "name": "Gamepad",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://w3c.github.io/gamepad/"
+    "url": "https://w3c.github.io/gamepad/",
+    "category": "hardware"
   },
   "features": [
     "Navigator.prototype.getGamepads"

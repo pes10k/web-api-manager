@@ -1,9 +1,9 @@
 {
   "info": {
-    "name": "HTML",
-    "subsection_number": "11",
-    "subsection_name": "Web Storage",
-    "url": "https://html.spec.whatwg.org/multipage/webstorage.html"
+    "id": "HTML: Web Storage",
+    "name": "HTML: Web Storage",
+    "url": "https://html.spec.whatwg.org/multipage/webstorage.html",
+    "category": "storage"
   },
   "features": [
     "Storage.prototype.clear",

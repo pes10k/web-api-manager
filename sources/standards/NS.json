@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "Non-Standard",
     "name": "Non-Standard",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": null
+    "url": null,
+    "category": "misc"
   },
   "features": [
     "AnonymousContent.prototype.getAttributeForElement",

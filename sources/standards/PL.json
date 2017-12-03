@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "Pointer Lock",
     "name": "Pointer Lock",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://w3c.github.io/pointerlock/"
+    "url": "https://w3c.github.io/pointerlock/",
+    "category": "presentation"
   },
   "features": [
     "document.mozPointerLockElement",

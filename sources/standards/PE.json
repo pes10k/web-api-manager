@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "Proximity Events",
     "name": "Proximity Events",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://w3c.github.io/proximity/"
+    "url": "https://w3c.github.io/proximity/",
+    "category": "hardware"
   },
   "features": [
     "window.ondeviceproximity",

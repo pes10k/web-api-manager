@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "HTML 5",
     "name": "HTML 5",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://www.w3.org/TR/html5/"
+    "url": "https://www.w3.org/TR/html5/",
+    "category": "core"
   },
   "features": [
     "document.defaultView",

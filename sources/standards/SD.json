@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "Shadow DOM",
     "name": "Shadow DOM",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://www.w3.org/TR/shadow-dom/"
+    "url": "https://www.w3.org/TR/shadow-dom/",
+    "category": "core"
   },
   "features": [
     "HTMLContentElement.prototype.getDistributedNodes"

@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "Web Audio API",
     "name": "Web Audio API",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://webaudio.github.io/web-audio-api"
+    "url": "https://webaudio.github.io/web-audio-api",
+    "category": "media"
   },
   "features": [
     "AnalyserNode.prototype.getByteFrequencyData",

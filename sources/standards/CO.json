@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "Console API",
     "name": "Console API",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://github.com/DeveloperToolsWG/console-object"
+    "url": "https://github.com/DeveloperToolsWG/console-object",
+    "category": "misc"
   },
   "features": [
     "Console.prototype.assert",

@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "Resource Timing",
     "name": "Resource Timing",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://w3c.github.io/resource-timing/"
+    "url": "https://w3c.github.io/resource-timing/",
+    "category": "timing"
   },
   "features": [
     "performance.onresourcetimingbufferfull",

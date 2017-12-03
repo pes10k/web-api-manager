@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "Service Workers",
     "name": "Service Workers",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://www.w3.org/TR/service-workers/"
+    "url": "https://www.w3.org/TR/service-workers/",
+    "category": "computation"
   },
   "features": [
     "Cache.prototype.add",

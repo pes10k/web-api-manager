@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "UI Events Specification",
     "name": "UI Events Specification",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://w3c.github.io/uievents/"
+    "url": "https://w3c.github.io/uievents/",
+    "category": "presentation"
   },
   "features": [
     "CompositionEvent.prototype.initCompositionEvent",

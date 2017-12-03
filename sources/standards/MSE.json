@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "Media Source Extensions",
     "name": "Media Source Extensions",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://www.w3.org/TR/media-source/"
+    "url": "https://www.w3.org/TR/media-source/",
+    "category": "media"
   },
   "features": [
     "HTMLVideoElement.prototype.getVideoPlaybackQuality",

@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "execCommand",
     "name": "execCommand",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://w3c.github.io/editing/execCommand.html"
+    "url": "https://w3c.github.io/editing/execCommand.html",
+    "category": "misc"
   },
   "features": [
     "document.execCommand",

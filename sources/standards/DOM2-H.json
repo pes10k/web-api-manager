@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "DOM Level 2: HTML",
     "name": "DOM Level 2: HTML",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://www.w3.org/TR/DOM-Level-2-HTML/"
+    "url": "https://www.w3.org/TR/DOM-Level-2-HTML/",
+    "category": "core"
   },
   "features": [
     "document.cookie",

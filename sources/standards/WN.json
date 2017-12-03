@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "Web Notifications",
     "name": "Web Notifications",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://notifications.spec.whatwg.org/"
+    "url": "https://notifications.spec.whatwg.org/",
+    "category": "presentation"
   },
   "features": [
     "DesktopNotification.prototype.show",

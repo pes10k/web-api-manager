@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "WebVTT: The Web Video Text Tracks Format",
     "name": "WebVTT: The Web Video Text Tracks Format",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://w3c.github.io/webvtt/"
+    "url": "https://w3c.github.io/webvtt/",
+    "category": "media"
   },
   "features": [
     "VTTCue.prototype.getCueAsHTML"

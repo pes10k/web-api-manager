@@ -1,9 +1,9 @@
 {
   "info": {
-    "name": "DeviceOrientation Event Specification",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://www.w3.org/TR/orientation-event/"
+    "id": "DeviceOrientation Event Specification",
+    "name": "DeviceOrientation Events",
+    "url": "https://www.w3.org/TR/orientation-event/",
+    "category": "hardware"
   },
   "features": [
     "DeviceMotionEvent.prototype.initDeviceMotionEvent",

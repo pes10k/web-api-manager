@@ -89,14 +89,14 @@ describe("Import / Export", function () {
                 .then(function (checkboxElms) {
                     checkedCheckboxes = checkboxElms;
                     assert.equal(checkboxElms.length, 2, "There should be two standards blocked.");
-                    return checkedCheckboxes[0].getAttribute("value");
-                })
-                .then(function (firstCheckboxValue) {
-                    assert.equal(firstCheckboxValue, "Beacon", "The first blocked standard should be 'Beacon'.");
                     return checkedCheckboxes[1].getAttribute("value");
                 })
+                .then(function (firstCheckboxValue) {
+                    assert.equal(firstCheckboxValue, "Beacon", "One blocked standard should be 'Beacon'.");
+                    return checkedCheckboxes[0].getAttribute("value");
+                })
                 .then(function (secondCheckboxValue) {
-                    assert.equal(secondCheckboxValue, utils.constants.svgBlockRule[0], "The second blocked standard should be the SVG standard.");
+                    assert.equal(secondCheckboxValue, utils.constants.svgBlockRule[0], "The other blocked standard should be SVG.");
                     driverReference.quit();
                     done();
                 })
@@ -129,14 +129,14 @@ describe("Import / Export", function () {
                 .then(function (checkboxElms) {
                     checkedCheckboxes = checkboxElms;
                     assert.equal(checkboxElms.length, 2, "There should be two standards blocked.");
-                    return checkedCheckboxes[0].getAttribute("value");
-                })
-                .then(function (firstCheckboxValue) {
-                    assert.equal(firstCheckboxValue, "Ambient Light Sensor API", "The first blocked standard should be 'Ambient Light Sensor API'.");
                     return checkedCheckboxes[1].getAttribute("value");
                 })
+                .then(function (firstCheckboxValue) {
+                    assert.equal(firstCheckboxValue, "Ambient Light Sensor API", "One blocked standard should be 'Ambient Light Sensor API'.");
+                    return checkedCheckboxes[0].getAttribute("value");
+                })
                 .then(function (secondCheckboxValue) {
-                    assert.equal(secondCheckboxValue, "WebGL Specification", "The second blocked standard should be 'WebGL Specification'.");
+                    assert.equal(secondCheckboxValue, "WebGL Specification", "The other blocked standard should be 'WebGL Specification'.");
                     driverReference.quit();
                     done();
                 })

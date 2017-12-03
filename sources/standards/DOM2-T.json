@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "DOM Level 2: Traversal and Range",
     "name": "DOM Level 2: Traversal and Range",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://www.w3.org/TR/DOM-Level-2-Traversal-Range/"
+    "url": "https://www.w3.org/TR/DOM-Level-2-Traversal-Range/",
+    "category": "core"
   },
   "features": [
     "Document.prototype.createNodeIterator",

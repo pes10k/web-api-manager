@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "HTML 5.1",
     "name": "HTML 5.1",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://www.w3.org/TR/html51/"
+    "url": "https://www.w3.org/TR/html51/",
+    "category": "core"
   },
   "features": [
     "DragEvent.prototype.initDragEvent",

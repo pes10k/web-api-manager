@@ -1,9 +1,9 @@
 {
   "info": {
-    "name": "W3C DOM4",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://www.w3.org/TR/dom/"
+    "id": "W3C DOM4",
+    "name": "DOM Level 4",
+    "url": "https://www.w3.org/TR/dom/",
+    "category": "core"
   },
   "features": [
     "MutationObserver.prototype.disconnect",

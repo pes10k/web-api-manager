@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "Tracking Preference Expression (DNT)",
     "name": "Tracking Preference Expression (DNT)",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://www.w3.org/TR/tracking-dnt/"
+    "url": "https://www.w3.org/TR/tracking-dnt/",
+    "category": "networking"
   },
   "features": [
     "navigator.doNotTrack"

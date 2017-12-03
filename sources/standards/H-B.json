@@ -1,9 +1,9 @@
 {
   "info": {
-    "name": "HTML",
-    "subsection_number": "9.6",
-    "subsection_name": "Broadcasting",
-    "url": "https://html.spec.whatwg.org/multipage/comms.html#dom-broadcastchannel-postmessage"
+    "id": "HTML: Broadcasting",
+    "name": "HTML: Broadcasting",
+    "url": "https://html.spec.whatwg.org/multipage/comms.html#dom-broadcastchannel-postmessage",
+    "category": "networking"
   },
   "features": [
     "BroadcastChannel.prototype.close",

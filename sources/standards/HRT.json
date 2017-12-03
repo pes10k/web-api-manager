@@ -1,9 +1,9 @@
 {
   "info": {
-    "name": "High Resolution Time Level 2",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://w3c.github.io/hr-time/"
+    "id": "High Resolution Time Level 2",
+    "name": "High Resolution Time (Level 2)",
+    "url": "https://w3c.github.io/hr-time/",
+    "category": "timing"
   },
   "features": [
     "Performance.prototype.now"

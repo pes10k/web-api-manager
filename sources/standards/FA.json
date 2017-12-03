@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "File API",
     "name": "File API",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://w3c.github.io/FileAPI/"
+    "url": "https://w3c.github.io/FileAPI/",
+    "category": "media"
   },
   "features": [
     "Blob.prototype.slice",

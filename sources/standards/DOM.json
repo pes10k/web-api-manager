@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "DOM",
     "name": "DOM",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://dom.spec.whatwg.org/"
+    "url": "https://dom.spec.whatwg.org/",
+    "category": "core"
   },
   "features": [
     "CharacterData.prototype.appendData",

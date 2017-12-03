@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "HTML",
     "name": "HTML",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://html.spec.whatwg.org"
+    "url": "https://html.spec.whatwg.org",
+    "category": "core"
   },
   "features": [
     "DataTransfer.prototype.addElement",

@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "CSS Object Model (CSSOM)",
     "name": "CSS Object Model (CSSOM)",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://drafts.csswg.org/cssom/"
+    "url": "https://drafts.csswg.org/cssom/",
+    "category": "presentation"
   },
   "features": [
     "CSS.escape",

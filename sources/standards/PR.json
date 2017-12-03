@@ -1,9 +1,9 @@
 {
     "info": {
+      "id": "Payment Request API",
       "name": "Payment Request API",
-      "subsection_number": null,
-      "subsection_name": null,
-      "url": "https://w3c.github.io/payment-request/"
+      "url": "https://w3c.github.io/payment-request/",
+      "category": "misc"
     },
     "features": [
       "PaymentRequest.prototype.show",

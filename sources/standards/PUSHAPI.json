@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "Push API",
     "name": "Push API",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://w3c.github.io/push-api/"
+    "url": "https://w3c.github.io/push-api/",
+    "category": "networking"
   },
   "features": [
     "PushManager.prototype.subscribe",

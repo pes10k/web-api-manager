@@ -1,9 +1,9 @@
 {
   "info": {
+    "id": "DOM Level 3: Core",
     "name": "DOM Level 3: Core",
-    "subsection_number": null,
-    "subsection_name": null,
-    "url": "https://www.w3.org/TR/DOM-Level-3-Core/"
+    "url": "https://www.w3.org/TR/DOM-Level-3-Core/",
+    "category": "core"
   },
   "features": [
     "document.documentURI",

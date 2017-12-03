@@ -1,9 +1,9 @@
 {
   "info": {
-    "name": "HTML",
-    "subsection_number": "8.6.1.5",
-    "subsection_name": "Plugins",
-    "url": "https://html.spec.whatwg.org/multipage/webappapis.html#plugins-2"
+    "id": "HTML: Plugins",
+    "name": "HTML: Plugins",
+    "url": "https://html.spec.whatwg.org/multipage/webappapis.html#plugins-2",
+    "category": "misc"
   },
   "features": [
     "document.plugins",

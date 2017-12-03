@@ -85,7 +85,7 @@ module.exports.promiseSetShouldLog = function (driver, shouldLog) {
                 return Promise.resolve(true);
             }
             return elm.click();
-        })
+        });
 };
 
 module.exports.promiseGetDriver = function () {

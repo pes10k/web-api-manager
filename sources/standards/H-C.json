@@ -1,9 +1,9 @@
 {
   "info": {
-    "name": "HTML",
-    "subsection_number": "4.12.4",
-    "subsection_name": "Canvas Element",
-    "url": "https://html.spec.whatwg.org/multipage/scripting.html#the-canvas-element"
+    "id": "HTML: Canvas Element",
+    "name": "HTML: Canvas Element",
+    "url": "https://html.spec.whatwg.org/multipage/scripting.html#the-canvas-element",
+    "category": "graphics"
   },
   "features": [
     "CanvasGradient.prototype.addColorStop",
@@ -58,8 +58,6 @@
     "Path2D.prototype.lineTo",
     "Path2D.prototype.moveTo",
     "Path2D.prototype.quadraticCurveTo",
-    "Path2D.prototype.rect",
-    "window.webkitRequestAnimationFrame",
-    "window.requestAnimationFrame"
+    "Path2D.prototype.rect"
   ]
 }
