@@ -8,8 +8,8 @@ const firefox = require("selenium-webdriver/firefox");
 const injectedScripts = require("./injected");
 const Context = firefox.Context;
 const webdriver = require("selenium-webdriver");
+const {logging, until} = webdriver;
 const by = webdriver.By;
-const until = webdriver.until;
 const keys = webdriver.Key;
 const path = require("path");
 
@@ -75,6 +75,19 @@ module.exports.promiseSetBlockingRules = function (driver, standardsToBlock) {
         .then(() => module.exports.pause(500));
 };
 
+module.exports.promiseSetShouldLog = function (driver, shouldLog) {
+    driver.setContext(Context.CONTENT);
+    return this.promiseExtensionConfigPage(driver)
+        .then(() => driver.wait(until.elementLocated(by.css(".logging-settings input"))))
+        .then(elm => {
+            const isCurrnetlyLogging = elm.value === "on";
+            if (shouldLog === isCurrnetlyLogging) {
+                return Promise.resolve(true);
+            }
+            return elm.click();
+        })
+};
+
 module.exports.promiseGetDriver = function () {
 
     const binary = new firefox.Binary();
@@ -83,8 +96,12 @@ module.exports.promiseGetDriver = function () {
         binary.addArguments("--headless");
     }
 
+    const loggingPrefs = new logging.Preferences();
+    loggingPrefs.setLevel(logging.Type.BROWSER, logging.Level.DEBUG);
+
     const driver = new webdriver.Builder()
         .forBrowser("firefox")
+        .setLoggingPrefs(loggingPrefs)
         .setFirefoxOptions(new firefox.Options().setBinary(binary))
         .build();
 

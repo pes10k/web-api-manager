@@ -16,6 +16,11 @@
     // it just like any other JS).
     const proxyBlockingFunction = function () {
 
+        // Grab a reference to console.log before the page can get to it,
+        // to prevent the page from allowing logging which standards are called
+        // (if that option is enabled in the extension).
+        const consoleLog = console.log;
+
         const settings = window.WEB_API_MANAGER_PAGE;
         const shouldLog = settings.shouldLog;
         const standardsToBlock = settings.toBlock;
@@ -101,7 +106,7 @@
                     hasBeenLogged = true;
                     const standard = featureToStandardMapping[keyPath];
                     const message = `Blocked '${keyPath}' from '${standard}' on '${hostName}'`;
-                    console.log(message);
+                    consoleLog.call(console, message);
                 }
             };
 
@@ -191,7 +196,7 @@
             } catch (e) {
 
                 if (shouldLog) {
-                    console.log("Error instrumenting " + keyPath + ": " + e);
+                    consoleLog.call(console, "Error instrumenting " + keyPath + ": " + e);
                 }
 
                 return false;
