@@ -69,7 +69,7 @@
             }
         },
         watch: {
-            selectedStandards: function () {
+            selectedStandardIds: function () {
                 this.exportedData = generateExportString(
                     this.domainsToExport,
                     this.$root.$data.domainRules

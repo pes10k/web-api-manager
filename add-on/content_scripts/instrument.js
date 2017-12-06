@@ -1,10 +1,10 @@
-/*jslint es6: true, browser: true*/
-/*global window*/
+/*global window, console*/
 // This script file runs in the context of the extension, and mainly
 // exists to inject the proxy blocking code into content frames.
 (function () {
     "use strict";
 
+    const consoleLog = window.console.log;
     const cookies2 = window.Cookies.noConflict();
     const {standards, constants, cookieEncodingLib, proxyBlockLib} = window.WEB_API_MANAGER;
     const standardsCookieName = constants.cookieName;
@@ -42,17 +42,23 @@
     }
 
     if (!domainPref) {
-        window.console.log(`Unable to find the Web API Manager settings for ${doc.location.href}`);
+        consoleLog.call(console, `Unable to find Web API Manager settings: ${doc.location.href}`);
         return;
     }
 
-    const [standardsToBlock, shouldLog] = cookieEncodingLib.fromCookieValue(domainPref);
+    const [standardsToBlock, shouldLog, randNonce] = cookieEncodingLib.fromCookieValue(domainPref);
 
     const [scriptToInject, ignore] = proxyBlockLib.generateScriptPayload(
         standards,
         standardsToBlock,
-        shouldLog
+        shouldLog,
+        randNonce
     );
+
+    const eventName = "__wamEvent" + randNonce;
+    doc.addEventListener(eventName, event => {
+        browser.runtime.sendMessage(["blockedFeature", event.detail]);
+    });
 
     script.appendChild(doc.createTextNode(scriptToInject));
     rootElm.appendChild(script);

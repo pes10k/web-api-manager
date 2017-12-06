@@ -1,4 +1,3 @@
-/*jslint es6: true*/
 /*global window*/
 (function () {
     "use strict";
@@ -6,6 +5,7 @@
     const rootObject = window.browser || window.chrome;
     const doc = window.document;
     const configureButton = doc.getElementById("config-page-link");
+    const reportButton = doc.getElementById("report-page-link");
     const domainRuleTableBody = doc.querySelector("#domain-rule-table tbody");
     const defaultDomainRule = "(default)";
 
@@ -38,7 +38,7 @@
             button.className += " disabled";
             button.innerHtml = "setting…";
 
-            rootObject.runtime.sendMessage(message, function (responseMessage) {
+            rootObject.runtime.sendMessage(message, responseMessage => {
 
                 const [messageType, numAPIsBlocked] = responseMessage;
 
@@ -132,11 +132,17 @@
         return trElm;
     };
 
-    configureButton.addEventListener("click", function (event) {
+    configureButton.addEventListener("click", event => {
         rootObject.runtime.openOptionsPage();
         event.preventDefault();
         event.stopImmediatePropagation();
     }, false);
+
+    reportButton.addEventListener("click", event => {
+        rootObject.runtime.sendMessage(["openReportPage", undefined]);
+        event.preventDefault();
+        event.stopImmediatePropagation();
+    });
 
     rootObject.tabs.executeScript(
         {
@@ -148,16 +154,22 @@
             const uniqueDomains = Array.from(new Set(response)).sort();
             const message = ["rulesForDomains", uniqueDomains];
 
-            rootObject.runtime.sendMessage(message, function (response) {
+            rootObject.runtime.sendMessage(message, response => {
 
                 doc.body.className = "loaded";
 
-                const currentDomains = Object.keys(response);
-                currentDomains.forEach(function (aDomain) {
-                    const {ruleName, numRules} = response[aDomain];
+                const {domainData, shouldLog} = response;
+                const currentDomains = Object.keys(domainData);
+
+                currentDomains.forEach(aDomain => {
+                    const {ruleName, numRules} = domainData[aDomain];
                     const rowElm = ruleToTr(aDomain, ruleName, numRules);
                     domainRuleTableBody.appendChild(rowElm);
                 });
+
+                if (shouldLog === true) {
+                    reportButton.className = reportButton.className.replace(" hidden", "");
+                }
             });
         }
     );

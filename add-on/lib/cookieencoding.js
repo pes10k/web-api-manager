@@ -19,11 +19,16 @@
      *   An array of strings, each a standard that should be blocked.
      * @param {boolean} shouldLog
      *   Whether logging should be enabled.
+     * @param {string} randNonce
+     *   A unique, unguessable identififer, used so that the injected content
+     *   script can communicate with the content script, using an unguessable
+     *   event name (so that the guest page cannot listen to or spoof
+     *   these messages).
      *
      * @return {string}
      *   A cookie safe string encoding the above values.
      */
-    const toCookieValue = function (standardsToBlock, shouldLog) {
+    const toCookieValue = function (standardsToBlock, shouldLog, randNonce) {
 
         const standardsToBlockWithshouldLogKey = shouldLog
             ? standardsToBlock.concat(shouldLogKey)
@@ -34,9 +39,15 @@
             standardsToBlockWithshouldLogKey
         );
 
+        // Next, append the rand nonce to the end of the cookie string.  Since
+        // "@" is guaranteed to never be a character in a base64 encoded
+        // string, we can use it as a seperator between the packed cookie
+        // values and the nonce.
+        const packedCookieValue = packedValues + "@" + randNonce;
+
         // Last, replace "=" with "-" in the base64 string, to avoid
         // silly ambiguities in the cookie value.
-        return packedValues.replace(/=/g, "-");
+        return packedCookieValue.replace(/=/g, "-");
     };
 
     /**
@@ -48,16 +59,15 @@
      * @param {string} data
      *   A string created from `toCookieValue`
      *
-     * @return {[array, bool]}
-     *   An array of strings of standard names (representing standards to
-     *   block), and a boolean describing whether to log blocking
-     *   behavior.
+     * @return {[array, bool, string]}
+     *   An array of lenght three.  The frist value in the returned array is
+     *   an array of strings of standard names (representing standards to
+     *   block).  The second value is a boolean describing whether to log
+     *   blocking behavior.  The third value is a random nonce.
      */
     const fromCookieValue = function (data) {
-
-        const base64Data = data.replace(/-/g, "=");
-
-        const unpackedValues = packingLib.unpack(allStandardsWithShouldLogOption, base64Data);
+        const [packedValues, randNonce] = data.replace(/-/g, "=").split("@");
+        const unpackedValues = packingLib.unpack(allStandardsWithShouldLogOption, packedValues);
 
         let shouldLog;
         const standardsToBlock = unpackedValues;
@@ -70,7 +80,7 @@
             standardsToBlock.splice(indexOfShouldLog, 1);
         }
 
-        return [standardsToBlock, shouldLog];
+        return [standardsToBlock, shouldLog, randNonce];
     };
 
     window.WEB_API_MANAGER.cookieEncodingLib = {

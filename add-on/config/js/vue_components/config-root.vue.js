@@ -38,7 +38,7 @@
             });
         };
 
-        globalVmInstance.$watch("selectedStandards", updateStoredSettings);
+        globalVmInstance.$watch("selectedStandardIds", updateStoredSettings);
         globalVmInstance.$watch("domainNames", updateStoredSettings);
         globalVmInstance.$watch("shouldLog", updateStoredSettings);
     };

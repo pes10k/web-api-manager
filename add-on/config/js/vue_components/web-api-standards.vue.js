@@ -13,7 +13,7 @@
     };
 
     Vue.component("web-api-standards", {
-        props: ["standards", "selectedStandards", "selectedDomain"],
+        props: ["standards", "selectedStandardIds", "selectedDomain"],
         render: window.WEB_API_MANAGER.vueComponents["web-api-standards"].render,
         staticRenderFns: window.WEB_API_MANAGER.vueComponents["web-api-standards"].staticRenderFns,
         computed: {
@@ -52,24 +52,23 @@
         },
         methods: {
             onStandardChecked: function () {
-                this.$root.$data.setSelectedStandards(this.selectedStandards);
+                this.$root.$data.setSelectedStandardIds(this.selectedStandardIds);
             },
             onLiteClicked: function () {
-                this.$root.$data.setSelectedStandards(standardsDefaults.lite);
+                this.$root.$data.setSelectedStandardIds(standardsDefaults.lite);
             },
             onConservativeClicked: function () {
-                this.$root.$data.setSelectedStandards(standardsDefaults.conservative);
+                this.$root.$data.setSelectedStandardIds(standardsDefaults.conservative);
             },
             onAggressiveClicked: function () {
-                this.$root.$data.setSelectedStandards(standardsDefaults.aggressive);
+                this.$root.$data.setSelectedStandardIds(standardsDefaults.aggressive);
             },
             onClearClicked: function () {
-                this.$root.$data.setSelectedStandards([]);
+                this.$root.$data.setSelectedStandardIds([]);
             },
             onAllClicked: function () {
-                const allStandards = Object.keys(this.standards)
-                    .map(aStdName => this.standards[aStdName].info.identifier);
-                this.$root.$data.setSelectedStandards(allStandards);
+                const allStandardIds = Object.keys(this.standards);
+                this.$root.$data.setSelectedStandardIds(allStandardIds);
             }
         }
     });

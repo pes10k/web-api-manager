@@ -22,7 +22,10 @@
             // The value in the packed array of options thats used to
             // include the shouldLog option in the in bitfield encoded in
             // the above cookie.
-            shouldLogKey: "shouldLogKey"
+            shouldLogKey: "shouldLogKey",
+
+            // The homepage of the extension.
+            homepage: "https://github.com/snyderp/web-api-manager"
         }
     };
 }());

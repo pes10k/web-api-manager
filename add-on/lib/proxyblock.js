@@ -16,20 +16,26 @@
     // it just like any other JS).
     const proxyBlockingFunction = function () {
 
-        // Grab a reference to console.log before the page can get to it,
-        // to prevent the page from allowing logging which standards are called
-        // (if that option is enabled in the extension).
+        // Grab references to console.log and Document.prototype.dispatchEvent
+        // before the page can get to it, to prevent the page from interacting
+        // with recording what standards are blocked / logged.
         const consoleLog = console.log;
+        const dispatchEvent = document.dispatchEvent;
 
         const settings = window.WEB_API_MANAGER_PAGE;
         const shouldLog = settings.shouldLog;
+        const randNonce = settings.randNonce;
         const standardsToBlock = settings.toBlock;
         const standardDefinitions = settings.standards;
-        const hostName = window.location.hostname;
 
         if (standardsToBlock.length === 0) {
             return;
         }
+
+        // Listen to events triggered from the blocking code using a randomly
+        // generated nonce, so that the guest page does not know what events
+        // to listen for, or what event name to spoof.
+        const eventName = "__wamEvent" + randNonce;
 
         // Its possible that the Web API removal code will block direct references
         // to the following methods, so grab references to them before the
@@ -53,10 +59,10 @@
         // that contains the blocked feature).
         const featureToStandardMapping = Object
             .keys(standardDefinitions)
-            .reduce(function (mapping, standardName) {
-                const featuresInStandard = standardDefinitions[standardName].features;
+            .reduce(function (mapping, standardId) {
+                const featuresInStandard = standardDefinitions[standardId].features;
                 featuresInStandard.forEach(function (featureName) {
-                    mapping[featureName] = standardName;
+                    mapping[featureName] = standardId;
                 });
                 return mapping;
             }, {});
@@ -103,10 +109,19 @@
                 if (keyPath !== undefined &&
                         hasBeenLogged === false &&
                         shouldLog) {
+
                     hasBeenLogged = true;
-                    const standard = featureToStandardMapping[keyPath];
-                    const message = `Blocked '${keyPath}' from '${standard}' on '${hostName}'`;
-                    consoleLog.call(console, message);
+                    const standardId = featureToStandardMapping[keyPath];
+                    const featureReport = {
+                        standardId: standardId,
+                        feature: keyPath,
+                    };
+
+                    const blockEvent = new window.CustomEvent(eventName, {
+                        detail: featureReport,
+                    });
+
+                    dispatchEvent.call(document, blockEvent);
                 }
             };
 
@@ -249,6 +264,11 @@
      *   standards object.
      * @param {boolean} shouldLog
      *   Whether to log the behavior of the blocking proxy.
+     * @param {string} randNonce
+     *   A unique, unguessable identififer, used so that the injected content
+     *   script can communicate with the content script, using an unguessable
+     *   event name (so that the guest page cannot listen to or spoof
+     *   these messages).
      *
      * @return {[string, string]}
      *   Returns an array containing two values.  First, JavaScript code
@@ -256,10 +276,11 @@
      *   standardNamesToBlock standards un-reachable, and second, a
      *   base64 encoded sha256 hash of the code.
      */
-    const generateScriptPayload = function (standards, standardNamesToBlock, shouldLog) {
+    const generateScriptPayload = function (standards, standardNamesToBlock, shouldLog, randNonce) {
 
         const proxyBlockingSettings = `
             window.WEB_API_MANAGER_PAGE = {
+                randNonce: "${randNonce}",
                 standards: ${JSON.stringify(standards)},
                 toBlock: ${JSON.stringify(standardNamesToBlock)},
                 shouldLog: ${shouldLog ? "true" : "false"}

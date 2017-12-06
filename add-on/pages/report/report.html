@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Frame listing popup</title>
+        <link href="../../config/css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../config/css/bootstrap-theme.min.css" rel="stylesheet">
+        <link href="css/repro.css" rel="stylesheet">
+    </head>
+    <body class="not-loaded">
+        <header class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h2>Features Blocked</h2>
+                </div>
+            </div>
+        </header>
+        <section class="container">
+            <div class="row">
+                <div class="col-xs-12">
+
+                    <div id="loading-section">
+                        <p>Fetching blocking information…</p>
+                    </div>
+
+                    <div id="loaded-section" class="hidden">
+                        <p>The following features have been blocked on this page.</p>
+                        <div id="blocked-feature-report"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <script src="../../lib/init.js"></script>
+        <script src="../../lib/third_party/uri.all.min.js"></script>
+        <script src="js/report.js"></script>
+    </body>
+</html>
+

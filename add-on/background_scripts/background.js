@@ -1,9 +1,10 @@
+/*global sjcl*/
 (function () {
     "use strict";
 
     const {storageLib, domainMatcherLib, constants} = window.WEB_API_MANAGER;
     const {cookieEncodingLib, proxyBlockLib, httpHeadersLib} = window.WEB_API_MANAGER;
-    const {standards} = window.WEB_API_MANAGER;
+    const {standards, tabBlockedFeaturesLib} = window.WEB_API_MANAGER;
     const rootObject = window.browser || window.chrome;
     const defaultKey = "(default)";
 
@@ -16,7 +17,7 @@
     // The extension depends on this fetch happening before the DOM on any
     // pages is loaded.  The Chrome and Firefox docs *do not* promise this,
     // but in testing this is always the case.
-    storageLib.get(function (storedValues) {
+    storageLib.get(storedValues => {
         domainRules = storedValues.domainRules;
         shouldLog = storedValues.shouldLog;
     });
@@ -54,15 +55,6 @@
     rootObject.tabs.onUpdated.addListener(updateBrowserActionBadge);
     rootObject.tabs.onActivated.addListener(updateBrowserActionBadge);
 
-    // window.setInterval(function () {
-    //     rootObject.tabs.getCurrent(function (currentTab) {
-    //         if (currentTab === undefined) {
-    //             return;
-    //         }
-    //         updateBrowserActionBadge({tabId: currentTab.id});
-    //     });
-    // }, 1000);
-
     // Listen for updates to the domain rules from the config page.
     // The two types of messages that are sent to the background page are
     // "stateUpdate", which comes from the config page, indicating the domain
@@ -70,7 +62,7 @@
     // message, which comes from the browserAction popup, and is a request
     // for information about "here are the domains of the frames on the
     // current page, which rules are being used to match them".
-    rootObject.runtime.onMessage.addListener(function (request, ignore, sendResponse) {
+    rootObject.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
         const [label, data] = request;
 
@@ -99,7 +91,23 @@
                 };
             });
 
-            sendResponse(domainToRuleMapping);
+            sendResponse({
+                domainData: domainToRuleMapping,
+                shouldLog: shouldLog
+            });
+            return;
+        }
+
+        // Sent from the popup / browser action, that the user wants to view
+        // the blocking report for the currently active tab.
+        if (label === "openReportPage") {
+            rootObject.tabs.query({active: true, currentWindow: true })
+                .then(tabs => {
+                    const visibileTabId = tabs[0].id;
+                    rootObject.tabs.create({
+                        url: `/pages/report/report.html?tabId=${visibileTabId}`,
+                    });
+                });
             return;
         }
 
@@ -122,6 +130,36 @@
                 domainRules,
                 shouldLog
             });
+            return;
+        }
+
+        // Sent from content script (which is relaying the message from the
+        // injected web script) that a feature was blocked in a frame.
+        // The "data" object here will contain two properties, "standard",
+        // the Web API standard that contains the feature that was blocked,
+        // and "feature", a string of the keypath to the feature that was
+        // blocked.
+        if (label === "blockedFeature") {
+            const {standardId, feature} = data;
+            const standardName = standards[standardId].info.name;
+            tabBlockedFeaturesLib.reportBlockedFeature(
+                sender.tab.id,
+                sender.frameId,
+                standardName,
+                feature
+            );
+            return;
+        }
+
+        // Request from the report tab for information about which features
+        // have been blocked on a given tab.  The "data" object here will
+        // be an object in the shape of {tabId: <integer>}, describing the
+        // tab we want the report for.
+        if (label === "blockedFeaturesForTab") {
+            const {tabId} = data;
+            const blockedFeatures = tabBlockedFeaturesLib.featuresForTab(tabId);
+            sendResponse(["blockedFeaturesForTabResponse", blockedFeatures]);
+            return;
         }
     });
 
@@ -178,7 +216,13 @@
         // of the URL being requested.
         const matchingDomainRule = domainMatcherLib.matchUrl(Object.keys(domainRules), url);
         const standardsToBlock = domainRules[matchingDomainRule || defaultKey];
-        const encodedOptions = cookieEncodingLib.toCookieValue(standardsToBlock, shouldLog);
+        const randBytes = sjcl.random.randomWords(8);
+        const randNonce = sjcl.codec.base64.fromBits(randBytes);
+        const encodedOptions = cookieEncodingLib.toCookieValue(
+            standardsToBlock,
+            shouldLog,
+            randNonce
+        );
 
         // If we're on a site thats sending the "strict-dynamic"
         // Content-Security-Policy instruction, then we need to add the

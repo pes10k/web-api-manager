@@ -80,7 +80,7 @@
             domainRules: {},
             domainNames: [],
             shouldLog: false,
-            selectedStandards: [],
+            selectedStandardIds: [],
 
             toStorage: function () {
                 return {
@@ -124,20 +124,20 @@
                 this.domainNames = Object.keys(newDomainRules);
 
                 if (this.domainRules[this.selectedDomain] === undefined) {
-                    this.selectedStandards = this.domainRules[this.defaultDomain];
+                    this.selectedStandardIds = this.domainRules[this.defaultDomain];
                 } else {
-                    this.selectedStandards = this.domainRules[this.selectedDomain];
+                    this.selectedStandardIds = this.domainRules[this.selectedDomain];
                 }
             },
 
             setSelectedDomain: function (newDomain) {
                 this.selectedDomain = newDomain;
-                this.selectedStandards = this.domainRules[newDomain];
+                this.selectedStandardIds = this.domainRules[newDomain];
             },
 
-            setSelectedStandards: function (selectedStandards) {
-                this.selectedStandards = selectedStandards;
-                this.domainRules[this.selectedDomain] = selectedStandards;
+            setSelectedStandardIds: function (selectedStandardIds) {
+                this.selectedStandardIds = selectedStandardIds;
+                this.domainRules[this.selectedDomain] = selectedStandardIds;
             },
 
             deleteDomainRule: function (domainToDelete) {
@@ -156,18 +156,18 @@
                 this.domainRules[newDomainRule] = [];
                 this.domainNames = Object.keys(this.domainRules);
                 this.selectedDomain = newDomainRule;
-                this.selectedStandards = this.domainRules[newDomainRule];
+                this.selectedStandardIds = this.domainRules[newDomainRule];
             },
 
             setShouldLog: function (shouldLog) {
                 this.shouldLog = shouldLog;
             },
 
-            setStandardsForDomain: function (domain, standards) {
+            setStandardsForDomain: function (domain, standardIds) {
                 this.domainRules[domain] = standards;
                 this.domainNames = Object.keys(this.domainRules);
                 if (domain === this.selectedDomain) {
-                    this.selectedStandards = standards;
+                    this.selectedStandardIds = standardIds;
                 }
             }
         };
