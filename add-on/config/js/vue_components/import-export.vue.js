@@ -3,14 +3,14 @@
 
     const Vue = window.Vue;
 
-    const generateExportString = function (domainsToExport, allDomainData) {
+    const generateExportString = (domainsToExport, allDomainData) => {
 
-        const dataToExport = domainsToExport.map(function (domain) {
-            const domainsToBlock = allDomainData[domain];
-            domainsToBlock.sort();
+        const dataToExport = domainsToExport.map(domain => {
+            const standardsToBlock = allDomainData[domain];
+            standardsToBlock.sort();
             return {
                 "pattern": domain,
-                "standards": domainsToBlock
+                "standards": standardsToBlock
             };
         });
 
@@ -48,7 +48,8 @@
                 const newDomainRules = this.dataToImport;
                 this.importLog = "";
 
-                const logMessages = newDomainRules.map(function (newDomainRule) {
+                const logMessages = newDomainRules.map(newDomainRule => {
+
                     const {pattern, standards} = newDomainRule;
                     if (currentDomainRules[pattern] !== undefined && shouldOverwrite === false) {
                         return ` ! ${pattern}: Skipped. Set to not override.\n`;

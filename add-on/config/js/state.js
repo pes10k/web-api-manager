@@ -164,7 +164,7 @@
             },
 
             setStandardsForDomain: function (domain, standardIds) {
-                this.domainRules[domain] = standards;
+                this.domainRules[domain] = standardIds;
                 this.domainNames = Object.keys(this.domainRules);
                 if (domain === this.selectedDomain) {
                     this.selectedStandardIds = standardIds;
