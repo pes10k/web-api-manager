@@ -28,7 +28,35 @@
         const standardsToBlock = settings.toBlock;
         const standardDefinitions = settings.standards;
 
+        // Its possible that the Web API removal code will block direct references
+        // to the following methods, so grab references to them before the
+        // DOM is instrumented (and their references are possibly blocked).
+        const removeChild = window.Element.prototype.removeChild;
+        const getElementsByTagName = window.document.getElementsByTagName;
+
+        // This function removes the script tag containing this script
+        // from the page, and removes any variables injected into the page.
+        // This is done to make it more difficult for the modified page
+        // to detect the modifications / this extension/
+        const removeSelfFromPage = () => {
+
+            // Delete the WEB_API_MANAGER_PAGE global property.  Technically
+            // this never needed to be global, but doing so allows for easier
+            // linting of the code, makes things easier to understand (for me
+            // at least) and doesn't have any side effect as long as we delete
+            // it when we're done, and before the page scripts can start running.
+            delete window.WEB_API_MANAGER_PAGE;
+        
+            // Next, remove the script tag containing this code from the document,
+            // so that the structure of the page looks like what the page author
+            // expects / intended.
+            const scriptTags = getElementsByTagName.call(window.document, "script");
+            const thisScript = scriptTags[0];
+            removeChild.call(thisScript.parentNode, thisScript);
+        };
+
         if (standardsToBlock.length === 0) {
+            removeSelfFromPage();
             return;
         }
 
@@ -36,12 +64,6 @@
         // generated nonce, so that the guest page does not know what events
         // to listen for, or what event name to spoof.
         const eventName = "__wamEvent" + randNonce;
-
-        // Its possible that the Web API removal code will block direct references
-        // to the following methods, so grab references to them before the
-        // DOM is instrumented (and their references are possibly blocked).
-        const removeChild = window.Element.prototype.removeChild;
-        const getElementsByTagName = window.document.getElementsByTagName;
 
         const defaultFunction = function () {};
         const funcPropNames = Object.getOwnPropertyNames(defaultFunction);
@@ -220,20 +242,6 @@
 
         featuresToBlock.forEach(blockFeatureAtKeyPath);
 
-        // Next, delete the WEB_API_MANAGER_PAGE global property.  Technically
-        // this never needed to be global, but doing so allows for easier
-        // linting of the code, makes things easier to understand (for me
-        // at least) and doesn't have any side effect as long as we delete
-        // it when we're done, and before the page scripts can start running.
-        delete window.WEB_API_MANAGER_PAGE;
-
-        // Next, remove the script tag containing this code from the document,
-        // so that the structure of the page looks like what the page author
-        // expects / intended.
-        const scriptTags = getElementsByTagName.call(window.document, "script");
-        const thisScript = scriptTags[0];
-        removeChild.call(thisScript.parentNode, thisScript);
-
         // Next, prevent access to frame's contentDocument / contentWindow
         // properties, to prevent the parent frame from pulling unblocked
         // references to blocked standards from injected frames.
@@ -248,6 +256,8 @@
                 });
             });
         });
+
+        removeSelfFromPage();
     };
 
     /**
