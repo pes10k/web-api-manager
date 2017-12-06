@@ -216,7 +216,7 @@
         // of the URL being requested.
         const matchingDomainRule = domainMatcherLib.matchUrl(Object.keys(domainRules), url);
         const standardsToBlock = domainRules[matchingDomainRule || defaultKey];
-        const randBytes = sjcl.random.randomWords(8);
+        const randBytes = sjcl.random.randomWords(4);
         const randNonce = sjcl.codec.base64.fromBits(randBytes);
         const encodedOptions = cookieEncodingLib.toCookieValue(
             standardsToBlock,

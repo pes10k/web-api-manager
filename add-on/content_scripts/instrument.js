@@ -57,7 +57,7 @@
 
     const eventName = "__wamEvent" + randNonce;
     doc.addEventListener(eventName, event => {
-        browser.runtime.sendMessage(["blockedFeature", event.detail]);
+        (window.browser || window.chrome).runtime.sendMessage(["blockedFeature", event.detail]);
     });
 
     script.appendChild(doc.createTextNode(scriptToInject));
