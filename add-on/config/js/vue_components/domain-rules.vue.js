@@ -1,6 +1,7 @@
 (function () {
     "use strict";
 
+    const {constants} = window.WEB_API_MANAGER;
     const Vue = window.Vue;
 
     Vue.component("domain-rules", {
@@ -48,7 +49,7 @@
                 this.$root.$data.deleteDomainRule(domain);
             },
             isDefault: function (domainName) {
-                return domainName === "(default)";
+                return domainName === constants.defaultDomainRule;
             }
         }
     });

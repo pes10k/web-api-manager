@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    const defaultDomain = "(default)";
+    const {constants} = window.WEB_API_MANAGER;
 
     /**
      * Checks if two arrays contain the same values, regardless of order.
@@ -145,7 +145,7 @@
                 // If we're deleted the domain thats currently selected, then
                 // select the default domain.
                 if (this.selectedDomain === domainToDelete) {
-                    this.setSelectedDomain(defaultDomain);
+                    this.setSelectedDomain(constants.defaultDomainRule);
                 }
 
                 delete this.domainRules[domainToDelete];

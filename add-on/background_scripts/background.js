@@ -6,7 +6,7 @@
     const {cookieEncodingLib, proxyBlockLib, httpHeadersLib} = window.WEB_API_MANAGER;
     const {standards, tabBlockedFeaturesLib, browserLib} = window.WEB_API_MANAGER;
     const rootObject = browserLib.getRootObject();
-    const defaultKey = "(default)";
+    const defaultKey = constants.defaultDomainRule;
 
     // Once loaded from storage, will be a mapping from regular expressions
     // (or the default option, "(default)"), to an array of standards

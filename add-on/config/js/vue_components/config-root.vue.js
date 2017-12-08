@@ -1,11 +1,10 @@
 (function () {
     "use strict";
 
-    const rootObject = window.browser || window.chrome;
+    const {storageLib, stateLib, standards, browserLib, constants} = window.WEB_API_MANAGER;
+    const rootObject = browserLib.getRootObject();
     const doc = window.document;
-    const standards = window.WEB_API_MANAGER.standards;
-    const {storageLib, stateLib} = window.WEB_API_MANAGER;
-    const defaultDomain = "(default)";
+    const defaultDomain = constants.defaultDomainRule;
     const Vue = window.Vue;
 
     const state = stateLib.generateStateObject(defaultDomain, standards);

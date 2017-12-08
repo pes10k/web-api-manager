@@ -15,15 +15,15 @@
     }
   },
   "permissions": [
+    "activeTab",
     "contextMenus",
+    "cookies",
     "privacy",
     "storage",
     "tabs",
-    "cookies",
     "unlimitedStorage",
     "webNavigation",
     "webRequest",
-    "activeTab",
     "webRequestBlocking",
     "<all_urls>"
   ],
@@ -33,11 +33,11 @@
         "lib/third_party/js.cookie.js",
         "lib/third_party/sjcl.js",
         "lib/init.js",
+        "lib/browser.js",
         "lib/standards.js",
         "lib/pack.js",
         "lib/cookieencoding.js",
         "lib/proxyblock.js",
-        "lib/browser.js",
         "content_scripts/instrument.js"
       ],
       "matches": [

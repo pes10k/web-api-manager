@@ -25,7 +25,11 @@
             shouldLogKey: "shouldLogKey",
 
             // The homepage of the extension.
-            homepage: "https://github.com/snyderp/web-api-manager"
+            homepage: "https://github.com/snyderp/web-api-manager",
+
+            // The name of the catch all rule set used when there are no
+            // more specific matching domain rule sets.
+            defaultDomainRule: "(default)",
         }
     };
 }());

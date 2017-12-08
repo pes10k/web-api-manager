@@ -1,6 +1,6 @@
 (function () {
     "use strict";
-    const defaultKey = "(default)";
+    const {constants} = window.WEB_API_MANAGER;
 
     // From https://www.npmjs.com/package/escape-string-regexp
     const matchOperatorsRe = /[|\\{}()[\]^$+*?.]/g;
@@ -86,7 +86,7 @@
     const matchHostName = function (matchPatterns, hostName) {
         const matchingUrlReduceFunctionBound = matchingUrlReduceFunction.bind(undefined, hostName);
         const matchingPattern = matchPatterns
-            .filter((aRule) => aRule !== defaultKey)
+            .filter((aRule) => aRule !== constants.defaultDomainRule)
             .sort()
             .reduce(matchingUrlReduceFunctionBound, undefined);
 

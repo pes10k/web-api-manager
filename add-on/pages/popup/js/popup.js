@@ -2,12 +2,13 @@
 (function () {
     "use strict";
 
-    const rootObject = window.browser || window.chrome;
+    const {browserLib, constants} = window.WEB_API_MANAGER;
+    const rootObject = browserLib.getRootObject();
     const doc = window.document;
     const configureButton = doc.getElementById("config-page-link");
     const reportButton = doc.getElementById("report-page-link");
     const domainRuleTableBody = doc.querySelector("#domain-rule-table tbody");
-    const defaultDomainRule = "(default)";
+    const defaultDomainRule = constants.defaultDomainRule;
 
     /**
      * Returns a function for use as the "onclick" handler for a toggle button.

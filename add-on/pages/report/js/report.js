@@ -3,10 +3,11 @@
  * in which tab.
  */
 (function () {
-    const {constants} = window.WEB_API_MANAGER;
+    "use strict";
 
+    const {constants, browserLib} = window.WEB_API_MANAGER;
     const doc = window.document;
-    const rootObject = window.browser || window.chrome;
+    const rootObject = browserLib.getRootObject();
     const loadingSection = doc.getElementById("loading-section");
     const loadedSection = doc.getElementById("loaded-section");
     const featureReportDiv = loadedSection.querySelector("div");
@@ -40,7 +41,8 @@
      */
     const buildStandardReport = (standardName, blockedFeatures) => {
         const standardReportPanelElm = doc.createElement("div");
-        standardReportPanelElm.className = "panel panel-default";
+        standardReportPanelElm.dataset.standard = standardName;
+        standardReportPanelElm.className = "panel panel-default standard-report-container";
 
         const standardTitlePanelHeader = doc.createElement("div");
         standardTitlePanelHeader.className = "panel-heading";
@@ -51,7 +53,8 @@
         featuresListElm.className = "list-group";
         blockedFeatures.sort().forEach(featureName => {
             const featureLiElm = doc.createElement("li");
-            featureLiElm.className = "list-group-item";
+            featureLiElm.className = "list-group-item feature-container";
+            featureLiElm.dataset.feature = featureName;
             featureLiElm.appendChild(doc.createTextNode(featureName));
             featuresListElm.appendChild(featureLiElm);
         });
@@ -78,6 +81,7 @@
         const {url, standards} = frameReport;
 
         const frameReportContainerElm = doc.createElement("div");
+        frameReportContainerElm.dataset.url = url;
         frameReportContainerElm.className = "frame-report-container";
 
         const frameUrlTitleElm = doc.createElement("h3");

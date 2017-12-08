@@ -1,7 +1,8 @@
 (function () {
     "use strict";
 
-    const rootObject = window.browser || window.chrome;
+    const {constants, browserLib} = window.WEB_API_MANAGER;
+    const rootObject = browserLib.getRootObject();
     const webApiManagerKeySettingsKey = "webApiManager";
     const storageObject = rootObject.storage;
 
@@ -17,11 +18,11 @@
                     Object.keys(loadedValues.domainRules).length === 0) {
 
                 loadedValues = {
-                    domainRules: {
-                        "(default)": []
-                    },
+                    domainRules: {},
                     shouldLog: false
                 };
+
+                loadedValues.domainRules[constants.defaultDomainRule] = [];
             }
 
             callback(loadedValues);
