@@ -37,6 +37,7 @@
         "lib/pack.js",
         "lib/cookieencoding.js",
         "lib/proxyblock.js",
+        "lib/browser.js",
         "content_scripts/instrument.js"
       ],
       "matches": [
@@ -52,6 +53,7 @@
       "lib/third_party/uri.all.min.js",
       "lib/third_party/sjcl.js",
       "lib/init.js",
+      "lib/browser.js",
       "lib/standards.js",
       "lib/pack.js",
       "lib/defaults.js",

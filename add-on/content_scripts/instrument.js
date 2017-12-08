@@ -6,7 +6,8 @@
 
     const consoleLog = window.console.log;
     const cookies2 = window.Cookies.noConflict();
-    const {standards, constants, cookieEncodingLib, proxyBlockLib} = window.WEB_API_MANAGER;
+    const {standards, constants, cookieEncodingLib} = window.WEB_API_MANAGER;
+    const {browserLib, proxyBlockLib} = window.WEB_API_MANAGER;
     const standardsCookieName = constants.cookieName;
 
     const doc = window.document;
@@ -57,7 +58,7 @@
 
     const eventName = "__wamEvent" + randNonce;
     doc.addEventListener(eventName, event => {
-        (window.browser || window.chrome).runtime.sendMessage(["blockedFeature", event.detail]);
+        browserLib.getRootObject().runtime.sendMessage(["blockedFeature", event.detail]);
     });
 
     script.appendChild(doc.createTextNode(scriptToInject));

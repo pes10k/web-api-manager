@@ -4,8 +4,8 @@
 
     const {storageLib, domainMatcherLib, constants} = window.WEB_API_MANAGER;
     const {cookieEncodingLib, proxyBlockLib, httpHeadersLib} = window.WEB_API_MANAGER;
-    const {standards, tabBlockedFeaturesLib} = window.WEB_API_MANAGER;
-    const rootObject = window.browser || window.chrome;
+    const {standards, tabBlockedFeaturesLib, browserLib} = window.WEB_API_MANAGER;
+    const rootObject = browserLib.getRootObject();
     const defaultKey = "(default)";
 
     // Once loaded from storage, will be a mapping from regular expressions
@@ -101,13 +101,12 @@
         // Sent from the popup / browser action, that the user wants to view
         // the blocking report for the currently active tab.
         if (label === "openReportPage") {
-            rootObject.tabs.query({active: true, currentWindow: true })
-                .then(tabs => {
-                    const visibileTabId = tabs[0].id;
-                    rootObject.tabs.create({
-                        url: `/pages/report/report.html?tabId=${visibileTabId}`,
-                    });
+            browserLib.queryTabs({active: true, currentWindow: true }, tabs => {
+                const visibileTabId = tabs[0].id;
+                rootObject.tabs.create({
+                    url: `/pages/report/report.html?tabId=${visibileTabId}`,
                 });
+            });
             return;
         }
 
