@@ -31,18 +31,18 @@ describe("Basic Functionality", function () {
             let driverReference;
 
             utils.promiseGetDriver()
-                .then(function (driver) {
+                .then(driver => {
                     driverReference = driver;
                     return utils.promiseSetBlockingRules(driver, standardsToBlock);
                 })
                 .then(() => driverReference.get(testUrl))
                 .then(() => driverReference.executeAsyncScript(svgTestScript))
-                .then(function () {
+                .then(() => {
                     driverReference.quit();
                     testServer.stop(httpServer);
                     done(new Error("SVG acted as if it was being blocked"));
                 })
-                .catch(function () {
+                .catch(() => {
                     // Since we're not blocking the SVG API, then the sample
                     // SVG code should throw an exception.
                     driverReference.quit();
@@ -64,18 +64,18 @@ describe("Basic Functionality", function () {
             let driverReference;
 
             utils.promiseGetDriver()
-                .then(function (driver) {
+                .then(driver => {
                     driverReference = driver;
                     return utils.promiseSetBlockingRules(driver, standardsToBlock);
                 })
                 .then(() => driverReference.get(testUrl))
                 .then(() => driverReference.executeAsyncScript(svgTestScript))
-                .then(function () {
+                .then(() => {
                     driverReference.quit();
                     testServer.stop(httpServer);
                     done();
                 })
-                .catch(function (e) {
+                .catch(e => {
                     driverReference.quit();
                     testServer.stop(httpServer);
                     done(e);
@@ -93,18 +93,18 @@ describe("Basic Functionality", function () {
             let driverReference;
 
             utils.promiseGetDriver()
-                .then(function (driver) {
+                .then(driver => {
                     driverReference = driver;
                     return utils.promiseSetBlockingRules(driver, standardsToBlock);
                 })
                 .then(() => driverReference.get(testUrl))
                 .then(() => driverReference.wait(until.elementLocated(by.css("div.success-case")), 2000))
-                .then(function () {
+                .then(() => {
                     driverReference.quit();
                     testServer.stop(httpServer);
                     done();
                 })
-                .catch(function (e) {
+                .catch(e => {
                     driverReference.quit();
                     testServer.stop(httpServer);
                     done(e);

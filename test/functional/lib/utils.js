@@ -20,16 +20,16 @@ module.exports.constants = {
 };
 
 module.exports.pause = function (ms = 2000) {
-    return new Promise(function (resolve) {
+    return new Promise(resolve => {
         setTimeout(resolve, ms);
     });
 };
 
-module.exports.promiseSetFormAndSubmit = function (driver, values) {
+module.exports.promiseSetFormAndSubmit = (driver, values) => {
     driver.setContext(Context.CONTENT);
     const numberOfPairs = values.length;
 
-    const setFormValue = function (index = 0) {
+    const setFormValue = (index = 0) => {
 
         const [name, value] = values[index];
 
@@ -49,35 +49,40 @@ module.exports.promiseSetFormAndSubmit = function (driver, values) {
     return setFormValue();
 };
 
-module.exports.promiseAddonButton = function (driver) {
+module.exports.promiseAddonButton = driver => {
     driver.setContext(Context.CHROME);
     return driver.wait(until.elementLocated(by.css("[tooltiptext='WebAPI Manager']")), 2000);
 };
 
-module.exports.promiseExtensionConfigPage = function (driver) {
+const promiseGetExtensionId = driver => {
     const extensionIdPattern = /url\("moz-extension:\/\/(.*?)\/images/;
-    return this.promiseAddonButton(driver)
+    return module.exports.promiseAddonButton(driver)
         .then(button => button.getAttribute("style"))
-        .then(function (buttonStyle) {
+        .then(buttonStyle => {
             const match = extensionIdPattern.exec(buttonStyle);
             const extensionId = match[1];
             driver.setContext(Context.CONTENT);
-            return driver.get(`moz-extension://${extensionId}/config/index.html`);
+            return new Promise(resolve => resolve(extensionId));
         });
+}
+
+module.exports.promiseExtensionConfigPage = driver => {
+    return promiseGetExtensionId(driver)
+        .then(extensionId => driver.get(`moz-extension://${extensionId}/config/index.html`));
 };
 
-module.exports.promiseSetBlockingRules = function (driver, standardsToBlock) {
+module.exports.promiseSetBlockingRules = (driver, standardsToBlock) => {
     const setStandardsScript = injectedScripts.setStandardsAsBlockedScript(standardsToBlock);
     driver.setContext(Context.CONTENT);
 
-    return this.promiseExtensionConfigPage(driver)
-        .then(driver.executeAsyncScript(setStandardsScript))
+    return module.exports.promiseExtensionConfigPage(driver)
+        .then(() => driver.executeAsyncScript(setStandardsScript))
         .then(() => module.exports.pause(500));
 };
 
-module.exports.promiseSetShouldLog = function (driver, shouldLog) {
+module.exports.promiseSetShouldLog = (driver, shouldLog) => {
     driver.setContext(Context.CONTENT);
-    return this.promiseExtensionConfigPage(driver)
+    return module.exports.promiseExtensionConfigPage(driver)
         .then(() => driver.wait(until.elementLocated(by.css(".logging-settings input"))))
         .then(elm => {
             const isCurrnetlyLogging = elm.value === "on";
@@ -88,8 +93,12 @@ module.exports.promiseSetShouldLog = function (driver, shouldLog) {
         });
 };
 
-module.exports.promiseGetDriver = function () {
+module.exports.promiseOpenLoggingTab = (driver, tabId) => {
+    return promiseGetExtensionId(driver)
+        .then(extensionId => driver.get(`moz-extension://${extensionId}/pages/report/report.html?tabId=${tabId}`));
+};
 
+module.exports.promiseGetDriver = () => {
     const binary = new firefox.Binary();
 
     if (process.argv.indexOf("--watch") === -1) {

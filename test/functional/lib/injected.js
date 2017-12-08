@@ -7,7 +7,7 @@
 // Returns the contents of the provided function definition source.
 //
 // Ex "function () { return 1; }" -> "return 1";
-const stripFuncFromSource = function (source) {
+const stripFuncFromSource = source => {
 
     const parts = source.split("\n").filter(x => !!x.trim());
     parts.splice(0, 1);
@@ -50,7 +50,7 @@ module.exports.temporaryAddOnInstallScript = (function () {
 
     const funcSource = stripFuncFromSource(funcToInject.toString());
 
-    return function () {
+    return () => {
         return funcSource;
     };
 }());
@@ -72,7 +72,7 @@ module.exports.setStandardsAsBlockedScript = (function () {
 
     const funcSource = stripFuncFromSource(funcToInject.toString());
 
-    return function (standardsToBlock) {
+    return standardsToBlock => {
         return funcSource.replace("\"###REPLACE###\"", JSON.stringify(standardsToBlock));
     };
 }());
@@ -86,7 +86,7 @@ module.exports.testSVGTestScript = (function () {
 
     const funcSource = stripFuncFromSource(funcToInject.toString());
 
-    return function () {
+    return () => {
         return funcSource;
     };
 }());

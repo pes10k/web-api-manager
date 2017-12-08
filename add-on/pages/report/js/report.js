@@ -77,7 +77,7 @@
      *   on it, as a <h3> header tag and a series of bootstrap marked up div
      *   panel elements (one for each standard blocked).
      */
-    const buildFrameReport = (frameReport) => {
+    const buildFrameReport = frameReport => {
         const {url, standards} = frameReport;
 
         const frameReportContainerElm = doc.createElement("div");
@@ -91,7 +91,17 @@
         frameUrlTitleElm.appendChild(frameUrlCodeElm);
         frameReportContainerElm.appendChild(frameUrlTitleElm);
 
-        Object.keys(standards).sort().forEach(standardName => {
+        const standardNames = Object.keys(standards);
+
+        if (standardNames.length === 0) {
+            const noStandardsBlockedSection = doc.createElement("div");
+            noStandardsBlockedSection.className = " alert alert-info";
+            noStandardsBlockedSection.appendChild(doc.createTextNode("No blocked standards."));
+            frameReportContainerElm.appendChild(noStandardsBlockedSection);
+            return frameReportContainerElm;
+        }
+
+        standardNames.sort().forEach(standardName => {
             const blockedFeaturesForStandards = standards[standardName];
             const standardReport = buildStandardReport(standardName, blockedFeaturesForStandards);
             frameReportContainerElm.appendChild(standardReport);

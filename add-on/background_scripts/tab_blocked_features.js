@@ -5,8 +5,8 @@
  *  tab ids -> frame ids -> standard names -> feature names.
  */
 (function () {
-
-    const rootObject = window.browser || window.chrome;
+    const {browserLib} = window.WEB_API_MANAGER;
+    const rootObject = browserLib.getRootObject();
 
     // This object will end up being a severally deep nested object,
     // maping tab ids -> frame ids -> standard names -> feature names.
@@ -57,12 +57,12 @@
         };
     });
 
-    const reportBlockedFeature = (tabId, frameId, standard, feature) => {
+    const reportBlockedFeature = (tabId, frameId, standardName, feature) => {
         const standardsForFrame = tabMapping[tabId][frameId].standards;
-        if (standardsForFrame[standard] === undefined) {
-            standardsForFrame[standard] = [];
+        if (standardsForFrame[standardName] === undefined) {
+            standardsForFrame[standardName] = [];
         }
-        standardsForFrame[standard].push(feature);
+        standardsForFrame[standardName].push(feature);
     };
 
     const featuresForTab = tabId => tabMapping[tabId];

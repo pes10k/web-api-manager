@@ -57,12 +57,12 @@ describe("Import / Export", function () {
                 .then(() => promiseOpenImportExportTab(driverReference))
                 .then(() => driverReference.findElement(by.css(".export-section select option:nth-child(1)")).click())
                 .then(() => driverReference.findElement(by.css(".export-section textarea")).getAttribute("value"))
-                .then(function (exportValue) {
+                .then(exportValue => {
                     assert.equal(exportValue.trim(), blockingSVGandBeacon, "Exported ruleset does not match expected value.");
                     driverReference.quit();
                     done();
                 })
-                .catch(function (e) {
+                .catch(e => {
                     driverReference.quit();
                     done(e);
                 });
@@ -77,7 +77,7 @@ describe("Import / Export", function () {
             let checkedCheckboxes;
 
             utils.promiseGetDriver()
-                .then(function (driver) {
+                .then(driver => {
                     driverReference = driver;
                     return promiseOpenImportExportTab(driverReference);
                 })
@@ -91,16 +91,16 @@ describe("Import / Export", function () {
                     assert.equal(checkboxElms.length, 2, "There should be two standards blocked.");
                     return checkedCheckboxes[1].getAttribute("value");
                 })
-                .then(function (firstCheckboxValue) {
+                .then(firstCheckboxValue => {
                     assert.equal(firstCheckboxValue, "Beacon", "One blocked standard should be 'Beacon'.");
                     return checkedCheckboxes[0].getAttribute("value");
                 })
-                .then(function (secondCheckboxValue) {
+                .then(secondCheckboxValue => {
                     assert.equal(secondCheckboxValue, utils.constants.svgBlockRule[0], "The other blocked standard should be SVG.");
                     driverReference.quit();
                     done();
                 })
-                .catch(function (e) {
+                .catch(e => {
                     driverReference.quit();
                     done(e);
                 });
