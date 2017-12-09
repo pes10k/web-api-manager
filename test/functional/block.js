@@ -8,18 +8,15 @@ const by = webdriver.By;
 const until = webdriver.until;
 
 describe("Basic Functionality", function () {
-
     const svgTestScript = injected.testSVGTestScript();
 
     let httpServer;
     let testUrl;
 
     describe("blocking", function () {
-
         this.timeout = () => 20000;
 
         it("SVG Not Blocking", function (done) {
-
             this.timeout = () => 10000;
 
             const [server, url] = testServer.start();
@@ -52,7 +49,6 @@ describe("Basic Functionality", function () {
         });
 
         it("SVG blocking", function (done) {
-
             this.timeout = () => 10000;
 
             const [server, url] = testServer.start();
@@ -83,7 +79,6 @@ describe("Basic Functionality", function () {
         });
 
         it("Proxyblock does not get stuck in infinite loop", function (done) {
-
             const [server, url] = testServer.startWithFile("infinite-loop.html");
 
             testUrl = url;

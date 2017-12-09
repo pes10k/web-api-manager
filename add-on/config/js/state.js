@@ -15,7 +15,7 @@
      *   Returns true if the two arrays contain all of the same values,
      *   an otherwise false.
      */
-    const areArrayValuesIdentical = function (arrayOne, arrayTwo) {
+    const areArrayValuesIdentical = (arrayOne, arrayTwo) => {
         if (arrayOne.length !== arrayTwo.length) {
             return false;
         }
@@ -23,7 +23,7 @@
         const arrayOneSorted = arrayOne.sort();
         const arrayTwoSorted = arrayTwo.sort();
 
-        const areAllValuesEqual = arrayOneSorted.every(function (value, index) {
+        const areAllValuesEqual = arrayOneSorted.every((value, index) => {
             return value === arrayTwoSorted[index];
         });
 
@@ -47,8 +47,7 @@
      *   (ie would block the same standards on the same domains), and
      *   otherwise false.
      */
-    const areRuleSetsIdentical = function (firstRuleSet, secondRuleSet) {
-
+    const areRuleSetsIdentical = (firstRuleSet, secondRuleSet) => {
         const firstRuleSetDomains = Object.keys(firstRuleSet).sort();
         const secondRuleSetDomains = Object.keys(secondRuleSet).sort();
 
@@ -63,7 +62,7 @@
         // Next, now that we know both rule sets have rules describing the
         // same domains, check that standards blocked for all domains are
         // the same.
-        return firstRuleSetDomains.every(function (value) {
+        return firstRuleSetDomains.every(value => {
             if (secondRuleSet[value] === undefined) {
                 return false;
             }
@@ -72,11 +71,9 @@
         });
     };
 
-    const generateStateObject = function (initialDomain, standards) {
-
+    const generateStateObject = (initialDomain) => {
         const state = {
             selectedDomain: initialDomain,
-            standards: JSON.parse(JSON.stringify(standards)),
             domainRules: {},
             domainNames: [],
             shouldLog: false,
@@ -85,7 +82,7 @@
             toStorage: function () {
                 return {
                     domainRules: this.domainRules,
-                    shouldLog: this.shouldLog
+                    shouldLog: this.shouldLog,
                 };
             },
 
@@ -107,7 +104,6 @@
             },
 
             setDomainRules: function (newDomainRules) {
-
                 const isRuleSetMatchingCurrentRules = areRuleSetsIdentical(
                     newDomainRules,
                     this.domainRules
@@ -141,7 +137,6 @@
             },
 
             deleteDomainRule: function (domainToDelete) {
-
                 // If we're deleted the domain thats currently selected, then
                 // select the default domain.
                 if (this.selectedDomain === domainToDelete) {
@@ -163,13 +158,13 @@
                 this.shouldLog = shouldLog;
             },
 
-            setStandardsForDomain: function (domain, standardIds) {
+            setStandardIdsForDomain: function (domain, standardIds) {
                 this.domainRules[domain] = standardIds;
                 this.domainNames = Object.keys(this.domainRules);
                 if (domain === this.selectedDomain) {
                     this.selectedStandardIds = standardIds;
                 }
-            }
+            },
         };
 
         return state;
@@ -178,6 +173,6 @@
     window.WEB_API_MANAGER.stateLib = {
         generateStateObject,
         areRuleSetsIdentical,
-        areArrayValuesIdentical
+        areArrayValuesIdentical,
     };
 }());

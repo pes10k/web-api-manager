@@ -34,27 +34,27 @@
         </div>
     </div>
 
-    <div class="panel panel-default" v-for="category in categories">
+    <div class="panel panel-default" v-for="categoryId in sortedCategoryIds()">
         <div class="panel-heading">
-            {{ categoryStrings[category].title }}
+            {{ getCategoryLib().titleForCategoryId(categoryId) }}
         </div>
 
         <ul class="list-group">
-            <li class="list-group-item" v-for="standard in standardsByCategory[category]">
-                <span v-if="standard.info.url" class="badge">
-                    <a :href="standard.info.url">info</a>
+            <li class="list-group-item" v-for="standardId in sortedStandardIdsInCategory(categoryId)">
+                <span v-if="getStandardsLib().urlForStandardId(standardId)" class="badge">
+                    <a :href="getStandardsLib().urlForStandardId(standardId)">info</a>
                 </span>
 
                 <input type="checkbox"
-                    :value="standard.info.id"
+                    :value="standardId"
                     v-model="selectedStandardIds"
                     @change="onStandardChecked">
-                {{ standard.info.name }}
+                {{ getStandardsLib().nameForStandardId(standardId) }}
             </li>
         </ul>
 
         <div class="panel-footer">
-            {{ categoryStrings[category].desc }}
+            {{ getCategoryLib().descriptionForCategoryId(categoryId) }}
         </div>
     </div>
 </div>

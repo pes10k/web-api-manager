@@ -17,7 +17,6 @@
     const reCache = new Map();
 
     const makeRe = function (pattern, shouldNegate) {
-
         const cacheKey = pattern + shouldNegate;
 
         if (reCache.has(cacheKey)) {
@@ -49,7 +48,6 @@
     };
 
     const matchingUrlReduceFunction = function (hostName, prev, next) {
-
         if (prev) {
             return prev;
         }
@@ -114,6 +112,6 @@
 
     window.WEB_API_MANAGER.domainMatcherLib = {
         matchHostName,
-        matchUrl
+        matchUrl,
     };
 }());

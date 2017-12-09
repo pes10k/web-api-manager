@@ -3,7 +3,7 @@
     "id": "WebVTT: The Web Video Text Tracks Format",
     "name": "WebVTT: The Web Video Text Tracks Format",
     "url": "https://w3c.github.io/webvtt/",
-    "category": "media"
+    "catId": "media"
   },
   "features": [
     "VTTCue.prototype.getCueAsHTML"

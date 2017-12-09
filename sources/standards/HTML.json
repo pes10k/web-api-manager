@@ -3,7 +3,7 @@
     "id": "HTML",
     "name": "HTML",
     "url": "https://html.spec.whatwg.org",
-    "category": "core"
+    "catId": "core"
   },
   "features": [
     "DataTransfer.prototype.addElement",

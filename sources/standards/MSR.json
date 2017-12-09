@@ -3,7 +3,7 @@
     "id": "MediaStream Recording",
     "name": "MediaStream Recording",
     "url": "https://www.w3.org/TR/mediastream-recording/",
-    "category": "media"
+    "catId": "media"
   },
   "features": [
     "MediaRecorder.prototype.pause",

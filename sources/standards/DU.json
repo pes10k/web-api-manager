@@ -3,7 +3,7 @@
     "id": "Directory Upload",
     "name": "Directory Upload",
     "url": "https://wicg.github.io/directory-upload/proposal.html",
-    "category": "media"
+    "catId": "media"
   },
   "features": [
     "Directory.prototype.getFilesAndDirectories"

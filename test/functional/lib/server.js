@@ -19,9 +19,7 @@ const staticResponse = `<!DOCTYPE "html">
 `;
 
 module.exports.start = function (callback, html) {
-
     const httpServer = http.createServer(function (req, res) {
-
         const headers = {"Content-Type": "text/html; charset=utf-8"};
 
         if (callback !== undefined) {
@@ -51,7 +49,6 @@ module.exports.start = function (callback, html) {
  *   second item is the absolute URL that the server is serving from.
  */
 module.exports.startWithFile = function (testHtmlFileName, callback) {
-
     const pathToTestHtmlFileName = path.join(__dirname, "..", "..", "fixtures", testHtmlFileName);
     const htmlFileContents = fs.readFileSync(pathToTestHtmlFileName, "utf8");
     return module.exports.start(callback, htmlFileContents);

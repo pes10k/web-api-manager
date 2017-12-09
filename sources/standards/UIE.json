@@ -3,7 +3,7 @@
     "id": "UI Events Specification",
     "name": "UI Events Specification",
     "url": "https://w3c.github.io/uievents/",
-    "category": "presentation"
+    "catId": "presentation"
   },
   "features": [
     "CompositionEvent.prototype.initCompositionEvent",

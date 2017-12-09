@@ -3,7 +3,7 @@
     "id": "Beacon",
     "name": "Beacon",
     "url": "https://www.w3.org/TR/beacon/",
-    "category": "networking"
+    "catId": "networking"
   },
   "features": [
     "Navigator.prototype.sendBeacon"

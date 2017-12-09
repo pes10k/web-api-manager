@@ -3,7 +3,7 @@
     "id": "CSS Object Model (CSSOM)",
     "name": "CSS Object Model (CSSOM)",
     "url": "https://drafts.csswg.org/cssom/",
-    "category": "presentation"
+    "catId": "presentation"
   },
   "features": [
     "CSS.escape",

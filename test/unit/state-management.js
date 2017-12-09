@@ -19,11 +19,8 @@ require(path.join(addonConfigLibPath, "state.js"));
 const stateLib = window.WEB_API_MANAGER.stateLib;
 
 describe("Extension State Management", function () {
-
     describe("Array comparisons", function () {
-
         it("Identical values in same order", function (done) {
-
             const firstArray = [1, 2, 3, "A", "B", "C"];
             const secondArray = [1, 2, 3, "A", "B", "C"];
             const areEqual = stateLib.areArrayValuesIdentical(firstArray, secondArray);
@@ -33,7 +30,6 @@ describe("Extension State Management", function () {
         });
 
         it("Identical values in different order", function (done) {
-
             const firstArray = [1, 2, 3, "A", "B", "C"];
             const secondArray = [1, "B", 2, "A", 3, "C"];
             const areEqual = stateLib.areArrayValuesIdentical(firstArray, secondArray);
@@ -43,7 +39,6 @@ describe("Extension State Management", function () {
         });
 
         it("Different values", function (done) {
-
             const firstArray = [1, 2, 3, "A", "B", "C"];
             const secondArray = ["Totally", "different", "values"];
             const areEqual = stateLib.areArrayValuesIdentical(firstArray, secondArray);
@@ -54,17 +49,15 @@ describe("Extension State Management", function () {
     });
 
     describe("Domain rule comparisons", function () {
-
         it("Identical rule sets: same order", function (done) {
-
             const firstRuleSet = {
                 "(default)": [],
-                "www.example.com": ["Beacon", "Vibrate API"]
+                "www.example.com": ["Beacon", "Vibrate API"],
             };
 
             const secondRuleSet = {
                 "(default)": [],
-                "www.example.com": ["Beacon", "Vibrate API"]
+                "www.example.com": ["Beacon", "Vibrate API"],
             };
 
             const areEqual = stateLib.areRuleSetsIdentical(firstRuleSet, secondRuleSet);
@@ -73,15 +66,14 @@ describe("Extension State Management", function () {
         });
 
         it("Identical rule sets: different orders", function (done) {
-
             const firstRuleSet = {
                 "(default)": [],
-                "www.example.com": ["Beacon", "Vibrate API"]
+                "www.example.com": ["Beacon", "Vibrate API"],
             };
 
             const secondRuleSet = {
                 "www.example.com": ["Vibrate API", "Beacon"],
-                "(default)": []
+                "(default)": [],
             };
 
             const areEqual = stateLib.areRuleSetsIdentical(firstRuleSet, secondRuleSet);
@@ -90,15 +82,14 @@ describe("Extension State Management", function () {
         });
 
         it("Different rule sets: different domains", function (done) {
-
             const firstRuleSet = {
                 "(default)": [],
-                "www.example.com": ["Beacon", "Vibrate API"]
+                "www.example.com": ["Beacon", "Vibrate API"],
             };
 
             const secondRuleSet = {
                 "(default)": [],
-                "www.example.net": ["Beacon", "Vibrate API"]
+                "www.example.net": ["Beacon", "Vibrate API"],
             };
 
             const areEqual = stateLib.areRuleSetsIdentical(firstRuleSet, secondRuleSet);
@@ -107,15 +98,14 @@ describe("Extension State Management", function () {
         });
 
         it("Different rule sets: different standards", function (done) {
-
             const firstRuleSet = {
                 "(default)": [],
-                "www.example.com": ["Beacon", "Vibrate API"]
+                "www.example.com": ["Beacon", "Vibrate API"],
             };
 
             const secondRuleSet = {
                 "(default)": [],
-                "www.example.com": ["Beacon", "Gamepad API"]
+                "www.example.com": ["Beacon", "Gamepad API"],
             };
 
             const areEqual = stateLib.areRuleSetsIdentical(firstRuleSet, secondRuleSet);

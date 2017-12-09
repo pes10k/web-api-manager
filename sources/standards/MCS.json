@@ -3,7 +3,7 @@
     "id": "Media Capture and Streams",
     "name": "Media Capture and Streams",
     "url": "https://www.w3.org/TR/mediacapture-streams/",
-    "category": "media"
+    "catId": "media"
   },
   "features": [
     "LocalMediaStream.prototype.stop",

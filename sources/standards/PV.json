@@ -3,7 +3,7 @@
     "id": "Page Visibility (Second Edition)",
     "name": "Page Visibility (Second Edition)",
     "url": "https://www.w3.org/TR/page-visibility/",
-    "category": "presentation"
+    "catId": "presentation"
   },
   "features": [
     "document.mozHidden",

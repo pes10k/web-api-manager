@@ -3,7 +3,7 @@
     "id": "DOM Level 2: Traversal and Range",
     "name": "DOM Level 2: Traversal and Range",
     "url": "https://www.w3.org/TR/DOM-Level-2-Traversal-Range/",
-    "category": "core"
+    "catId": "core"
   },
   "features": [
     "Document.prototype.createNodeIterator",

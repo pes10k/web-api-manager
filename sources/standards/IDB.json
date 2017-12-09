@@ -3,7 +3,7 @@
     "id": "Indexed Database API",
     "name": "Indexed Database API",
     "url": "https://www.w3.org/TR/IndexedDB/",
-    "category": "storage"
+    "catId": "storage"
   },
   "features": [
     "IDBCursor.prototype.advance",

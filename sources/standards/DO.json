@@ -3,7 +3,7 @@
     "id": "DeviceOrientation Event Specification",
     "name": "DeviceOrientation Events",
     "url": "https://www.w3.org/TR/orientation-event/",
-    "category": "hardware"
+    "catId": "hardware"
   },
   "features": [
     "DeviceMotionEvent.prototype.initDeviceMotionEvent",

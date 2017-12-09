@@ -10,7 +10,7 @@
         methods: {
             shouldLogChanged: function () {
                 this.$root.$data.setShouldLog(this.shouldLog);
-            }
-        }
+            },
+        },
     });
 }());

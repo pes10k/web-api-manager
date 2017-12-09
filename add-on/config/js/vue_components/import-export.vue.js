@@ -4,13 +4,12 @@
     const Vue = window.Vue;
 
     const generateExportString = (domainsToExport, allDomainData) => {
-
         const dataToExport = domainsToExport.map(domain => {
-            const standardsToBlock = allDomainData[domain];
-            standardsToBlock.sort();
+            const standardIdsToBlock = allDomainData[domain];
+            standardIdsToBlock.sort();
             return {
                 "pattern": domain,
-                "standards": standardsToBlock
+                "standardIds": standardIdsToBlock,
             };
         });
 
@@ -29,12 +28,11 @@
                 importLog: "",
                 importTextAreaData: "",
                 dataToImport: "",
-                shouldOverwrite: false
+                shouldOverwrite: false,
             };
         },
         methods: {
             onImportClicked: function (event) {
-
                 if (!this.isValidToImport()) {
                     this.importError = true;
                     this.dataToImport = "";
@@ -49,14 +47,13 @@
                 this.importLog = "";
 
                 const logMessages = newDomainRules.map(newDomainRule => {
-
-                    const {pattern, standards} = newDomainRule;
+                    const {pattern, standardIds} = newDomainRule;
                     if (currentDomainRules[pattern] !== undefined && shouldOverwrite === false) {
                         return ` ! ${pattern}: Skipped. Set to not override.\n`;
                     }
 
-                    stateObject.setStandardsForDomain(pattern, standards);
-                    return ` * ${pattern}: Blocking ${standards.length} standards.\n`;
+                    stateObject.setStandardIdsForDomain(pattern, standardIds);
+                    return ` * ${pattern}: Blocking ${standardIds.length} standards.\n`;
                 });
 
                 this.importError = false;
@@ -67,7 +64,7 @@
             },
             isValidToImport: function () {
                 return (this.importError === false) && (this.dataToImport !== "");
-            }
+            },
         },
         watch: {
             selectedStandardIds: function () {
@@ -83,7 +80,6 @@
                 );
             },
             importTextAreaData: function () {
-
                 const value = this.importTextAreaData;
 
                 if (value.trim() === "") {
@@ -102,7 +98,7 @@
                     this.importError = true;
                     this.importLog = "Invalid import data provided.";
                 }
-            }
-        }
+            },
+        },
     });
 }());

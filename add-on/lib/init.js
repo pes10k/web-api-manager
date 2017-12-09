@@ -30,6 +30,6 @@
             // The name of the catch all rule set used when there are no
             // more specific matching domain rule sets.
             defaultDomainRule: "(default)",
-        }
+        },
     };
 }());

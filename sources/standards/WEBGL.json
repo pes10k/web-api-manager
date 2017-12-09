@@ -3,7 +3,7 @@
     "id": "WebGL Specification",
     "name": "WebGL Specification",
     "url": "https://www.khronos.org/registry/webgl/specs/latest/1.0/",
-    "category": "graphics"
+    "catId": "graphics"
   },
   "features": [
     "WebGLRenderingContext.prototype.activeTexture",

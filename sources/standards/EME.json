@@ -3,7 +3,7 @@
     "id": "Encrypted Media Extensions",
     "name": "Encrypted Media Extensions",
     "url": "https://w3c.github.io/encrypted-media/",
-    "category": "media"
+    "catId": "media"
   },
   "features": [
     "MediaKeys.prototype.createSession",

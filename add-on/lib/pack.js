@@ -44,7 +44,6 @@
     };
 
     const binOptionsReduceFunction = function (binSize, prev, next) {
-
         if (prev.length === 0) {
             prev.push([next]);
             return prev;
@@ -80,7 +79,6 @@
      *   were in the provided `selected` array.
      */
     const pack = function (options, selected) {
-
         const numBuckets = Math.ceil(options.length / bucketSize);
         const binToBucketSizeFunc = binOptionsReduceFunction.bind(undefined, bucketSize);
         options.sort();
@@ -95,7 +93,6 @@
             const currentBucket = binnedOptions[i];
 
             for (j = 0; j < currentBucket.length; j += 1) {
-
                 const currentOption = currentBucket[j];
                 if (selected.indexOf(currentOption) !== -1) {
                     bitfield |= 1 << j;
@@ -128,7 +125,6 @@
      *   options array.
      */
     const unpack = function (options, data) {
-
         const binToBucketSizeFunc = binOptionsReduceFunction.bind(undefined, bucketSize);
         options.sort();
 
@@ -156,6 +152,6 @@
 
     window.WEB_API_MANAGER.packingLib = {
         pack,
-        unpack
+        unpack,
     };
 }());

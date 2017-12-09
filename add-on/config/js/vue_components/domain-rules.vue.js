@@ -11,7 +11,7 @@
         data: function () {
             return {
                 newDomain: "",
-                errorMessage: ""
+                errorMessage: "",
             };
         },
         methods: {
@@ -22,7 +22,6 @@
                 return this.$root.$data.domainsBlockingNoStandards();
             },
             newDomainSubmitted: function () {
-
                 const state = this.$root.$data;
 
                 if (this.newDomain.length === 0) {
@@ -50,7 +49,7 @@
             },
             isDefault: function (domainName) {
                 return domainName === constants.defaultDomainRule;
-            }
-        }
+            },
+        },
     });
 }());

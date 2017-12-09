@@ -4,7 +4,7 @@
 
     const {storageLib, domainMatcherLib, constants} = window.WEB_API_MANAGER;
     const {cookieEncodingLib, proxyBlockLib, httpHeadersLib} = window.WEB_API_MANAGER;
-    const {standards, tabBlockedFeaturesLib, browserLib} = window.WEB_API_MANAGER;
+    const {standardsLib, tabBlockedFeaturesLib, browserLib} = window.WEB_API_MANAGER;
     const rootObject = browserLib.getRootObject();
     const defaultKey = constants.defaultDomainRule;
 
@@ -30,10 +30,9 @@
             tabId,
             {
                 allFrames: true,
-                code: "window.location.host"
+                code: "window.location.host",
             },
             function (allHosts) {
-
                 if (rootObject.runtime.lastError && !allHosts) {
                     rootObject.browserAction.setBadgeText({text: "-"});
                     return;
@@ -45,7 +44,7 @@
 
                 rootObject.browserAction.setBadgeText({
                     text: numFrames,
-                    tabId: tabId
+                    tabId: tabId,
                 });
             }
         );
@@ -63,7 +62,6 @@
     // for information about "here are the domains of the frames on the
     // current page, which rules are being used to match them".
     rootObject.runtime.onMessage.addListener((request, sender, sendResponse) => {
-
         const [label, data] = request;
 
         // Sent from the config page, when the "which APIs should be
@@ -78,7 +76,6 @@
         // which blocking rules are being applied to which domains in the
         // tab.
         if (label === "rulesForDomains") {
-
             const matchHostName = domainMatcherLib.matchHostName;
             const matchHostNameBound = matchHostName.bind(undefined, Object.keys(domainRules));
             const domainToRuleMapping = {};
@@ -87,13 +84,13 @@
                 const ruleNameForHost = matchHostNameBound(aHostName) || defaultKey;
                 domainToRuleMapping[aHostName] = {
                     "ruleName": ruleNameForHost,
-                    "numRules": domainRules[ruleNameForHost].length
+                    "numRules": domainRules[ruleNameForHost].length,
                 };
             });
 
             sendResponse({
                 domainData: domainToRuleMapping,
-                shouldLog: shouldLog
+                shouldLog: shouldLog,
             });
             return;
         }
@@ -115,7 +112,6 @@
         // (action === "block", or all APIs allowed
         // (action === "allow").
         if (label === "toggleBlocking") {
-
             const {action, hostName} = data;
             if (action === "block") {
                 delete domainRules[hostName];
@@ -127,7 +123,7 @@
 
             storageLib.set({
                 domainRules,
-                shouldLog
+                shouldLog,
             });
             return;
         }
@@ -139,12 +135,10 @@
         // and "feature", a string of the keypath to the feature that was
         // blocked.
         if (label === "blockedFeature") {
-            const {standardId, feature} = data;
-            const standardName = standards[standardId].info.name;
+            const {feature} = data;
             tabBlockedFeaturesLib.reportBlockedFeature(
                 sender.tab.id,
                 sender.frameId,
-                standardName,
                 feature
             );
             return;
@@ -156,7 +150,7 @@
         // tab we want the report for.
         if (label === "blockedFeaturesForTab") {
             const {tabId} = data;
-            const blockedFeatures = tabBlockedFeaturesLib.featuresForTab(tabId);
+            const blockedFeatures = tabBlockedFeaturesLib.reportForTab(tabId);
             sendResponse(["blockedFeaturesForTabResponse", blockedFeatures]);
             return;
         }
@@ -164,7 +158,7 @@
 
     const requestFilter = {
         urls: ["<all_urls>"],
-        types: ["main_frame", "sub_frame"]
+        types: ["main_frame", "sub_frame"],
     };
 
     const cookieRemoverRegex = new RegExp(constants.cookieName + "=.*?;");
@@ -176,10 +170,8 @@
     // making multiple, simultanious requests to the same domain where
     // we might make a request before deleting the cookie, so the below
     // adds at least some (incertain) extra protection.
-    rootObject.webRequest.onBeforeSendHeaders.addListener(function (details) {
-
-        const newHeaders = details.requestHeaders.map(function (header) {
-
+    rootObject.webRequest.onBeforeSendHeaders.addListener(details => {
+        const newHeaders = details.requestHeaders.map(header => {
             if (header.name.indexOf("Cookie") === -1) {
                 return header;
             }
@@ -190,7 +182,7 @@
         });
 
         return {
-            requestHeaders: newHeaders
+            requestHeaders: newHeaders,
         };
     }, requestFilter, ["blocking", "requestHeaders"]);
 
@@ -207,18 +199,17 @@
     // The page then reads the information about what standards to block
     // out of the cookie (by decoding and unpacking the bitfield), and then
     // deletes the cookie, so nothing is left behind.
-    rootObject.webRequest.onHeadersReceived.addListener(function (details) {
-
+    rootObject.webRequest.onHeadersReceived.addListener(details => {
         const url = details.url;
 
         // Decide which set of blocking rules to use, depending on the host
         // of the URL being requested.
         const matchingDomainRule = domainMatcherLib.matchUrl(Object.keys(domainRules), url);
-        const standardsToBlock = domainRules[matchingDomainRule || defaultKey];
+        const standardIdsToBlock = domainRules[matchingDomainRule || defaultKey];
         const randBytes = sjcl.random.randomWords(4);
         const randNonce = sjcl.codec.base64.fromBits(randBytes);
         const encodedOptions = cookieEncodingLib.toCookieValue(
-            standardsToBlock,
+            standardIdsToBlock,
             shouldLog,
             randNonce
         );
@@ -232,8 +223,8 @@
 
         if (cspDynamicPolicyHeaders.length === 1) {
             const [ignore, scriptHash] = proxyBlockLib.generateScriptPayload(
-                standards,
-                standardsToBlock,
+                standardsLib.allStandardIds(),
+                standardIdsToBlock,
                 shouldLog
             );
 
@@ -250,12 +241,11 @@
         rootObject.cookies.set({
             url: details.url,
             name: constants.cookieName,
-            value: encodedOptions
+            value: encodedOptions,
         });
 
         return {
-            responseHeaders: details.responseHeaders
+            responseHeaders: details.responseHeaders,
         };
-
     }, requestFilter, ["blocking", "responseHeaders"]);
 }());

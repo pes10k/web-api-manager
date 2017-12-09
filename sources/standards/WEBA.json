@@ -3,7 +3,7 @@
     "id": "Web Audio API",
     "name": "Web Audio API",
     "url": "https://webaudio.github.io/web-audio-api",
-    "category": "media"
+    "catId": "media"
   },
   "features": [
     "AnalyserNode.prototype.getByteFrequencyData",

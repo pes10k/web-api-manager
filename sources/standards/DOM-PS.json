@@ -3,7 +3,7 @@
     "id": "DOM Parsing and Serialization",
     "name": "DOM Parsing and Serialization",
     "url": "https://w3c.github.io/DOM-Parsing/",
-    "category": "core"
+    "catId": "core"
   },
   "features": [
     "DOMParser.prototype.parseFromString",

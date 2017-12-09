@@ -3,7 +3,7 @@
     "id": "Ambient Light Sensor API",
     "name": "Ambient Light Sensor API",
     "url": "https://w3c.github.io/ambient-light/",
-    "category": "hardware"
+    "catId": "hardware"
   },
   "features": [
     "window.ondevicelight"

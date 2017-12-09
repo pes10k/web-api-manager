@@ -3,7 +3,7 @@
     "id": "Gamepad",
     "name": "Gamepad",
     "url": "https://w3c.github.io/gamepad/",
-    "category": "hardware"
+    "catId": "hardware"
   },
   "features": [
     "Navigator.prototype.getGamepads"

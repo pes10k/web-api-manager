@@ -5,9 +5,7 @@ const utils = require("./lib/utils");
 const testServer = require("./lib/server");
 
 describe("iFrames", function () {
-
     describe("HTMLIFrameElement.prototype.contentWindow property", function () {
-
         this.timeout = () => 20000;
 
         const standardsToBlock = utils.constants.svgBlockRule;
@@ -30,7 +28,6 @@ describe("iFrames", function () {
         // implementation is *not* blocked, then trying to call it
         // will throw, since its being called without a context.
         it("Can access w/o blocking", function (done) {
-
             const [server, url] = testServer.start(undefined, testHtml);
             let driverReference;
 
@@ -54,7 +51,6 @@ describe("iFrames", function () {
         });
 
         it("Can not access when blocking", function (done) {
-
             const [server, url] = testServer.start(undefined, testHtml);
             let driverReference;
 

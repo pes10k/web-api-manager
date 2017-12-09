@@ -3,7 +3,7 @@
     "id": "Console API",
     "name": "Console API",
     "url": "https://console.spec.whatwg.org/",
-    "category": "misc"
+    "catId": "misc"
   },
   "features": [
     "console.assert",

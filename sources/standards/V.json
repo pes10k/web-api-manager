@@ -3,7 +3,7 @@
     "id": "Vibration API",
     "name": "Vibration API",
     "url": "https://www.w3.org/TR/vibration/",
-    "category": "hardware"
+    "catId": "hardware"
   },
   "features": [
     "Navigator.prototype.vibrate"

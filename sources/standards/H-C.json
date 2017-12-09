@@ -3,7 +3,7 @@
     "id": "HTML: Canvas Element",
     "name": "HTML: Canvas Element",
     "url": "https://html.spec.whatwg.org/multipage/scripting.html#the-canvas-element",
-    "category": "graphics"
+    "catId": "graphics"
   },
   "features": [
     "CanvasGradient.prototype.addColorStop",

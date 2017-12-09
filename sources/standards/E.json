@@ -3,7 +3,7 @@
     "id": "Encoding",
     "name": "Encoding",
     "url": "https://encoding.spec.whatwg.org/",
-    "category": "core"
+    "catId": "core"
   },
   "features": [
     "TextDecoder.prototype.decode",

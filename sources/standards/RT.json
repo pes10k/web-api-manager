@@ -3,7 +3,7 @@
     "id": "Resource Timing",
     "name": "Resource Timing",
     "url": "https://w3c.github.io/resource-timing/",
-    "category": "timing"
+    "catId": "timing"
   },
   "features": [
     "performance.onresourcetimingbufferfull",

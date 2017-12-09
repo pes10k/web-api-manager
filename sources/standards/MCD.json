@@ -3,7 +3,7 @@
     "id": "Media Capture from DOM Elements",
     "name": "Media Capture from DOM Elements",
     "url": "https://w3c.github.io/mediacapture-fromelement/",
-    "category": "media"
+    "catId": "media"
   },
   "features": [
     "CanvasCaptureMediaStream.prototype.requestFrame",

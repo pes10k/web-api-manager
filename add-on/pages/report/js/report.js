@@ -5,7 +5,7 @@
 (function () {
     "use strict";
 
-    const {constants, browserLib} = window.WEB_API_MANAGER;
+    const {constants, browserLib, standardsLib} = window.WEB_API_MANAGER;
     const doc = window.document;
     const rootObject = browserLib.getRootObject();
     const loadingSection = doc.getElementById("loading-section");
@@ -29,7 +29,7 @@
     /**
      * Returns a div, describing blocked features in a standard.
      *
-     * @param {string} standardName
+     * @param {string} standardId
      *   The name of the standard being represented, such as "Console API".
      * @param {Array.string} blockedFeatures
      *   An array of one or more strings, each describing a feature that was
@@ -39,9 +39,10 @@
      *   A div element, depicting a bootstrap style markedup panel, with the
      *   blocked features presented in a list in the panel.
      */
-    const buildStandardReport = (standardName, blockedFeatures) => {
+    const buildStandardReport = (standardId, blockedFeatures) => {
         const standardReportPanelElm = doc.createElement("div");
-        standardReportPanelElm.dataset.standard = standardName;
+        const standardName = standardsLib.nameForStandardId(standardId);
+        standardReportPanelElm.dataset.standardId = standardId;
         standardReportPanelElm.className = "panel panel-default standard-report-container";
 
         const standardTitlePanelHeader = doc.createElement("div");
@@ -78,7 +79,7 @@
      *   panel elements (one for each standard blocked).
      */
     const buildFrameReport = frameReport => {
-        const {url, standards} = frameReport;
+        const {url, standardReports} = frameReport;
 
         const frameReportContainerElm = doc.createElement("div");
         frameReportContainerElm.dataset.url = url;
@@ -91,9 +92,9 @@
         frameUrlTitleElm.appendChild(frameUrlCodeElm);
         frameReportContainerElm.appendChild(frameUrlTitleElm);
 
-        const standardNames = Object.keys(standards);
+        const standardIds = Object.keys(standardReports);
 
-        if (standardNames.length === 0) {
+        if (standardIds.length === 0) {
             const noStandardsBlockedSection = doc.createElement("div");
             noStandardsBlockedSection.className = " alert alert-info";
             noStandardsBlockedSection.appendChild(doc.createTextNode("No blocked standards."));
@@ -101,8 +102,11 @@
             return frameReportContainerElm;
         }
 
-        standardNames.sort().forEach(standardName => {
-            const blockedFeaturesForStandards = standards[standardName];
+        const sortedStandardIds = standardIds.sort(standardsLib.sortStandardsById);
+
+        sortedStandardIds.forEach(standardId => {
+            const blockedFeaturesForStandards = standardReports[standardId];
+            const standardName = standardsLib.nameForStandardId(standardId);
             const standardReport = buildStandardReport(standardName, blockedFeaturesForStandards);
             frameReportContainerElm.appendChild(standardReport);
         });
@@ -113,7 +117,6 @@
     const tabId = window.parseInt(queryString.replace("tabId=", ""));
     const message = ["blockedFeaturesForTab", {tabId}];
     rootObject.runtime.sendMessage(message, response => {
-
         const [messageType, frameMapping] = response;
 
         if (messageType !== "blockedFeaturesForTabResponse") {

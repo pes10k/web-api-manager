@@ -3,7 +3,7 @@
     "id": "URL",
     "name": "URL",
     "url": "https://url.spec.whatwg.org/",
-    "category": "core"
+    "catId": "core"
   },
   "features": [
     "URLSearchParams.prototype.append",

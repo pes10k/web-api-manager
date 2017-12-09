@@ -3,7 +3,7 @@
     "id": "Web Cryptography API",
     "name": "Web Cryptography API",
     "url": "https://www.w3.org/TR/WebCryptoAPI/",
-    "category": "misc"
+    "catId": "misc"
   },
   "features": [
     "Crypto.prototype.getRandomValues",

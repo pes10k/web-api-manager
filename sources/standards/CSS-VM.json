@@ -3,7 +3,7 @@
     "id": "CSSOM View Module",
     "name": "CSSOM View Module",
     "url": "https://drafts.csswg.org/cssom-view/",
-    "category": "presentation"
+    "catId": "presentation"
   },
   "features": [
     "CaretPosition.prototype.getClientRect",

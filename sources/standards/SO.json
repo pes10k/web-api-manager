@@ -3,7 +3,7 @@
     "id": "Screen Orientation API",
     "name": "Screen Orientation API",
     "url": "https://w3c.github.io/screen-orientation/",
-    "category": "hardware"
+    "catId": "hardware"
   },
   "features": [
     "screen.onmozorientationchange",

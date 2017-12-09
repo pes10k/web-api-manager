@@ -3,7 +3,7 @@
     "id": "DOM Level 3: XPath",
     "name": "DOM Level 3: XPath",
     "url": "https://www.w3.org/TR/DOM-Level-3-XPath/",
-    "category": "core"
+    "catId": "core"
   },
   "features": [
     "Document.prototype.createExpression",

@@ -3,7 +3,7 @@
     "id": "User Timing Level 2",
     "name": "User Timing (Level 2)",
     "url": "https://w3c.github.io/user-timing/",
-    "category": "timing"
+    "catId": "timing"
   },
   "features": [
     "Performance.prototype.clearMarks",

@@ -7,14 +7,14 @@
 module.exports = {
     github: {
         username: "",
-        password: ""
+        password: "",
     },
     google: {
         username: "",
-        password: ""
+        password: "",
     },
     facebook: {
         username: "",
-        password: ""
-    }
+        password: "",
+    },
 };

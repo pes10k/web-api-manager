@@ -3,7 +3,7 @@
     "id": "Scalable Vector Graphics (SVG) 1.1 (Second Edition)",
     "name": "Scalable Vector Graphics (SVG) 1.1 (Second Edition)",
     "url": "https://www.w3.org/TR/SVG/",
-    "category": "graphics"
+    "catId": "graphics"
   },
   "features": [
     "HTMLEmbedElement.prototype.getSVGDocument",

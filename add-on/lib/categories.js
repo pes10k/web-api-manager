@@ -56,10 +56,74 @@
             "title": "Timing",
             "desc": "Standards that allow websites to do high resolution " +
                     "measurements of activies on their pages.",
+        },
+    };
+
+    /**
+     * Returns an array of all of the category ids defined in the system.
+     *
+     * @return {Array.string}
+     *   An array of category ids, encoded as strings.
+     */
+    const allCategoryIds = () => Object.keys(categories);
+
+    /**
+     * Returns the user-facing title for a category id.
+     *
+     * @param {string} categoryId
+     *   The unique identifier for a category.
+     *
+     * @return {?string}
+     *   The user-facing title for a category, or undefined if the category id
+     *   is not recognized.
+     */
+    const titleForCategoryId = categoryId => {
+        if (categories[categoryId] === undefined) {
+            return undefined;
         }
+
+        return categories[categoryId].title;
+    };
+
+    /**
+     * Returns the user-facing description of a category.
+     *
+     * @param {string} categoryId
+     *   The unique identifier for a category.
+     *
+     * @return {?string}
+     *   The user-facing description for a category, or undefined if the
+     *   category id is not recognized.
+     */
+    const descriptionForCategoryId = categoryId => {
+        if (categories[categoryId] === undefined) {
+            return undefined;
+        }
+
+        return categories[categoryId].desc;
+    };
+
+    /**
+     * Sorts two categories based on their name, but identified by their id.
+     *
+     * @param {string} categoryIdA
+     *   The unique identifier for a category.
+     * @param {string} categoryIdB
+     *   The unique identifier for another category.
+     *
+     * @return {number}
+     *   An integer, of the type returned by String.prototype.localeCompare.
+     */
+    const sortCategoriesById = (categoryIdA, categoryIdB) => {
+        const categoryTitleA = titleForCategoryId(categoryIdA);
+        const categoryTitleB = titleForCategoryId(categoryIdB);
+        return categoryTitleA.localeCompare(categoryTitleB);
     };
 
     window.WEB_API_MANAGER.categoriesLib = {
-        categories
+        allCategoryIds,
+        titleForCategoryId,
+        descriptionForCategoryId,
+        sortCategoriesById,
     };
 }());

@@ -15,14 +15,12 @@ const until = webdriver.until;
 
 
 describe("Logging into popular sites", function () {
-
     if (utils.shouldRunRemoteTests === false) {
         // Skipping remote tests because of --only-local-tests flag
         return;
     }
 
     describe("GitHub", function () {
-
         if (!testParams.github.username) {
             console.log(" * No Github account information in test.config.js, skipping these tests.");
             return;
@@ -30,7 +28,7 @@ describe("Logging into popular sites", function () {
 
         const formValues = [
             ["login", testParams.github.username],
-            ["password", testParams.github.password]
+            ["password", testParams.github.password],
         ];
 
         this.timeout = function () {
@@ -38,7 +36,6 @@ describe("Logging into popular sites", function () {
         };
 
         it("Log in", function (done) {
-
             let driverReference;
 
             utils.promiseGetDriver()
@@ -64,7 +61,6 @@ describe("Logging into popular sites", function () {
         });
 
         it("Log in with SVG blocking", function (done) {
-
             const standardsToBlock = utils.constants.svgBlockRule;
             const svgTestScript = injected.testSVGTestScript();
             let driverReference;
@@ -95,7 +91,6 @@ describe("Logging into popular sites", function () {
     });
 
     describe("Facebook", function () {
-
         if (!testParams.facebook.username) {
             console.log(" * No Facebook account information in test.config.js, skipping these tests.");
             return;
@@ -106,10 +101,9 @@ describe("Logging into popular sites", function () {
         };
 
         it("Log in", function (done) {
-
             const formValues = [
                 ["email", testParams.facebook.username],
-                ["pass", testParams.facebook.password]
+                ["pass", testParams.facebook.password],
             ];
 
             let driverReference;
@@ -139,7 +133,6 @@ describe("Logging into popular sites", function () {
     });
 
     describe("YouTube", function () {
-
         if (!testParams.google.username) {
             console.log(" * No Google/YouTube account information in test.config.js, skipping these tests.");
             return;
@@ -150,7 +143,6 @@ describe("Logging into popular sites", function () {
         };
 
         it("Log in", function (done) {
-
             let driver;
 
             utils.promiseGetDriver()

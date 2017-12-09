@@ -6,7 +6,7 @@
 
     const consoleLog = window.console.log;
     const cookies2 = window.Cookies.noConflict();
-    const {standards, constants, cookieEncodingLib} = window.WEB_API_MANAGER;
+    const {constants, cookieEncodingLib} = window.WEB_API_MANAGER;
     const {browserLib, proxyBlockLib} = window.WEB_API_MANAGER;
     const standardsCookieName = constants.cookieName;
 
@@ -47,11 +47,11 @@
         return;
     }
 
-    const [standardsToBlock, shouldLog, randNonce] = cookieEncodingLib.fromCookieValue(domainPref);
+    const decodedCookieValues = cookieEncodingLib.fromCookieValue(domainPref);
+    const [standardIdsToBlock, shouldLog, randNonce] = decodedCookieValues;
 
     const [scriptToInject, ignore] = proxyBlockLib.generateScriptPayload(
-        standards,
-        standardsToBlock,
+        standardIdsToBlock,
         shouldLog,
         randNonce
     );

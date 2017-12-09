@@ -7,6 +7,8 @@
 (function () {
     "use strict";
 
+    const {standardsLib} = window.WEB_API_MANAGER;
+
     // This function is what does the instrumenting of the DOM,
     // based on values set in the global window.WEB_API_MANAGER_PAGE
     // structure.  This function is never called, but is rendered to
@@ -15,18 +17,13 @@
     // just to make it easier to write and deploy (ie vim highlights
     // it just like any other JS).
     const proxyBlockingFunction = function () {
-
         // Grab references to console.log and Document.prototype.dispatchEvent
         // before the page can get to it, to prevent the page from interacting
         // with recording what standards are blocked / logged.
         const consoleLog = console.log;
         const dispatchEvent = document.dispatchEvent;
 
-        const settings = window.WEB_API_MANAGER_PAGE;
-        const shouldLog = settings.shouldLog;
-        const randNonce = settings.randNonce;
-        const standardsToBlock = settings.toBlock;
-        const standardDefinitions = settings.standards;
+        const {shouldLog, randNonce, featuresToBlock} = window.WEB_API_MANAGER_PAGE;
 
         // Its possible that the Web API removal code will block direct references
         // to the following methods, so grab references to them before the
@@ -39,14 +36,13 @@
         // This is done to make it more difficult for the modified page
         // to detect the modifications / this extension/
         const removeSelfFromPage = () => {
-
             // Delete the WEB_API_MANAGER_PAGE global property.  Technically
             // this never needed to be global, but doing so allows for easier
             // linting of the code, makes things easier to understand (for me
             // at least) and doesn't have any side effect as long as we delete
             // it when we're done, and before the page scripts can start running.
             delete window.WEB_API_MANAGER_PAGE;
-        
+
             // Next, remove the script tag containing this code from the document,
             // so that the structure of the page looks like what the page author
             // expects / intended.
@@ -55,7 +51,7 @@
             removeChild.call(thisScript.parentNode, thisScript);
         };
 
-        if (standardsToBlock.length === 0) {
+        if (featuresToBlock.length === 0) {
             removeSelfFromPage();
             return;
         }
@@ -67,29 +63,12 @@
 
         const defaultFunction = function () {};
         const funcPropNames = Object.getOwnPropertyNames(defaultFunction);
-        const unconfigurablePropNames = funcPropNames.filter(function (propName) {
+        const unconfigurablePropNames = funcPropNames.filter(propName => {
             const possiblePropDesc = Object.getOwnPropertyDescriptor(defaultFunction, propName);
             return (possiblePropDesc && !possiblePropDesc.configurable);
         });
 
-        const featuresToBlock = standardsToBlock.reduce(function (prev, cur) {
-            return prev.concat(standardDefinitions[cur].features);
-        }, []);
-
-        // A mapping of feature keypaths to the standards that contain them,
-        // to make the logs more useful (ie so the log can mention the standard
-        // that contains the blocked feature).
-        const featureToStandardMapping = Object
-            .keys(standardDefinitions)
-            .reduce(function (mapping, standardId) {
-                const featuresInStandard = standardDefinitions[standardId].features;
-                featuresInStandard.forEach(function (featureName) {
-                    mapping[featureName] = standardId;
-                });
-                return mapping;
-            }, {});
-
-        const toPrimitiveFunc = function (hint) {
+        const toPrimitiveFunc = hint => {
             if (hint === "number" || hint === "default") {
                 return 0;
             }
@@ -99,10 +78,9 @@
             return undefined;
         };
 
-        const keyPathToRefPath = function (keyPath) {
+        const keyPathToRefPath = keyPath => {
             const keyParts = keyPath.split(".");
             return keyParts.reduce(function (prev, cur) {
-
                 if (prev === undefined) {
                     return undefined;
                 }
@@ -122,23 +100,15 @@
             }, []);
         };
 
-        const createBlockingProxy = function (keyPath) {
-
+        const createBlockingProxy = keyPath => {
             let hasBeenLogged = false;
 
-            const logKeyPath = function () {
-
+            const logKeyPath = () => {
                 if (keyPath !== undefined &&
                         hasBeenLogged === false &&
                         shouldLog) {
-
                     hasBeenLogged = true;
-                    const standardId = featureToStandardMapping[keyPath];
-                    const featureReport = {
-                        standardId: standardId,
-                        feature: keyPath,
-                    };
-
+                    const featureReport = {feature: keyPath};
                     const blockEvent = new window.CustomEvent(eventName, {
                         detail: featureReport,
                     });
@@ -192,7 +162,7 @@
                         return undefined;
                     }
                     return Object.getOwnPropertyDescriptor(defaultFunction, property);
-                }
+                },
             });
 
             return blockingProxy;
@@ -200,7 +170,7 @@
 
         const defaultBlockingProxy = createBlockingProxy();
 
-        const blockFeatureAtKeyPath = function (keyPath) {
+        const blockFeatureAtKeyPath = keyPath => {
             const propertyRefs = keyPathToRefPath(keyPath);
 
             // If we weren't able to turn the key path into an array of references,
@@ -221,7 +191,6 @@
             }
 
             try {
-
                 if (shouldLog === true) {
                     parentRef[lastPropertyName] = createBlockingProxy(keyPath);
                     return true;
@@ -229,9 +198,7 @@
 
                 parentRef[lastPropertyName] = defaultBlockingProxy;
                 return true;
-
             } catch (e) {
-
                 if (shouldLog) {
                     consoleLog.call(console, "Error instrumenting " + keyPath + ": " + e);
                 }
@@ -249,10 +216,10 @@
         const frameTypesToModify = [HTMLIFrameElement, HTMLFrameElement];
         const propertiesToBlock = ["contentDocument", "contentWindow"];
 
-        frameTypesToModify.forEach(function (frameType) {
-            propertiesToBlock.forEach(function (propertyName) {
+        frameTypesToModify.forEach(frameType => {
+            propertiesToBlock.forEach(propertyName => {
                 Object.defineProperty(frameType.prototype, propertyName, {
-                    get: () => defaultBlockingProxy
+                    get: () => defaultBlockingProxy,
                 });
             });
         });
@@ -266,12 +233,8 @@
      * but with the window.WEB_API_MANAGER_PAGE object set up
      * correctly to block the desired functions.
      *
-     * @param {object} standards
-     *   A mapping of standard names to information about those standards.
-     *   The structure of this object should match whats in data/standards.js
-     * @param {array} standardNamesToBlock
-     *   An array of strings, which must be a subset of the keys of the
-     *   standards object.
+     * @param {Array.string} standardIds
+     *   An array of strings, each being a standard id that should be blocked.
      * @param {boolean} shouldLog
      *   Whether to log the behavior of the blocking proxy.
      * @param {string} randNonce
@@ -286,13 +249,19 @@
      *   standardNamesToBlock standards un-reachable, and second, a
      *   base64 encoded sha256 hash of the code.
      */
-    const generateScriptPayload = function (standards, standardNamesToBlock, shouldLog, randNonce) {
+    const generateScriptPayload = (standardIds, shouldLog, randNonce) => {
+        // Build an array of the strings, each being the keypath to
+        // a feature that should be blocked.
+        const featuresToBlock = standardIds.reduce((collection, standardId) => {
+            const featuresInStandard = standardsLib.featuresForStandardId(standardId);
+            collection = collection.concat(featuresInStandard);
+            return collection;
+        }, []);
 
         const proxyBlockingSettings = `
             window.WEB_API_MANAGER_PAGE = {
                 randNonce: "${randNonce}",
-                standards: ${JSON.stringify(standards)},
-                toBlock: ${JSON.stringify(standardNamesToBlock)},
+                featuresToBlock: ${JSON.stringify(featuresToBlock)},
                 shouldLog: ${shouldLog ? "true" : "false"}
             };
         `;
@@ -311,6 +280,6 @@
     };
 
     window.WEB_API_MANAGER.proxyBlockLib = {
-        generateScriptPayload
+        generateScriptPayload,
     };
 }());

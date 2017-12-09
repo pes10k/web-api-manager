@@ -5,13 +5,10 @@ const injected = require("./lib/injected");
 const testServer = require("./lib/server");
 
 describe("Content-Security-Protocol Issues", function () {
-
     describe("script-src", function () {
-
         this.timeout = () => 20000;
 
         it("default-src and script-src (from Pitchfork.com)", function (done) {
-
             const [server, testUrl] = testServer.start(function (headers) {
                 // Add the CSP header to every request
                 const pitchforkCSP = [

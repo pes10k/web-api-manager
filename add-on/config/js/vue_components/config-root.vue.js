@@ -1,18 +1,17 @@
 (function () {
     "use strict";
 
-    const {storageLib, stateLib, standards, browserLib, constants} = window.WEB_API_MANAGER;
+    const {storageLib, stateLib, browserLib, constants} = window.WEB_API_MANAGER;
     const rootObject = browserLib.getRootObject();
     const doc = window.document;
     const defaultDomain = constants.defaultDomainRule;
     const Vue = window.Vue;
 
-    const state = stateLib.generateStateObject(defaultDomain, standards);
+    const state = stateLib.generateStateObject(defaultDomain);
 
     let globalVmInstance;
 
-    const onSettingsLoaded = function (storedSettings) {
-
+    const onSettingsLoaded = storedSettings => {
         state.populateFromStorage(storedSettings);
         state.activeTab = "domain-rules";
 
@@ -27,8 +26,8 @@
                     this.activeTab = targetElement.hash.replace("#", "");
                     event.stopPropagation();
                     event.preventDefault();
-                }
-            }
+                },
+            },
         });
 
         const updateStoredSettings = function () {

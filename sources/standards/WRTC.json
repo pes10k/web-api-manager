@@ -3,7 +3,7 @@
     "id": "WebRTC 1.0: Real-time Communication Between Browser",
     "name": "WebRTC 1.0: Real-time Communication Between Browser",
     "url": "https://www.w3.org/TR/webrtc/",
-    "category": "networking"
+    "catId": "networking"
   },
   "features": [
     "DataChannel.prototype.close",

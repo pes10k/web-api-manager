@@ -3,7 +3,7 @@
     "id": "HTML: History Interface",
     "name": "HTML: History Interface",
     "url": "https://html.spec.whatwg.org/multipage/browsers.html#the-history-interface",
-    "category": "core"
+    "catId": "core"
   },
   "features": [
     "History.prototype.back",

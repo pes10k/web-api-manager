@@ -3,7 +3,7 @@
     "name": "XMLHttpRequest",
     "id": "XMLHttpRequest",
     "url": "https://xhr.spec.whatwg.org/",
-    "category": "networking"
+    "catId": "networking"
   },
   "features": [
     "FormData.prototype.append",

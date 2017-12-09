@@ -3,7 +3,7 @@
     "id": "Navigation Timing",
     "name": "Navigation Timing",
     "url": "https://www.w3.org/TR/navigation-timing/",
-    "category": "timing"
+    "catId": "timing"
   },
   "features": [
     "performance.navigation",

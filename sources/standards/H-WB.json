@@ -3,7 +3,7 @@
     "id": "HTML: Web Storage",
     "name": "HTML: Web Storage",
     "url": "https://html.spec.whatwg.org/multipage/webstorage.html",
-    "category": "storage"
+    "catId": "storage"
   },
   "features": [
     "Storage.prototype.clear",

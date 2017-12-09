@@ -3,7 +3,7 @@
     "id": "DOM",
     "name": "DOM",
     "url": "https://dom.spec.whatwg.org/",
-    "category": "core"
+    "catId": "core"
   },
   "features": [
     "CharacterData.prototype.appendData",

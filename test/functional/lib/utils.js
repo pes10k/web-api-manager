@@ -16,7 +16,7 @@ const path = require("path");
 module.exports.shouldRunRemoteTests = process.argv.indexOf("--only-local-tests") === -1;
 
 module.exports.constants = {
-    svgBlockRule: ["Scalable Vector Graphics (SVG) 1.1 (Second Edition)"]
+    svgBlockRule: ["Scalable Vector Graphics (SVG) 1.1 (Second Edition)"],
 };
 
 module.exports.pause = function (ms = 2000) {
@@ -30,16 +30,12 @@ module.exports.promiseSetFormAndSubmit = (driver, values) => {
     const numberOfPairs = values.length;
 
     const setFormValue = (index = 0) => {
-
         const [name, value] = values[index];
 
         if (index === numberOfPairs - 1) {
-
             return driver.findElement(by.name(name))
                 .sendKeys(value, keys.ENTER);
-
         } else {
-
             return driver.findElement(by.name(name))
                 .sendKeys(value)
                 .then(() => setFormValue(index + 1));
@@ -64,7 +60,7 @@ const promiseGetExtensionId = driver => {
             driver.setContext(Context.CONTENT);
             return new Promise(resolve => resolve(extensionId));
         });
-}
+};
 
 module.exports.promiseExtensionConfigPage = driver => {
     return promiseGetExtensionId(driver)
@@ -95,7 +91,10 @@ module.exports.promiseSetShouldLog = (driver, shouldLog) => {
 
 module.exports.promiseOpenLoggingTab = (driver, tabId) => {
     return promiseGetExtensionId(driver)
-        .then(extensionId => driver.get(`moz-extension://${extensionId}/pages/report/report.html?tabId=${tabId}`));
+        .then(extensionId => {
+            const reportUrl = `moz-extension://${extensionId}/pages/report/report.html?tabId=${tabId}`;
+            return driver.get(reportUrl);
+        });
 };
 
 module.exports.promiseGetDriver = () => {

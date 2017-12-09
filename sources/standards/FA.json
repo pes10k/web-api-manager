@@ -3,7 +3,7 @@
     "id": "File API",
     "name": "File API",
     "url": "https://w3c.github.io/FileAPI/",
-    "category": "media"
+    "catId": "media"
   },
   "features": [
     "Blob.prototype.slice",

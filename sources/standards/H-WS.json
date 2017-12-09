@@ -3,7 +3,7 @@
     "id": "HTML: Web Sockets",
     "name": "HTML: Web Sockets",
     "url": "https://html.spec.whatwg.org/multipage/comms.html#network",
-    "category": "networking"
+    "catId": "networking"
   },
   "features": [
     "WebSocket.prototype.close",

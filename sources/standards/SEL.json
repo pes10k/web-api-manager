@@ -3,7 +3,7 @@
     "id": "Selection API",
     "name": "Selection API",
     "url": "http://w3c.github.io/selection-api/",
-    "category": "presentation"
+    "catId": "presentation"
   },
   "features": [
     "HTMLDocument.prototype.getSelection",

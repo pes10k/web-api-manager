@@ -22,7 +22,7 @@ window.WEB_API_MANAGER.defaults.lite = [
     "Vibration API",
     "WebVR",
     "WebUSB API",
-    "Web Speech API"
+    "Web Speech API",
 ];
 
 window.WEB_API_MANAGER.defaults.conservative = [
@@ -45,7 +45,7 @@ window.WEB_API_MANAGER.defaults.conservative = [
     "WebVR",
     "WebVTT: The Web Video Text Tracks Format",
     "WebUSB API",
-    "Web Speech API"
+    "Web Speech API",
 ];
 
 window.WEB_API_MANAGER.defaults.aggressive = window.WEB_API_MANAGER.defaults.conservative.concat([
@@ -78,5 +78,6 @@ window.WEB_API_MANAGER.defaults.aggressive = window.WEB_API_MANAGER.defaults.con
     "User Timing Level 2",
     "W3C DOM4",
     "Web Notifications",
-    "WebRTC 1.0: Real-time Communication Between Browser"
+    "WebRTC 1.0: Real-time Communication Between Browser",
+    "HTML: Canvas Element",
 ]);

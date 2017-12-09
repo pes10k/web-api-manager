@@ -3,7 +3,7 @@
     "id": "CSS Font Loading Module Level 3",
     "name": "CSS Font Loading (Level 3)",
     "url": "https://drafts.csswg.org/css-font-loading/",
-    "category": "presentation"
+    "catId": "presentation"
   },
   "features": [
     "document.fonts",

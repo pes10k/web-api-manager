@@ -3,7 +3,7 @@
     "id": "Shadow DOM",
     "name": "Shadow DOM",
     "url": "https://www.w3.org/TR/shadow-dom/",
-    "category": "core"
+    "catId": "core"
   },
   "features": [
     "HTMLContentElement.prototype.getDistributedNodes"

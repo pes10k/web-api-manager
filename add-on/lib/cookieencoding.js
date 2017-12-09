@@ -1,24 +1,23 @@
 (function () {
     "use strict";
-    const {packingLib, standards, constants} = window.WEB_API_MANAGER;
-    const standardsNames = Object.keys(standards);
+    const {packingLib, standardsLib, constants} = window.WEB_API_MANAGER;
     const shouldLogKey = constants.shouldLogKey;
-    const allStandardsWithShouldLogOption = standardsNames.concat([shouldLogKey]);
+    const allStandardIdsWithShouldLogOption = standardsLib.allStandardIds().concat([shouldLogKey]);
 
     /**
-     * Creates a cookie safe encoding of standards to block, and
+     * Creates a cookie-safe encoding of standard ids to block, and
      * whether logging should be enabled.
      *
      * This function is the inverse of the `fromCookieValue` function
      * in this module.
      *
-     * The `standardsToBlock` array must be a subset of all the standards
+     * The `standardIdsToBlock` array must be a subset of all the standard ids
      * documented in data/standards.
      *
      * The returned cookie value will be in the following format:
      *   "<base64 string encoding a bitstring>"@"<nonce>".replace("=", "-")
      *
-     * @param {array} standardsToBlock
+     * @param {array} standardIdsToBlock
      *   An array of strings, each a standard that should be blocked.
      * @param {boolean} shouldLog
      *   Whether logging should be enabled.
@@ -31,15 +30,14 @@
      * @return {string}
      *   A cookie safe string encoding the above values.
      */
-    const toCookieValue = (standardsToBlock, shouldLog, randNonce) => {
-
-        const standardsToBlockWithshouldLogKey = shouldLog
-            ? standardsToBlock.concat(shouldLogKey)
-            : standardsToBlock;
+    const toCookieValue = (standardIdsToBlock, shouldLog, randNonce) => {
+        const standardIdsToBlockWithShouldLogKey = shouldLog
+            ? standardIdsToBlock.concat(shouldLogKey)
+            : standardIdsToBlock;
 
         const packedValues = packingLib.pack(
-            allStandardsWithShouldLogOption,
-            standardsToBlockWithshouldLogKey
+            allStandardIdsWithShouldLogOption,
+            standardIdsToBlockWithShouldLogKey
         );
 
         // Next, append the rand nonce to the end of the cookie string.  Since
@@ -64,30 +62,30 @@
      *
      * @return {[array, bool, string]}
      *   An array of length three.  The first value in the returned array is
-     *   an array of strings of standard names (representing standards to
+     *   an array of strings of standard ids (representing standards to
      *   block).  The second value is a boolean describing whether to log
      *   blocking behavior.  The third value is a random nonce.
      */
     const fromCookieValue = data => {
         const [packedValues, randNonce] = data.replace(/-/g, "=").split("@");
-        const unpackedValues = packingLib.unpack(allStandardsWithShouldLogOption, packedValues);
+        const unpackedValues = packingLib.unpack(allStandardIdsWithShouldLogOption, packedValues);
 
         let shouldLog;
-        const standardsToBlock = unpackedValues;
+        const standardIdsToBlock = unpackedValues;
         const indexOfShouldLog = unpackedValues.indexOf(shouldLogKey);
 
         if (indexOfShouldLog === -1) {
             shouldLog = false;
         } else {
             shouldLog = true;
-            standardsToBlock.splice(indexOfShouldLog, 1);
+            standardIdsToBlock.splice(indexOfShouldLog, 1);
         }
 
-        return [standardsToBlock, shouldLog, randNonce];
+        return [standardIdsToBlock, shouldLog, randNonce];
     };
 
     window.WEB_API_MANAGER.cookieEncodingLib = {
         toCookieValue,
-        fromCookieValue
+        fromCookieValue,
     };
 }());

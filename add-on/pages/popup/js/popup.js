@@ -28,7 +28,7 @@
         const onClickHandler = function (event) {
             const message = ["toggleBlocking", {
                 "action": action,
-                "hostName": hostName
+                "hostName": hostName,
             }];
             const button = event.target;
             const containingRowElm = button.parentNode.parentNode;
@@ -40,11 +40,9 @@
             button.innerHtml = "setting…";
 
             rootObject.runtime.sendMessage(message, responseMessage => {
-
                 const [messageType, numAPIsBlocked] = responseMessage;
 
                 if (messageType === "toggleBlockingResponse") {
-
                     numApisBlockedTd.innerText = numAPIsBlocked;
 
                     if (action === "block") {
@@ -79,7 +77,6 @@
      *   a HTMLTRElement object.
      */
     const ruleToTr = function (domainName, appliedRuleName, numAPIsBlocked) {
-
         const trElm = doc.createElement("tr");
 
         const domainTd = doc.createElement("td");
@@ -148,15 +145,13 @@
     rootObject.tabs.executeScript(
         {
             allFrames: true,
-            code: "window.location.host"
+            code: "window.location.host",
         },
         function (response) {
-
             const uniqueDomains = Array.from(new Set(response)).sort();
             const message = ["rulesForDomains", uniqueDomains];
 
             rootObject.runtime.sendMessage(message, response => {
-
                 doc.body.className = "loaded";
 
                 const {domainData, shouldLog} = response;

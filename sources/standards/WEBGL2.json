@@ -3,7 +3,7 @@
     "id": "WebGL 2.0",
     "name": "WebGL 2.0",
     "url": "https://www.khronos.org/registry/webgl/specs/latest/2.0/",
-    "category": "graphics"
+    "catId": "graphics"
   },
   "features": [
     "WebGL2RenderingContext.prototype.beginQuery",

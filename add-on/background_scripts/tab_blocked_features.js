@@ -5,7 +5,7 @@
  *  tab ids -> frame ids -> standard names -> feature names.
  */
 (function () {
-    const {browserLib} = window.WEB_API_MANAGER;
+    const {browserLib, standardsLib} = window.WEB_API_MANAGER;
     const rootObject = browserLib.getRootObject();
 
     // This object will end up being a severally deep nested object,
@@ -15,12 +15,12 @@
     //      aTabId<integer>: {
     //          aFrameId<integer>: {
     //              url: <string>,
-    //              standards: {
-    //                  aStandardName<string>: [
+    //              standardReports: {
+    //                  aStandardId<string>: [
     //                      aFeatureName<string>,
     //                      anotherFeatureName<string>
     //                  ],
-    //                  anotherStandardName<string>: [...]
+    //                  anotherStandardId<string>: [...]
     //              }
     //          },
     //          anotherFrameId<integer>: {...}
@@ -53,22 +53,66 @@
 
         tabMapping[tabId][frameId] = {
             url: url,
-            standards: {}
+            standardReports: {},
         };
     });
 
-    const reportBlockedFeature = (tabId, frameId, standardName, feature) => {
-        const standardsForFrame = tabMapping[tabId][frameId].standards;
-        if (standardsForFrame[standardName] === undefined) {
-            standardsForFrame[standardName] = [];
+    /**
+     * Registers that a feature was blocked on a frame.
+     *
+     * @param {number} tabId
+     *   The identifier for a browser tab.
+     * @param {number} frameId
+     *   The identifier for a frame within the given tab.
+     * @param {string} featureName
+     *   A keypath identifying a feature that as blocked.
+     *
+     * @return {undefined}
+     */
+    const reportBlockedFeature = (tabId, frameId, featureName) => {
+        const standardId = standardsLib.standardIdForFeature(featureName);
+
+        const standardReportsForFrame = tabMapping[tabId][frameId].standardReports;
+        if (standardReportsForFrame[standardId] === undefined) {
+            standardReportsForFrame[standardId] = [];
         }
-        standardsForFrame[standardName].push(feature);
+        standardReportsForFrame[standardId].push(featureName);
     };
 
-    const featuresForTab = tabId => tabMapping[tabId];
+    /**
+     * Describes which features in a standard were blocked.
+     * @typedef StandardReport {Object.<number, Array.strings>}
+     */
+
+    /**
+     * Describes features were blocked in frames on a tab.
+     * @typedef TabReport {Object.<number, FrameReport}
+     */
+
+    /**
+     * Describes which features were blocked on a frame.
+     * @typedef FrameReport
+     * @property {string} url
+     *   The URL loaded for this frame.
+     * @property {Object.<string, StandardReport>} standardReports
+     *   An mapping of standardIds, to arrays of features in that standard
+     *   that were blocked.
+     */
+
+    /**
+     * Returns a report that describes which features were blocked in a tab.
+     *
+     * @param {number} tabId
+     *   The identifier for an open browser tab.
+     *
+     * @return {?TabReport}
+     *   A object that describes what features were blocked on this tab, and
+     *   on which frames.
+     */
+    const reportForTab = tabId => tabMapping[tabId];
 
     window.WEB_API_MANAGER.tabBlockedFeaturesLib = {
         reportBlockedFeature,
-        featuresForTab
+        reportForTab,
     };
 }());

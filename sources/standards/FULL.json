@@ -3,7 +3,7 @@
     "id": "Fullscreen API",
     "name": "Fullscreen API",
     "url": "https://fullscreen.spec.whatwg.org/",
-    "category": "presentation"
+    "catId": "presentation"
   },
   "features": [
     "document.mozFullScreen",

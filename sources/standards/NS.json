@@ -3,7 +3,7 @@
     "id": "Non-Standard",
     "name": "Non-Standard",
     "url": null,
-    "category": "misc"
+    "catId": "misc"
   },
   "features": [
     "AnonymousContent.prototype.getAttributeForElement",

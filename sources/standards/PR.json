@@ -3,7 +3,7 @@
       "id": "Payment Request API",
       "name": "Payment Request API",
       "url": "https://w3c.github.io/payment-request/",
-      "category": "misc"
+      "catId": "misc"
     },
     "features": [
       "PaymentRequest.prototype.show",

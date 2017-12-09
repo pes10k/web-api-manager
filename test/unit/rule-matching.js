@@ -18,7 +18,6 @@ require(path.join(addonLibPath, "domainmatcher.js"));
 const domainMatcherLib = window.WEB_API_MANAGER.domainMatcherLib;
 
 describe("Host Pattern Matching", function () {
-
     const testPatterns = [
         "*.example.com",
         "www.uic.edu",
@@ -26,9 +25,7 @@ describe("Host Pattern Matching", function () {
     ];
 
     describe("Exact matches", function () {
-
         it("Positive case: input 'www.uic.edu' gives pattern 'www.uic.edu'", function (done) {
-
             const testHostName = "www.uic.edu";
             const matchingPattern = domainMatcherLib.matchHostName(testPatterns, testHostName);
             assert.equal(matchingPattern, "www.uic.edu");
@@ -36,7 +33,6 @@ describe("Host Pattern Matching", function () {
         });
 
         it("Negative case: input 'nope.uic.edu' gives no pattern", function (done) {
-
             const testHostName = "nope.uic.edu";
             const matchingPattern = domainMatcherLib.matchHostName(testPatterns, testHostName);
             assert.equal(matchingPattern, undefined);
@@ -45,9 +41,7 @@ describe("Host Pattern Matching", function () {
     });
 
     describe("Wildcard matches", function () {
-
         it("Positive case: input 'www.example.com' gives pattern '*.example.com'", function (done) {
-
             const testHostName = "www.example.com";
             const matchingPattern = domainMatcherLib.matchHostName(testPatterns, testHostName);
             assert.equal(matchingPattern, "*.example.com");
@@ -55,7 +49,6 @@ describe("Host Pattern Matching", function () {
         });
 
         it("Negative case: input 'www.example.com.co.uk' gives no pattern", function (done) {
-
             const testHostName = "www.example.com.co.uk";
             const matchingPattern = domainMatcherLib.matchHostName(testPatterns, testHostName);
             assert.equal(matchingPattern, undefined);
@@ -64,7 +57,6 @@ describe("Host Pattern Matching", function () {
     });
 
     describe("Collapsed matches", function () {
-
         it("Positive case: input 'example.com' gives pattern '*.example.com'", function (done) {
             const testHostName = "example.com";
             const matchingPattern = domainMatcherLib.matchHostName(testPatterns, testHostName);

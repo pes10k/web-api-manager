@@ -3,7 +3,7 @@
     "id": "DOM Level 2: HTML",
     "name": "DOM Level 2: HTML",
     "url": "https://www.w3.org/TR/DOM-Level-2-HTML/",
-    "category": "core"
+    "catId": "core"
   },
   "features": [
     "document.cookie",

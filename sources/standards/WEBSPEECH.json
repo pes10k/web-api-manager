@@ -3,7 +3,7 @@
     "id": "Web Speech API",
     "name": "Web Speech API",
     "url": "https://w3c.github.io/speech-api/webspeechapi.html",
-    "category": "media"
+    "catId": "media"
   },
   "features": [
       "webkitSpeechRecognition.prototype.start",

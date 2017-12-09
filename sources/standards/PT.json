@@ -3,7 +3,7 @@
     "id": "Performance Timeline",
     "name": "Performance Timeline",
     "url": "https://www.w3.org/TR/performance-timeline",
-    "category": "timing"
+    "catId": "timing"
   },
   "features": [
     "Performance.prototype.getEntriesByName",

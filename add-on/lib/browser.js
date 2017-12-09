@@ -41,7 +41,7 @@
             }
 
             return _rootObject;
-        }
+        };
     }());
 
     /**
@@ -62,8 +62,7 @@
      *   A promise that, when resolved, will return the result of the query.
      */
     const queryTabs = (query, callback) => {
-
-        let rootObject = getRootObject();
+        const rootObject = getRootObject();
         if (environmentName === "chrome") {
             rootObject.tabs.query(query, callback);
             return;
@@ -75,6 +74,6 @@
 
     window.WEB_API_MANAGER.browserLib = {
         getRootObject,
-        queryTabs
+        queryTabs,
     };
 }());

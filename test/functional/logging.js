@@ -14,16 +14,17 @@ const by = webdriver.By;
 const until = webdriver.until;
 
 const svgTestScript = injected.testSVGTestScript();
-const standardsToBlock = utils.constants.svgBlockRule;
+const stdIdsToBlock = utils.constants.svgBlockRule;
 
 describe("Logging", function () {
-
     describe("Single frame", function () {
-
         this.timeout = () => 20000;
 
-        it("Blocking SVG", function (done) {
+        // it("Blocking nothing", function (done) {
 
+        // });
+
+        it("Blocking SVG", function (done) {
             this.timeout = () => 10000;
 
             const [server, url] = testServer.start();
@@ -35,7 +36,7 @@ describe("Logging", function () {
             utils.promiseGetDriver()
                 .then(driver => {
                     driverReference = driver;
-                    return utils.promiseSetBlockingRules(driver, standardsToBlock);
+                    return utils.promiseSetBlockingRules(driver, stdIdsToBlock);
                 })
                 .then(() => utils.promiseSetShouldLog(driverReference, true))
                 .then(() => driverReference.get(testUrl))
@@ -44,10 +45,14 @@ describe("Logging", function () {
                 .then(() => driverReference.wait(until.elementsLocated(by.css(".standard-report-container")), 1000))
                 .then(standardElms => {
                     assert.equal(standardElms.length, 1, "There should only be one blocked standard.");
-                    return standardElms[0].getAttribute("data-standard");
+                    return standardElms[0].getAttribute("data-standard-id");
                 })
                 .then(standardName => {
-                    assert.equal(standardName, standardsToBlock[0], `The blocked standard should be ${standardsToBlock[0]}, not ${standardName}.`);
+                    assert.equal(
+                        standardName,
+                        stdIdsToBlock[0],
+                        `The blocked standard should be ${stdIdsToBlock[0]}, not ${standardName}.`
+                    );
                     return driverReference.wait(until.elementsLocated(by.css(".feature-container")), 1000);
                 })
                 .then(featureElms => {
@@ -56,7 +61,11 @@ describe("Logging", function () {
                 })
                 .then(featureName => {
                     const expectedFeatureName = "HTMLEmbedElement.prototype.getSVGDocument";
-                    assert.equal(featureName, expectedFeatureName, `The blocked feature should be ${expectedFeatureName}, not ${featureName}.`);
+                    assert.equal(
+                        featureName,
+                        expectedFeatureName,
+                        `The blocked feature should be ${expectedFeatureName}, not ${featureName}.`
+                    );
                     driverReference.quit();
                     testServer.stop(httpServer);
                     done();

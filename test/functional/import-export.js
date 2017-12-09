@@ -6,25 +6,21 @@ const webdriver = require("selenium-webdriver");
 const by = webdriver.By;
 const until = webdriver.until;
 
-const emptyRuleSet = "[{\"pattern\":\"(default)\",\"standards\":[]}]";
-const blockingSVGandBeacon = "[{\"pattern\":\"(default)\",\"standards\":[\"Beacon\",\"Scalable Vector Graphics (SVG) 1.1 (Second Edition)\"]}]";
-const newDomainImport = "[{\"pattern\":\"*.example.com\",\"standards\":[\"Ambient Light Sensor API\",\"WebGL Specification\"]}]";
+const emptyRuleSet = "[{\"pattern\":\"(default)\",\"standardIds\":[]}]";
+const blockingSVGandBeacon = "[{\"pattern\":\"(default)\",\"standardIds\":[\"Beacon\",\"Scalable Vector Graphics (SVG) 1.1 (Second Edition)\"]}]";
+const newDomainImport = "[{\"pattern\":\"*.example.com\",\"standardIds\":[\"Ambient Light Sensor API\",\"WebGL Specification\"]}]";
 
 const promiseOpenImportExportTab = function (driver) {
-
     return utils.promiseExtensionConfigPage(driver)
         .then(() => driver.wait(until.elementLocated(by.css("a[href='#import-export']"))), 500)
         .then(element => element.click());
 };
 
 describe("Import / Export", function () {
-
     this.timeout = () => 20000;
 
     describe("Exporting", function () {
-
         it("Exporting empty blocking rule", function (done) {
-
             let driverReference;
 
             utils.promiseGetDriver()
@@ -46,7 +42,6 @@ describe("Import / Export", function () {
         });
 
         it("Exporting SVG and Beacon blocking rules", function (done) {
-
             let driverReference;
 
             utils.promiseGetDriver()
@@ -70,9 +65,7 @@ describe("Import / Export", function () {
     });
 
     describe("Importing", function () {
-
         it("Importing SVG and Beacon blocking rules", function (done) {
-
             let driverReference;
             let checkedCheckboxes;
 
@@ -107,7 +100,6 @@ describe("Import / Export", function () {
         });
 
         it("Importing rules for new domain", function (done) {
-
             let driverReference;
             let checkedCheckboxes;
 

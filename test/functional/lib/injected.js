@@ -8,7 +8,6 @@
 //
 // Ex "function () { return 1; }" -> "return 1";
 const stripFuncFromSource = source => {
-
     const parts = source.split("\n").filter(x => !!x.trim());
     parts.splice(0, 1);
     parts.splice(parts.length - 1, 1);
@@ -17,9 +16,7 @@ const stripFuncFromSource = source => {
 };
 
 module.exports.temporaryAddOnInstallScript = (function () {
-
     const funcToInject = function () {
-
         const {Components, AddonManager} = window;
         const fileUtils = Components.utils.import("resource://gre/modules/FileUtils.jsm");
         const FileUtils = fileUtils.FileUtils;
@@ -36,7 +33,7 @@ module.exports.temporaryAddOnInstallScript = (function () {
             onInstalled: function(addon) {
                 AddonManager.removeAddonListener(listener);
                 callback([addon.id, 0]);
-            }
+            },
         };
 
         const file = new FileUtils.File(arguments[0]);
@@ -56,13 +53,12 @@ module.exports.temporaryAddOnInstallScript = (function () {
 }());
 
 module.exports.setStandardsAsBlockedScript = (function () {
-
     const funcToInject = function () {
         const doc = window.document;
         const callback = arguments[arguments.length - 1];
         const standardsToBlockArray = "###REPLACE###";
 
-        standardsToBlockArray.forEach(function (aStandardName) {
+        standardsToBlockArray.forEach(aStandardName => {
             const input = doc.querySelector(`input[value='${aStandardName}']`);
             input.click();
         });
@@ -78,7 +74,6 @@ module.exports.setStandardsAsBlockedScript = (function () {
 }());
 
 module.exports.testSVGTestScript = (function () {
-
     const funcToInject = function () {
         const callback = arguments[arguments.length - 1];
         callback(HTMLEmbedElement.prototype.getSVGDocument.art.bart.fart());

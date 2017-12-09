@@ -24,7 +24,6 @@
      *   properties, and false in all other cases.
      */
     const isHeaderCSPScriptSrcWithOutUnsafeInline = function (header) {
-
         if (!header ||
                 !header.name ||
                 header.name.toLowerCase().indexOf("content-security-policy") === -1) {
@@ -75,7 +74,6 @@
      *   otherwise, a new value CSP instruction with the given hash allowed.
      */
     const createCSPInstructionWithHashAllowed = function (cspInstruction, scriptHash) {
-
         const indexOfScriptSrc = cspInstruction.indexOf("script-src ");
         const indexOfDefaultSrc = cspInstruction.indexOf("default-src ");
 
@@ -100,6 +98,6 @@
 
     window.WEB_API_MANAGER.httpHeadersLib = {
         isHeaderCSPScriptSrcWithOutUnsafeInline,
-        createCSPInstructionWithHashAllowed
+        createCSPInstructionWithHashAllowed,
     };
 }());

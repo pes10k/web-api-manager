@@ -15,15 +15,21 @@
         "semi": ["error", "always"],
         "indent": ["error", 4],
         "eol-last": "error",
-        "quotes": ["error", "double"],
+        "quotes": ["error", "double", {"allowTemplateLiterals": true}],
         "comma-dangle": ["error", "only-multiline"],
         "function-paren-newline": ["error"],
-        "max-len": ["error", {"ignoreStrings": true, "code": 100}],
+        "max-len": ["error", {
+            "ignoreStrings": true,
+            "code": 100,
+            "ignoreTemplateLiterals": true
+        }],
         "require-jsdoc": "error",
         "valid-jsdoc": "error",
         "prefer-const": "error",
         "no-template-curly-in-string": "error",
         "no-unused-expressions": "error",
-        "no-trailing-spaces": "error"
+        "no-trailing-spaces": "error",
+        "padded-blocks": ["error", "never"],
+        "comma-dangle": ["error", "always-multiline"]
     }
 }

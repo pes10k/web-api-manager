@@ -3,7 +3,7 @@
     "id": "Service Workers",
     "name": "Service Workers",
     "url": "https://www.w3.org/TR/service-workers/",
-    "category": "computation"
+    "catId": "computation"
   },
   "features": [
     "Cache.prototype.add",

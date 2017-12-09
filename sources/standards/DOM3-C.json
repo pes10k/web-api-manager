@@ -3,7 +3,7 @@
     "id": "DOM Level 3: Core",
     "name": "DOM Level 3: Core",
     "url": "https://www.w3.org/TR/DOM-Level-3-Core/",
-    "category": "core"
+    "catId": "core"
   },
   "features": [
     "document.documentURI",

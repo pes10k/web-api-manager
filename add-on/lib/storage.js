@@ -8,7 +8,6 @@
 
     const get = function (callback) {
         storageObject.sync.get(webApiManagerKeySettingsKey, function (results) {
-
             let loadedValues = results && results[webApiManagerKeySettingsKey];
 
             // If there are no currently saved domain rules, then create
@@ -16,10 +15,9 @@
             if (!loadedValues ||
                     !loadedValues.domainRules ||
                     Object.keys(loadedValues.domainRules).length === 0) {
-
                 loadedValues = {
                     domainRules: {},
-                    shouldLog: false
+                    shouldLog: false,
                 };
 
                 loadedValues.domainRules[constants.defaultDomainRule] = [];
@@ -36,11 +34,9 @@
     };
 
     const onChange = (function () {
-
         const queue = [];
 
         storageObject.onChanged.addListener(function (changes) {
-
             if (changes[webApiManagerKeySettingsKey] === undefined) {
                 return;
             }
@@ -68,6 +64,6 @@
     window.WEB_API_MANAGER.storageLib = {
         get,
         set,
-        onChange
+        onChange,
     };
 }());

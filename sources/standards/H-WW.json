@@ -3,7 +3,7 @@
     "id": "HTML: Web Workers",
     "name": "HTML: Web Workers",
     "url": "https://html.spec.whatwg.org/multipage/workers.html",
-    "category": "computation"
+    "catId": "computation"
   },
   "features": [
     "Worker.prototype.postMessage",

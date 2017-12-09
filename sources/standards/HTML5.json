@@ -3,7 +3,7 @@
     "id": "HTML 5",
     "name": "HTML 5",
     "url": "https://www.w3.org/TR/html5/",
-    "category": "core"
+    "catId": "core"
   },
   "features": [
     "document.defaultView",

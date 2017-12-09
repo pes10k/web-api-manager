@@ -3,7 +3,7 @@
     "id": "Pointer Lock",
     "name": "Pointer Lock",
     "url": "https://w3c.github.io/pointerlock/",
-    "category": "presentation"
+    "catId": "presentation"
   },
   "features": [
     "document.mozPointerLockElement",

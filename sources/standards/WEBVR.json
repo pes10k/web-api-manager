@@ -3,7 +3,7 @@
     "id": "WebVR",
     "name": "WebVR",
     "url": "https://w3c.github.io/webvr/spec/1.1/",
-    "category": "media"
+    "catId": "media"
   },
   "features": [
       "VRDisplay.prototype.getEyeParameters",

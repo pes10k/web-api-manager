@@ -3,7 +3,7 @@
     "id": "Geolocation API",
     "name": "Geolocation API",
     "url": "https://www.w3.org/TR/geolocation-API/",
-    "category": "misc"
+    "catId": "misc"
   },
   "features": [
     "navigator.geolocation",
