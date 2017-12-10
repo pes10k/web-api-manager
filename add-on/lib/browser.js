@@ -32,7 +32,7 @@
                     if (browser === undefined) {
                         // Throws in Chrome
                     }
-                    environmentName = "firefox";
+                    environmentName = "standard";
                     _rootObject = browser;
                 } catch (e) {
                     environmentName = "chrome";
@@ -47,8 +47,8 @@
     /**
      * Provides a common interface for querying tabs.
      *
-     * The chrome interface wants a callback function, and the firefox
-     * interface returns a promise.  This function provides a common interface
+     * The chrome interface wants a callback function, and the standard
+     * specifies a promise.  This function provides a common interface
      * for both environments.
      *
      * @see https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/Tabs/query
