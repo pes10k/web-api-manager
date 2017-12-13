@@ -150,7 +150,7 @@
         // tab we want the report for, or undefined if the requester
         // wants information for all tabs.
         if (label === "blockedFeaturesReport") {
-            if (data === undefined || data.tabId === undefined) {
+            if (!data || data.tabId === undefined) {
                 const reportData = tabBlockedFeaturesLib.getBlockReport().toJSON();
                 sendResponse(["blockedFeaturesReportResponse", reportData]);
                 return;

@@ -1,6 +1,6 @@
 {
     "name": "web-api-manager",
-    "version": "0.9.16",
+    "version": "0.9.17",
     "description": "Tools to generate Web API managing browser extensions for Firefox and Chrome.",
     "author": "Peter Snyder <psnyde2@uic.edu> (https://www.cs.uic.edu/~psnyder/)",
     "license": "GPL-3.0",
@@ -47,8 +47,8 @@
         "selenium-webdriver": "^3.6.0",
         "sjcl": "^1.0.7",
         "uri-js": "^3.0.2",
-        "vue-template-compiler": "^2.5.3",
-        "vue.js": "^0.3.2",
+        "vue": "^2.5.10",
+        "vue-template-compiler": "^2.5.10",
         "web-ext": "^2.2.2"
     }
 }
