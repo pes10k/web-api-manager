@@ -195,7 +195,7 @@
         const getAllStandardReports = () => {
             return Object.keys(blockedStandardIds).map(standardId => {
                 const blockedFeaturesInStandard = blockedStandardIds[standardId];
-                return buildStandardReport(blockedFeaturesInStandard, blockedStandardIds);
+                return buildStandardReport(standardId, blockedFeaturesInStandard);
             });
         };
         const getStandardReport = standardId => {
@@ -235,7 +235,7 @@
         if (blockReport[tabId] !== undefined) {
             return false;
         }
-        blockReport[tabId] = {};
+        blockReport[tabId] = Object.create(null);
         return true;
     };
 
@@ -333,7 +333,7 @@
 
         blockReport[tabId][frameId] = {
             url: url,
-            standards: {},
+            standards: Object.create(null),
         };
     };
 
