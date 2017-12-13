@@ -58,8 +58,7 @@
      * @param {function} callback
      *   Function that will be called with the result of the tabs.query.
      *
-     * @return {Promise}
-     *   A promise that, when resolved, will return the result of the query.
+     * @return {undefined}
      */
     const queryTabs = (query, callback) => {
         const rootObject = getRootObject();
