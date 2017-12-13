@@ -5,56 +5,22 @@
  *  tab ids -> frame ids -> standard names -> feature names.
  */
 (function () {
-    const {browserLib, standardsLib} = window.WEB_API_MANAGER;
+    const {browserLib, reportsLib} = window.WEB_API_MANAGER;
     const rootObject = browserLib.getRootObject();
 
-    // This object will end up being a severally deep nested object,
-    // maping tab ids -> frame ids -> standard names -> feature names.
-    // The exact struture of the object looks like this:
-    // {
-    //      aTabId<integer>: {
-    //          aFrameId<integer>: {
-    //              url: <string>,
-    //              standardReports: {
-    //                  aStandardId<string>: [
-    //                      aFeatureName<string>,
-    //                      anotherFeatureName<string>
-    //                  ],
-    //                  anotherStandardId<string>: [...]
-    //              }
-    //          },
-    //          anotherFrameId<integer>: {...}
-    //      },
-    //      anotherTabId<integer>: {...}
-    // }
-    const tabMapping = {};
+    const blockingReport = reportsLib.initBlockReport();
 
     rootObject.tabs.onCreated.addListener(tab => {
-        tabMapping[tab.id] = {};
+        blockingReport.initTabReport(tab.id);
     });
 
     rootObject.tabs.onRemoved.addListener(tabId => {
-        delete tabMapping[tabId];
+        blockingReport.deleteTabReport(tabId);
     });
 
     rootObject.webNavigation.onCommitted.addListener(details => {
         const {tabId, frameId, url} = details;
-
-        // Ignroe frames that are not http or https requests.
-        const urlLower = url.toLowerCase();
-        if (urlLower.startsWith("http://") === false &&
-                urlLower.startsWith("https://") === false) {
-            return;
-        }
-
-        if (tabMapping[tabId] === undefined) {
-            tabMapping[tabId] = {};
-        }
-
-        tabMapping[tabId][frameId] = {
-            url: url,
-            standardReports: {},
-        };
+        blockingReport.initFrameReport(tabId, frameId, url);
     });
 
     /**
@@ -70,49 +36,34 @@
      * @return {undefined}
      */
     const reportBlockedFeature = (tabId, frameId, featureName) => {
-        const standardId = standardsLib.standardIdForFeature(featureName);
-
-        const standardReportsForFrame = tabMapping[tabId][frameId].standardReports;
-        if (standardReportsForFrame[standardId] === undefined) {
-            standardReportsForFrame[standardId] = [];
-        }
-        standardReportsForFrame[standardId].push(featureName);
+        blockingReport.recordBlockedFeature(tabId, frameId, featureName);
     };
 
     /**
-     * Describes which features in a standard were blocked.
-     * @typedef StandardReport {Object.<number, Array.strings>}
+     * Returns information for all features that have been blocked on open tabs.
+     *
+     * @return {BlockReport}
+     *   Returns an object, mapping tab ids to reports about which featurs
+     *   have been blocked in those tabs.
      */
+    const getBlockReport = () => blockingReport;
 
     /**
-     * Describes features were blocked in frames on a tab.
-     * @typedef TabReport {Object.<number, FrameReport}
-     */
-
-    /**
-     * Describes which features were blocked on a frame.
-     * @typedef FrameReport
-     * @property {string} url
-     *   The URL loaded for this frame.
-     * @property {Object.<string, StandardReport>} standardReports
-     *   An mapping of standardIds, to arrays of features in that standard
-     *   that were blocked.
-     */
-
-    /**
-     * Returns a report that describes which features were blocked in a tab.
+     * Returns information about all feature blocking thats occured on a single
+     * tab.
      *
      * @param {number} tabId
-     *   The identifier for an open browser tab.
+     *   The identifier for an open tab.
      *
      * @return {?TabReport}
-     *   A object that describes what features were blocked on this tab, and
-     *   on which frames.
+     *   Either a TabReport object, describing the blocking thats occured
+     *   on a tab, or undefined if the tab is not recognized.
      */
-    const reportForTab = tabId => tabMapping[tabId];
+    const getTabReport = tabId => blockingReport.getTabReport(tabId);
 
     window.WEB_API_MANAGER.tabBlockedFeaturesLib = {
         reportBlockedFeature,
-        reportForTab,
+        getBlockReport,
+        getTabReport,
     };
 }());

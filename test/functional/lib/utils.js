@@ -11,7 +11,16 @@ const webdriver = require("selenium-webdriver");
 const {logging, until} = webdriver;
 const by = webdriver.By;
 const keys = webdriver.Key;
+
 const path = require("path");
+const addonLibPath = path.join(__dirname, "..", "..", "..", "add-on", "lib");
+// These will returning anything, but are called to populate
+// window.WEB_API_MANAGER.
+require(path.join(addonLibPath, "init.js"));
+require(path.join(addonLibPath, "standards.js"));
+require(path.join(addonLibPath, "reports.js"));
+const {reportsLib} = window.WEB_API_MANAGER;
+
 
 module.exports.shouldRunRemoteTests = process.argv.indexOf("--only-local-tests") === -1;
 
@@ -58,7 +67,7 @@ const promiseGetExtensionId = driver => {
             const match = extensionIdPattern.exec(buttonStyle);
             const extensionId = match[1];
             driver.setContext(Context.CONTENT);
-            return new Promise(resolve => resolve(extensionId));
+            return Promise.resolve(extensionId);
         });
 };
 
@@ -73,7 +82,7 @@ module.exports.promiseSetBlockingRules = (driver, standardsToBlock) => {
 
     return module.exports.promiseExtensionConfigPage(driver)
         .then(() => driver.executeAsyncScript(setStandardsScript))
-        .then(() => module.exports.pause(500));
+        .then(() => module.exports.pause(100));
 };
 
 module.exports.promiseSetShouldLog = (driver, shouldLog) => {
@@ -81,8 +90,8 @@ module.exports.promiseSetShouldLog = (driver, shouldLog) => {
     return module.exports.promiseExtensionConfigPage(driver)
         .then(() => driver.wait(until.elementLocated(by.css(".logging-settings input"))))
         .then(elm => {
-            const isCurrnetlyLogging = elm.value === "on";
-            if (shouldLog === isCurrnetlyLogging) {
+            const isCurrentlyLogging = elm.value === "on";
+            if (shouldLog === isCurrentlyLogging) {
                 return Promise.resolve(true);
             }
             return elm.click();
@@ -95,6 +104,64 @@ module.exports.promiseOpenLoggingTab = (driver, tabId) => {
             const reportUrl = `moz-extension://${extensionId}/pages/report/report.html?tabId=${tabId}`;
             return driver.get(reportUrl);
         });
+};
+
+module.exports.promiseOpenNewTab = (driver, url) => {
+    let initialHandle;
+    let allHandles;
+    let openedHandle;
+    return driver.getWindowHandle()
+        .then(handle => {
+            initialHandle = handle;
+            return driver.getAllWindowHandles();
+        })
+        .then(windowHandles => {
+            allHandles = windowHandles;
+            return driver.executeScript("window.open('');");
+        })
+        .then(() => driver.getAllWindowHandles())
+        .then(newHandles => {
+            const diffHandles = newHandles.filter(handle => allHandles.indexOf(handle) === -1);
+            if (diffHandles.length === 0) {
+                return Promise.reject(new Error("Could not find window handle for new tab window."));
+            }
+            const popupHandle = diffHandles[0];
+            return driver.switchTo().window(popupHandle);
+        })
+        .then(() => driver.get(url))
+        .then(() => driver.getAllWindowHandles())
+        .then(newHandles => {
+            const diffHandles = newHandles.filter(handle => allHandles.indexOf(handle) === -1);
+            if (diffHandles.length === 0) {
+                return Promise.reject(new Error("Could not find window handle for new tab window."));
+            }
+            openedHandle = diffHandles[0];
+            return driver.switchTo().window(openedHandle);
+        })
+        .then(() => Promise.resolve({prior: initialHandle, new: openedHandle}));
+};
+
+module.exports.promiseGetBlockReport = driver => {
+    let initialHandle;
+    let blockReport;
+    return promiseGetExtensionId(driver)
+        .then(foundExtensionId => {
+            const reportLogUrl = `moz-extension://${foundExtensionId}/pages/report/report-json.html`;
+            return module.exports.promiseOpenNewTab(driver, reportLogUrl);
+        })
+        .then(tabHandles => {
+            initialHandle = tabHandles.prior;
+            return driver.executeScript("return window.WEB_API_MANAGER_REPORT.blockingReportJSON;");
+        })
+        .then(fetchedLogData => {
+            if (!fetchedLogData) {
+                return Promise.reject(new Error("Unable to fetch log data."));
+            }
+            blockReport = fetchedLogData;
+            return driver.close();
+        })
+        .then(() => driver.switchTo().window(initialHandle))
+        .then(() => Promise.resolve(reportsLib.initBlockReport(blockReport)));
 };
 
 module.exports.promiseGetDriver = () => {

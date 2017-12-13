@@ -55,6 +55,7 @@
       "lib/init.js",
       "lib/browser.js",
       "lib/standards.js",
+      "lib/reports.js",      
       "lib/pack.js",
       "lib/defaults.js",
       "lib/storage.js",

@@ -5,7 +5,7 @@ const fs = require("fs");
 const http = require("http");
 
 const testPort = 8989;
-const testUrl = `http://localhost:${testPort}`;
+const testUrl = `http://localhost:${testPort}/`;
 
 const staticResponse = `<!DOCTYPE "html">
 <html>

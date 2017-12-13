@@ -24,7 +24,7 @@
 
     // Manage the state of the browser activity, by displaying the number
     // of origins / frames
-    const updateBrowserActionBadge = function (activeInfo) {
+    const updateBrowserActionBadge = activeInfo => {
         const tabId = activeInfo.tabId;
         rootObject.tabs.executeScript(
             tabId,
@@ -32,7 +32,7 @@
                 allFrames: true,
                 code: "window.location.host",
             },
-            function (allHosts) {
+            allHosts => {
                 if (rootObject.runtime.lastError && !allHosts) {
                     rootObject.browserAction.setBadgeText({text: "-"});
                     return;
@@ -72,7 +72,7 @@
             return;
         }
 
-        // Sent from the popup / browser action, asking for infromation about
+        // Sent from the popup / browser action, asking for information about
         // which blocking rules are being applied to which domains in the
         // tab.
         if (label === "rulesForDomains") {
@@ -80,7 +80,7 @@
             const matchHostNameBound = matchHostName.bind(undefined, Object.keys(domainRules));
             const domainToRuleMapping = {};
 
-            data.forEach(function (aHostName) {
+            data.forEach(aHostName => {
                 const ruleNameForHost = matchHostNameBound(aHostName) || defaultKey;
                 domainToRuleMapping[aHostName] = {
                     "ruleName": ruleNameForHost,
@@ -147,11 +147,17 @@
         // Request from the report tab for information about which features
         // have been blocked on a given tab.  The "data" object here will
         // be an object in the shape of {tabId: <integer>}, describing the
-        // tab we want the report for.
-        if (label === "blockedFeaturesForTab") {
-            const {tabId} = data;
-            const blockedFeatures = tabBlockedFeaturesLib.reportForTab(tabId);
-            sendResponse(["blockedFeaturesForTabResponse", blockedFeatures]);
+        // tab we want the report for, or undefined if the requester
+        // wants information for all tabs.
+        if (label === "blockedFeaturesReport") {
+            if (data === undefined || data.tabId === undefined) {
+                const reportData = tabBlockedFeaturesLib.getBlockReport().toJSON();
+                sendResponse(["blockedFeaturesReportResponse", reportData]);
+                return;
+            }
+
+            const tabReport = tabBlockedFeaturesLib.getTabReport(data.tabId);
+            sendResponse(["blockedFeaturesReportResponse", tabReport && tabReport.toJSON()]);
             return;
         }
     });
@@ -166,10 +172,10 @@
     // Make sure we never send the cookie value that contains what
     // standards should be blocked to any server, anytime.  In the common
     // case this will be a NOOP (since the cookie is deleted after being
-    // read), but there are some inconsitancy / timing situations where
-    // making multiple, simultanious requests to the same domain where
+    // read), but there are some inconsistency / timing situations where
+    // making multiple, simultaneous requests to the same domain where
     // we might make a request before deleting the cookie, so the below
-    // adds at least some (incertain) extra protection.
+    // adds at least some (uncertain) extra protection.
     rootObject.webRequest.onBeforeSendHeaders.addListener(details => {
         const newHeaders = details.requestHeaders.map(header => {
             if (header.name.indexOf("Cookie") === -1) {
@@ -187,7 +193,7 @@
     }, requestFilter, ["blocking", "requestHeaders"]);
 
     // Inject the blocking settings for each visited domain / frame.
-    // This needs to be done syncronously, so that the DOM of the visited
+    // This needs to be done synchronously, so that the DOM of the visited
     // page can be instrumented at "document_start" time.  This means we
     // can't do any of the "obvious" techniques for loading the "what should"
     // be blocked in this frame" information (ie using the storage API).
@@ -200,12 +206,20 @@
     // out of the cookie (by decoding and unpacking the bitfield), and then
     // deletes the cookie, so nothing is left behind.
     rootObject.webRequest.onHeadersReceived.addListener(details => {
+        // In rare cases, the browser might make the first request before
+        // its loaded the settings for the extension.  If thats the case, there
+        // is nothing meaningful we can do, other than try again next time.
+        if (domainRules === undefined) {
+            return;
+        }
+
         const url = details.url;
 
         // Decide which set of blocking rules to use, depending on the host
         // of the URL being requested.
         const matchingDomainRule = domainMatcherLib.matchUrl(Object.keys(domainRules), url);
         const standardIdsToBlock = domainRules[matchingDomainRule || defaultKey];
+
         const randBytes = sjcl.random.randomWords(4);
         const randNonce = sjcl.codec.base64.fromBits(randBytes);
         const encodedOptions = cookieEncodingLib.toCookieValue(
@@ -213,6 +227,19 @@
             shouldLog,
             randNonce
         );
+
+        rootObject.cookies.set({
+            url: details.url,
+            name: constants.cookieName,
+            value: encodedOptions,
+        });
+
+        // If there are no standards to block on this domain, then there is
+        // no need to modify the CSP headers, since no script will be injected
+        // into the page.
+        if (standardIdsToBlock.length === 0) {
+            return;
+        }
 
         // If we're on a site thats sending the "strict-dynamic"
         // Content-Security-Policy instruction, then we need to add the
@@ -237,12 +264,6 @@
                 cspDynamicPolicyHeaders[0].value = newCSPValue;
             }
         }
-
-        rootObject.cookies.set({
-            url: details.url,
-            name: constants.cookieName,
-            value: encodedOptions,
-        });
 
         return {
             responseHeaders: details.responseHeaders,

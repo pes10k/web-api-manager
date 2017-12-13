@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Calling WebCrypto in a Frame</title>
+    </head>
+    <body>
+        <iframe srcdoc="<script>crypto.getRandomValues(new Uint32Array(10))</script>"></iframe>
+    </body>
+</html>

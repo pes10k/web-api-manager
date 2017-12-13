@@ -26,8 +26,17 @@
                     </div>
 
                     <div id="loaded-section" class="hidden">
-                        <p>The following features have been blocked on this page.</p>
-                        <div id="blocked-feature-report"></div>
+                        <section id="frames-with-blocking-section">
+                            <p>
+                                The following features have been blocked on this page.
+                                You can also <a href="/pages/report/report-json.html">export
+                                all logged information for all tabs</a>.</p>
+                            <div id="blocked-feature-report"></div>
+                        </section>
+
+                        <section id="frames-without-blocking-section" class="hidden">
+                            <h3>Frames Where No Features were Blocked</h3>
+                        </section>
                     </div>
                 </div>
             </div>
@@ -35,6 +44,7 @@
         <script src="../../lib/init.js"></script>
         <script src="../../lib/browser.js"></script>
         <script src="../../lib/standards.js"></script>
+        <script src="../../lib/reports.js"></script>
         <script src="../../lib/third_party/uri.all.min.js"></script>
         <script src="js/report.js"></script>
     </body>

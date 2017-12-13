@@ -50,6 +50,12 @@
     const decodedCookieValues = cookieEncodingLib.fromCookieValue(domainPref);
     const [standardIdsToBlock, shouldLog, randNonce] = decodedCookieValues;
 
+    // If there are no standards to block on this domain, then don't
+    // insert any script into the page.
+    if (standardIdsToBlock.length === 0) {
+        return;
+    }
+
     const [scriptToInject, ignore] = proxyBlockLib.generateScriptPayload(
         standardIdsToBlock,
         shouldLog,

@@ -5,12 +5,13 @@
 (function () {
     "use strict";
 
-    const {constants, browserLib, standardsLib} = window.WEB_API_MANAGER;
+    const {constants, browserLib, standardsLib, reportsLib} = window.WEB_API_MANAGER;
     const doc = window.document;
     const rootObject = browserLib.getRootObject();
     const loadingSection = doc.getElementById("loading-section");
     const loadedSection = doc.getElementById("loaded-section");
-    const featureReportDiv = loadedSection.querySelector("div");
+    const nonBlockingFramesSection = doc.getElementById("frames-without-blocking-section");
+    const featureReportDiv = doc.getElementById("blocked-feature-report");
     const homepageLink = `<a href="${constants.homepage}">${constants.homepage}</a>`;
 
     // The Id of the tab we should generate a report should be passed to the
@@ -29,20 +30,17 @@
     /**
      * Returns a div, describing blocked features in a standard.
      *
-     * @param {string} standardId
-     *   The name of the standard being represented, such as "Console API".
-     * @param {Array.string} blockedFeatures
-     *   An array of one or more strings, each describing a feature that was
-     *   blocked, belonging to the given standard.
+     * @param {StandardReport} standardReport
+     *   An object describing which features in a Web API standard were blocked.
      *
      * @return {Element}
      *   A div element, depicting a bootstrap style markedup panel, with the
      *   blocked features presented in a list in the panel.
      */
-    const buildStandardReport = (standardId, blockedFeatures) => {
+    const buildStandardReport = standardReport => {
         const standardReportPanelElm = doc.createElement("div");
-        const standardName = standardsLib.nameForStandardId(standardId);
-        standardReportPanelElm.dataset.standardId = standardId;
+        const standardName = standardReport.name;
+        standardReportPanelElm.dataset.standardId = standardReport.id;
         standardReportPanelElm.className = "panel panel-default standard-report-container";
 
         const standardTitlePanelHeader = doc.createElement("div");
@@ -52,11 +50,11 @@
 
         const featuresListElm = doc.createElement("ul");
         featuresListElm.className = "list-group";
-        blockedFeatures.sort().forEach(featureName => {
+        standardReport.featurePaths().sort().forEach(featurePath => {
             const featureLiElm = doc.createElement("li");
             featureLiElm.className = "list-group-item feature-container";
-            featureLiElm.dataset.feature = featureName;
-            featureLiElm.appendChild(doc.createTextNode(featureName));
+            featureLiElm.dataset.feature = featurePath;
+            featureLiElm.appendChild(doc.createTextNode(featurePath));
             featuresListElm.appendChild(featureLiElm);
         });
 
@@ -67,11 +65,9 @@
     /**
      * Returns a div that describes standards that were blocked in a frame.
      *
-     * @param {object} frameReport
-     *   Object with two properties, "url", which contains a the string
-     *   this frame has loaded, as a string, and "standards", which contains
-     *   an object mapping standard names to features that were blocked in
-     *   that standard (represented as an array of strings).
+     * @param {FrameReport} frameReport
+     *   A frame report object, describing which features and Web API
+     *   standards have been blocked in a frame.
      *
      * @return {Element}
      *   A div element, describing the frame that had standards blocked
@@ -79,56 +75,128 @@
      *   panel elements (one for each standard blocked).
      */
     const buildFrameReport = frameReport => {
-        const {url, standardReports} = frameReport;
-
         const frameReportContainerElm = doc.createElement("div");
-        frameReportContainerElm.dataset.url = url;
+        frameReportContainerElm.dataset.url = frameReport.url;
         frameReportContainerElm.className = "frame-report-container";
 
         const frameUrlTitleElm = doc.createElement("h3");
         const frameUrlCodeElm = doc.createElement("code");
-        frameUrlCodeElm.appendChild(doc.createTextNode(url));
+        frameUrlCodeElm.appendChild(doc.createTextNode(frameReport.url));
         frameUrlTitleElm.appendChild(doc.createTextNode("Frame URL: "));
         frameUrlTitleElm.appendChild(frameUrlCodeElm);
         frameReportContainerElm.appendChild(frameUrlTitleElm);
 
-        const standardIds = Object.keys(standardReports);
+        const blockedStandardIds = frameReport.getAllStandardReports()
+            .map(standardReport => standardReport.id);
 
-        if (standardIds.length === 0) {
-            const noStandardsBlockedSection = doc.createElement("div");
-            noStandardsBlockedSection.className = " alert alert-info";
-            noStandardsBlockedSection.appendChild(doc.createTextNode("No blocked standards."));
-            frameReportContainerElm.appendChild(noStandardsBlockedSection);
-            return frameReportContainerElm;
-        }
+        const sortedStandardIds = blockedStandardIds.sort(standardsLib.sortStandardsById);
+        const sortedStandardReports = sortedStandardIds.map(frameReport.getStandardReport);
 
-        const sortedStandardIds = standardIds.sort(standardsLib.sortStandardsById);
-
-        sortedStandardIds.forEach(standardId => {
-            const blockedFeaturesForStandards = standardReports[standardId];
-            const standardName = standardsLib.nameForStandardId(standardId);
-            const standardReport = buildStandardReport(standardName, blockedFeaturesForStandards);
-            frameReportContainerElm.appendChild(standardReport);
+        sortedStandardReports.forEach(standardReport => {
+            const standardReportElm = buildStandardReport(standardReport);
+            frameReportContainerElm.appendChild(standardReportElm);
         });
 
         return frameReportContainerElm;
     };
 
-    const tabId = window.parseInt(queryString.replace("tabId=", ""));
-    const message = ["blockedFeaturesForTab", {tabId}];
-    rootObject.runtime.sendMessage(message, response => {
-        const [messageType, frameMapping] = response;
+    /**
+     * Build a list item for a frame that was loaded without blocked content.
+     *
+     * @param {string} url
+     *   A URL that was loaded in the document, but which had no blocked
+     *   standards called
+     * @param {number} count
+     *   The number of times this URL was loaded as a frame without
+     *   any blocked content being loaded.
+     *
+     * @return {Element}
+     *   A list item element, marked up for bootstrap3, depicting the frame's
+     *   URL and possibly the number of times the frame was loaded w/o having
+     *   functionality blocked.
+     */
+    const buildNonBlockedFrameUrlListItem = (url, count) => {
+        const frameListItemElm = doc.createElement("li");
+        frameListItemElm.className = "list-group-item frame-url-item";
+        frameListItemElm.dataset.frameUrl = url;
 
-        if (messageType !== "blockedFeaturesForTabResponse") {
+        if (count > 1) {
+            const countElm = doc.createElement("span");
+            countElm.className = "badge";
+            countElm.dataset.count = count;
+            countElm.appendChild(doc.createTextNode(count));
+            frameListItemElm.appendChild(countElm);
+        }
+
+        frameListItemElm.appendChild(doc.createTextNode(url));
+        return frameListItemElm;
+    };
+
+    /**
+     * Generates a listing of URLs, depciting frames with no blocked standards.
+     *
+     * @param {Array.string} urls
+     *   An array of one or more URLs, each depicting a frame where no
+     *   WebAPI standards were blocked.
+     *
+     * @return {Element}
+     *   An HTML element that depicts the URLs (and how many frames loaded
+     *   that URL).
+     */
+    const buildNonBlockingReport = urls => {
+        // Convert the array of URLs, to an object mapping each URL to the
+        // number of frames that loaded that URL.
+        const urlToCountMapping = urls.reduce((collection, aUrl) => {
+            if (collection[aUrl] === undefined) {
+                collection[aUrl] = 1;
+            } else {
+                collection[aUrl] += 1;
+            }
+            return collection;
+        }, Object.create(null));
+
+        const nonBlockingReportListElm = doc.createElement("ul");
+        nonBlockingReportListElm.className = "list-group non-blocking-frames-list";
+        Object.keys(urlToCountMapping).sort().forEach(aUrl => {
+            const loadCount = urlToCountMapping[aUrl];
+            const liElm = buildNonBlockedFrameUrlListItem(aUrl, loadCount);
+            nonBlockingReportListElm.appendChild(liElm);
+        });
+
+        return nonBlockingReportListElm;
+    };
+
+    const tabId = window.parseInt(queryString.replace("tabId=", ""));
+    const message = ["blockedFeaturesReport", {tabId}];
+    rootObject.runtime.sendMessage(message, response => {
+        const [messageType, tabReportAsJSON] = response;
+
+        if (messageType !== "blockedFeaturesReportResponse") {
             return;
         }
 
+        const tabReport = reportsLib.tabReportFromJSON(tabReportAsJSON);
+
+        const [framesWithBlocking, framesWithoutBlocking] = tabReport.getAllFrameReports()
+            .reduce((collection, frameReport) => {
+                const binIndex = (frameReport.hasBlocked() === true) ? 0 : 1;
+                collection[binIndex].push(frameReport);
+                return collection;
+            }, [[], []]);
+
         loadingSection.className += " hidden";
         loadedSection.className = loadedSection.className.replace("hidden", "");
-        Object.keys(frameMapping).forEach(frameId => {
-            const frameReport = frameMapping[frameId];
+
+        framesWithBlocking.forEach(frameReport => {
             const reportForFrame = buildFrameReport(frameReport);
             featureReportDiv.appendChild(reportForFrame);
         });
+
+        if (framesWithoutBlocking.length > 0) {
+            const urlsWithoutBlocking = framesWithoutBlocking.map(frameReport => frameReport.url);
+            const nonBlockingFramesElm = buildNonBlockingReport(urlsWithoutBlocking);
+            nonBlockingFramesSection.className = "";
+            nonBlockingFramesSection.appendChild(nonBlockingFramesElm);
+        }
     });
 }());
