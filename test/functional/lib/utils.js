@@ -117,7 +117,7 @@ module.exports.promiseOpenNewTab = (driver, url) => {
         })
         .then(windowHandles => {
             allHandles = windowHandles;
-            return driver.executeScript("window.open('');");
+            return driver.executeScript("window.open(window.location.href);");
         })
         .then(() => driver.getAllWindowHandles())
         .then(newHandles => {

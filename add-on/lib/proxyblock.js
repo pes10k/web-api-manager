@@ -207,6 +207,32 @@
             }
         };
 
+        // Block references to the return value of the `window.open` function,
+        // and the `window.opener` property, to prevent the current frame
+        // from getting access to Web API functions and features that are
+        // blocked in this frame, by reaching into other frames and
+        // pulling them into the current context.
+        //
+        // This is done before (otherwise) instrumenting the DOM to block
+        // the selected standards, so that the window.open function still
+        // functions if the HTML standard is allowed on the page, but the return
+        // value is protected (e.g. if the HTML standard is allowed, allow
+        // windows to be opened with window.open, but still prevent the current
+        // frame from accessing the DOM of other frames).
+        //
+        // @see https://developer.mozilla.org/en-US/docs/Web/API/Window/open
+        // @see https://developer.mozilla.org/en-US/docs/Web/API/Window/opener
+        const origWindowOpen = window.open;
+        window.open = function () {
+            origWindowOpen.apply(this, arguments);
+            return defaultBlockingProxy;
+        };
+        Object.defineProperty(window, "opener", {
+            get: () => defaultBlockingProxy,
+        });
+
+        // `featuresToBlock` is now an array of FeaturePath's / strings,
+        // each describing the keypath of feature in the DOM to block.
         featuresToBlock.forEach(blockFeatureAtKeyPath);
 
         // Next, prevent access to frame's contentDocument / contentWindow
