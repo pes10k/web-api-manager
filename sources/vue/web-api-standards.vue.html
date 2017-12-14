@@ -34,9 +34,20 @@
         </div>
     </div>
 
-    <div class="panel panel-default" v-for="categoryId in sortedCategoryIds()">
+    <div class="panel panel-default" v-for="categoryId in sortedCategoryIds">
         <div class="panel-heading">
             {{ getCategoryLib().titleForCategoryId(categoryId) }}
+
+            <button v-if="areAllStandardsInCategoryBlocked(categoryId)"
+                  @click="toggleCategory($event, false, categoryId)"
+                   class="pull-right toggle-button toggle-button-allow">
+                Allow all
+            </button>
+            <button @click="toggleCategory($event, true, categoryId)"
+                     class="pull-right toggle-button toggle-button-block"
+                     v-else>
+                Block all
+            </button>
         </div>
 
         <ul class="list-group">

@@ -71,7 +71,7 @@
         });
     };
 
-    const generateStateObject = (initialDomain) => {
+    const generateStateObject = initialDomain => {
         const state = {
             selectedDomain: initialDomain,
             domainRules: {},
@@ -164,6 +164,10 @@
                 if (domain === this.selectedDomain) {
                     this.selectedStandardIds = standardIds;
                 }
+            },
+
+            currentStandardIds: function () {
+                return this.domainRules[this.selectedDomain];
             },
         };
 
