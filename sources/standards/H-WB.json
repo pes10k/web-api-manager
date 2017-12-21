@@ -1,6 +1,7 @@
 {
   "info": {
-    "id": "HTML: Web Storage",
+    "id": 37,
+    "origId": "HTML: Web Storage",
     "name": "HTML: Web Storage",
     "url": "https://html.spec.whatwg.org/multipage/webstorage.html",
     "catId": "storage"

@@ -1,6 +1,7 @@
 {
   "info": {
-    "id": "DOM Level 2: Style",
+    "id": 17,
+    "origId": "DOM Level 2: Style",
     "name": "DOM Level 2: Style",
     "url": "https://www.w3.org/TR/DOM-Level-2-Style/",
     "catId": "core"

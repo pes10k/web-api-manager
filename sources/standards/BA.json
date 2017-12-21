@@ -1,6 +1,7 @@
 {
   "info": {
-    "id": "Battery Status API",
+    "id": 3,
+    "origId": "Battery Status API",
     "name": "Battery Status API",
     "url": "https://www.w3.org/TR/battery-status/",
     "catId": "hardware"

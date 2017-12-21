@@ -1,6 +1,7 @@
 {
   "info": {
-    "id": "Geolocation API",
+    "id": 29,
+    "origId": "Geolocation API",
     "name": "Geolocation API",
     "url": "https://www.w3.org/TR/geolocation-API/",
     "catId": "misc"

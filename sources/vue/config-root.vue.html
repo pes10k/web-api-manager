@@ -1,15 +1,15 @@
 <section class="container">
     <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" :class="activeTab === 'domain-rules' ? 'active' : ''">
+        <li role="presentation" :class="dataActiveTab === 'domain-rules' ? 'active' : ''">
             <a href="#domain-rules" @click="setActiveTab">Domain Rules</a>
         </li>
-        <li role="presentation" :class="activeTab === 'import-export' ? 'active' : ''">
+        <li role="presentation" :class="dataActiveTab === 'import-export' ? 'active' : ''">
             <a href="#import-export" @click="setActiveTab">Import / Export</a>
         </li>
     </ul>
 
     <div class="tab-content">
-        <div role="tabpanel" :class="['tab-pane', activeTab === 'domain-rules' ? 'active' : '']" id="domain-rules">
+        <div role="tabpanel" :class="['tab-pane', dataActiveTab === 'domain-rules' ? 'active' : '']" id="domain-rules">
             <div class="row">
                 <div class="col-xs-12 col-md-12">
                     <p>
@@ -23,28 +23,30 @@
             <div class="row">
                 <div class="col-xs-4 col-md-4">
                     <domain-rules
-                        :domain-names="domainNames"
-                        :selected-domain="selectedDomain"
+                        :data-patterns="dataPatterns"
+                        :data-selected-pattern="dataSelectedPattern"
                     ></domain-rules>
 
-                    <logging-settings :should-log="shouldLog"></logging-settings>
+                    <logging-settings :data-should-log="dataShouldLog"></logging-settings>
                 </div>
 
                 <div class="col-xs-8 col-md-8">
                     <web-api-standards
-                        :selected-standard-ids="selectedStandardIds"
-                        :selected-domain="selectedDomain">
+                        :data-current-standard-ids="dataCurrentStandardIds"
+                        :data-selected-pattern="dataSelectedPattern">
                     </web-api-standards>
                 </div>
             </div>
         </div>
 
-        <div role="tabpanel" :class="['tab-pane', activeTab === 'import-export' ? 'active' : '']" id="import-export">
+        <div role="tabpanel"
+           :class="['tab-pane', dataActiveTab === 'import-export' ? 'active' : '']"
+               id="import-export">
             <div class="row">
                 <div class="col-xs-12 col-md-12">
                     <import-export
-                        :domain-names="domainNames"
-                        :selected-standard-ids="selectedStandardIds">
+                        :data-patterns="dataPatterns"
+                        :data-current-standard-ids="dataCurrentStandardIds">
                     </import-export>
                 </div>
             </div>

@@ -1,6 +1,7 @@
 {
   "info": {
-    "id": "Vibration API",
+    "id": 70,
+    "origId": "Vibration API",
     "name": "Vibration API",
     "url": "https://www.w3.org/TR/vibration/",
     "catId": "hardware"

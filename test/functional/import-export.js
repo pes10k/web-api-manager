@@ -6,9 +6,14 @@ const webdriver = require("selenium-webdriver");
 const by = webdriver.By;
 const until = webdriver.until;
 
-const emptyRuleSet = "[{\"pattern\":\"(default)\",\"standardIds\":[]}]";
-const blockingSVGandBeacon = "[{\"pattern\":\"(default)\",\"standardIds\":[\"Beacon\",\"Scalable Vector Graphics (SVG) 1.1 (Second Edition)\"]}]";
-const newDomainImport = "[{\"pattern\":\"*.example.com\",\"standardIds\":[\"Ambient Light Sensor API\",\"WebGL Specification\"]}]";
+const beaconId = 4;
+const svgId = 63;
+const ambientLightSensorId = 2;
+const webGLId = 73;
+
+const emptyRuleSet = `[{"pattern":"(default)","standardIds":[]}]`;
+const blockingSVGandBeacon = `[{"pattern":"(default)","standardIds":[${beaconId},${svgId}]}]`;
+const newDomainImport = `[{"pattern":"*.example.com","standardIds":[${ambientLightSensorId},${webGLId}]}]`;
 
 const promiseOpenImportExportTab = function (driver) {
     return utils.promiseExtensionConfigPage(driver)
@@ -47,7 +52,7 @@ describe("Import / Export", function () {
             utils.promiseGetDriver()
                 .then(function (driver) {
                     driverReference = driver;
-                    return utils.promiseSetBlockingRules(driverReference, utils.constants.svgBlockRule.concat(["Beacon"]));
+                    return utils.promiseSetBlockingRules(driverReference, utils.constants.svgBlockRule.concat([beaconId]));
                 })
                 .then(() => promiseOpenImportExportTab(driverReference))
                 .then(() => driverReference.findElement(by.css(".export-section select option:nth-child(1)")).click())
@@ -85,7 +90,7 @@ describe("Import / Export", function () {
                     return checkedCheckboxes[1].getAttribute("value");
                 })
                 .then(firstCheckboxValue => {
-                    assert.equal(firstCheckboxValue, "Beacon", "One blocked standard should be 'Beacon'.");
+                    assert.equal(firstCheckboxValue, beaconId, "One blocked standard should be 'Beacon'.");
                     return checkedCheckboxes[0].getAttribute("value");
                 })
                 .then(secondCheckboxValue => {
@@ -124,11 +129,11 @@ describe("Import / Export", function () {
                     return checkedCheckboxes[1].getAttribute("value");
                 })
                 .then(function (firstCheckboxValue) {
-                    assert.equal(firstCheckboxValue, "Ambient Light Sensor API", "One blocked standard should be 'Ambient Light Sensor API'.");
+                    assert.equal(firstCheckboxValue, ambientLightSensorId, "One blocked standard should be 'Ambient Light Sensor API'.");
                     return checkedCheckboxes[0].getAttribute("value");
                 })
                 .then(function (secondCheckboxValue) {
-                    assert.equal(secondCheckboxValue, "WebGL Specification", "The other blocked standard should be 'WebGL Specification'.");
+                    assert.equal(secondCheckboxValue, webGLId, "The other blocked standard should be 'WebGL Specification'.");
                     driverReference.quit();
                     done();
                 })

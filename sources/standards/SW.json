@@ -1,6 +1,7 @@
 {
   "info": {
-    "id": "Service Workers",
+    "id": 64,
+    "origId": "Service Workers",
     "name": "Service Workers",
     "url": "https://www.w3.org/TR/service-workers/",
     "catId": "computation"

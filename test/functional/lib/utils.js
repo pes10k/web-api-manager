@@ -25,7 +25,7 @@ const {reportsLib} = window.WEB_API_MANAGER;
 module.exports.shouldRunRemoteTests = process.argv.indexOf("--only-local-tests") === -1;
 
 module.exports.constants = {
-    svgBlockRule: ["Scalable Vector Graphics (SVG) 1.1 (Second Edition)"],
+    svgBlockRule: [63],
 };
 
 module.exports.pause = function (ms = 2000) {

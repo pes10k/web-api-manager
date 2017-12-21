@@ -5,50 +5,50 @@
     const Vue = window.Vue;
 
     Vue.component("domain-rules", {
-        props: ["domainNames", "selectedDomain"],
+        props: ["dataPatterns", "dataSelectedPattern"],
         render: window.WEB_API_MANAGER.vueComponents["domain-rules"].render,
         staticRenderFns: window.WEB_API_MANAGER.vueComponents["domain-rules"].staticRenderFns,
         data: function () {
             return {
-                newDomain: "",
+                newPattern: "",
                 errorMessage: "",
             };
         },
         methods: {
-            blockingRules: function () {
-                return this.$root.$data.domainsBlockingStandards();
+            blockingPatterns: function () {
+                return this.$root.$data.patternsBlockingStandards();
             },
-            allowingRules: function () {
-                return this.$root.$data.domainsBlockingNoStandards();
+            allowingPatterns: function () {
+                return this.$root.$data.patternsBlockingNoStandards();
             },
-            newDomainSubmitted: function () {
+            newPatternSubmitted: function () {
                 const state = this.$root.$data;
 
-                if (this.newDomain.length === 0) {
-                    this.errorMessage = "Domain rule field cannot be empty.";
+                if (this.newPattern.length === 0) {
+                    this.errorMessage = "Pattern field cannot be empty.";
                     return;
                 }
 
-                if (state.domainNames.indexOf(this.newDomain) !== -1) {
-                    this.errorMessage = "There are already settings for this domain pattern.";
+                if (this.dataPatterns.indexOf(this.newPattern) !== -1) {
+                    this.errorMessage = "There are already settings for this pattern.";
                     return;
                 }
 
-                state.addDomainRule(this.newDomain);
-                this.newDomain = "";
+                state.addPattern(this.newPattern);
+                this.newPattern = "";
             },
             onRadioChange: function () {
-                this.$root.$data.setSelectedDomain(this.selectedDomain);
+                this.$root.$data.setSelectedPattern(this.dataSelectedPattern);
             },
             onRemoveClick: function (event) {
                 const targetElement = event.target;
-                const domain = targetElement.dataset.domain;
+                const pattern = targetElement.dataset.pattern;
                 event.stopPropagation();
                 event.preventDefault();
-                this.$root.$data.deleteDomainRule(domain);
+                this.$root.$data.deletePattern(pattern);
             },
-            isDefault: function (domainName) {
-                return domainName === constants.defaultDomainRule;
+            isDefault: function (pattern) {
+                return pattern === constants.defaultPattern;
             },
         },
     });

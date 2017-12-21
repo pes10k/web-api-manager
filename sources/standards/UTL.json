@@ -1,6 +1,7 @@
 {
   "info": {
-    "id": "User Timing Level 2",
+    "id": 69,
+    "origId": "User Timing Level 2",
     "name": "User Timing (Level 2)",
     "url": "https://w3c.github.io/user-timing/",
     "catId": "timing"

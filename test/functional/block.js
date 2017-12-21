@@ -84,7 +84,8 @@ describe("Basic Functionality", function () {
             testUrl = url;
             httpServer = server;
 
-            const standardsToBlock = ["Selectors API Level 1"];
+            const selectorsApiId = 60;
+            const standardsToBlock = [selectorsApiId];
             let driverReference;
 
             utils.promiseGetDriver()

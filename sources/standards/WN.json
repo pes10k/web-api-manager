@@ -1,6 +1,7 @@
 {
   "info": {
-    "id": "Web Notifications",
+    "id": 79,
+    "origId": "Web Notifications",
     "name": "Web Notifications",
     "url": "https://notifications.spec.whatwg.org/",
     "catId": "presentation"

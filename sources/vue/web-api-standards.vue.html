@@ -1,5 +1,5 @@
 <div class="web-api-standards-container">
-    <h3>Pattern: <code>{{ selectedDomain }}</code></h3>
+    <h3>Pattern: <code>{{ dataSelectedPattern }}</code></h3>
 
     <div class="panel panel-default form-horizontal">
         <div class="panel-heading">
@@ -51,14 +51,16 @@
         </div>
 
         <ul class="list-group">
-            <li class="list-group-item" v-for="standardId in sortedStandardIdsInCategory(categoryId)">
-                <span v-if="getStandardsLib().urlForStandardId(standardId)" class="badge">
+            <li class="list-group-item"
+                v-for="standardId in sortedStandardIdsInCategory(categoryId)">
+                <span v-if="getStandardsLib().urlForStandardId(standardId)"
+                     class="badge">
                     <a :href="getStandardsLib().urlForStandardId(standardId)">info</a>
                 </span>
 
                 <input type="checkbox"
-                    :value="standardId"
-                    v-model="selectedStandardIds"
+                     :value="standardId"
+                    v-model="dataCurrentStandardIds"
                     @change="onStandardChecked">
                 {{ getStandardsLib().nameForStandardId(standardId) }}
             </li>

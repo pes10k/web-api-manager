@@ -1,6 +1,7 @@
 {
   "info": {
-    "id": "DOM",
+    "id": 12,
+    "origId": "DOM",
     "name": "DOM",
     "url": "https://dom.spec.whatwg.org/",
     "catId": "core"

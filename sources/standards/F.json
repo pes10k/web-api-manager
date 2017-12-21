@@ -1,6 +1,7 @@
 {
   "info": {
-    "id": "Fetch",
+    "id": 26,
+    "origId": "Fetch",
     "name": "Fetch",
     "url": "https://fetch.spec.whatwg.org/",
     "catId": "networking"

@@ -1,6 +1,7 @@
 {
   "info": {
-    "id": "Screen Orientation API",
+    "id": 62,
+    "origId": "Screen Orientation API",
     "name": "Screen Orientation API",
     "url": "https://w3c.github.io/screen-orientation/",
     "catId": "hardware"

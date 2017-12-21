@@ -1,6 +1,7 @@
 {
   "info": {
-    "id": "High Resolution Time Level 2",
+    "id": 40,
+    "origId": "High Resolution Time Level 2",
     "name": "High Resolution Time (Level 2)",
     "url": "https://w3c.github.io/hr-time/",
     "catId": "timing"

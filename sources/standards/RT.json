@@ -1,6 +1,7 @@
 {
   "info": {
-    "id": "Resource Timing",
+    "id": 58,
+    "origId": "Resource Timing",
     "name": "Resource Timing",
     "url": "https://w3c.github.io/resource-timing/",
     "catId": "timing"

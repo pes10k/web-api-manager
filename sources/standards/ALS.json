@@ -1,6 +1,7 @@
 {
   "info": {
-    "id": "Ambient Light Sensor API",
+    "id": 2,
+    "origId": "Ambient Light Sensor API",
     "name": "Ambient Light Sensor API",
     "url": "https://w3c.github.io/ambient-light/",
     "catId": "hardware"

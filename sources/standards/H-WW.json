@@ -1,6 +1,7 @@
 {
   "info": {
-    "id": "HTML: Web Workers",
+    "id": 39,
+    "origId": "HTML: Web Workers",
     "name": "HTML: Web Workers",
     "url": "https://html.spec.whatwg.org/multipage/workers.html",
     "catId": "computation"

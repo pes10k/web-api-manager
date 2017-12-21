@@ -1,6 +1,7 @@
 {
   "info": {
-    "id": "HTML: Canvas Element",
+    "id": 33,
+    "origId": "HTML: Canvas Element",
     "name": "HTML: Canvas Element",
     "url": "https://html.spec.whatwg.org/multipage/scripting.html#the-canvas-element",
     "catId": "graphics"

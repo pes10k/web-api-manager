@@ -1,6 +1,7 @@
 {
   "info": {
-    "id": "Media Capture and Streams",
+    "id": 46,
+    "origId": "Media Capture and Streams",
     "name": "Media Capture and Streams",
     "url": "https://www.w3.org/TR/mediacapture-streams/",
     "catId": "media"

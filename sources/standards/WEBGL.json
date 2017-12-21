@@ -1,6 +1,7 @@
 {
   "info": {
-    "id": "WebGL Specification",
+    "id": 73,
+    "origId": "WebGL Specification",
     "name": "WebGL Specification",
     "url": "https://www.khronos.org/registry/webgl/specs/latest/1.0/",
     "catId": "graphics"

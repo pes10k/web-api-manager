@@ -1,6 +1,7 @@
 {
   "info": {
-    "id": "Shadow DOM",
+    "id": 59,
+    "origId": "Shadow DOM",
     "name": "Shadow DOM",
     "url": "https://www.w3.org/TR/shadow-dom/",
     "catId": "core"

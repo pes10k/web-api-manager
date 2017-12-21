@@ -1,6 +1,7 @@
 {
   "info": {
-    "id": "Performance Timeline",
+    "id": 54,
+    "origId": "Performance Timeline",
     "name": "Performance Timeline",
     "url": "https://www.w3.org/TR/performance-timeline",
     "catId": "timing"

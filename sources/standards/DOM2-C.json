@@ -1,6 +1,7 @@
 {
   "info": {
-    "id": "DOM Level 2: Core",
+    "id": 14,
+    "origId": "DOM Level 2: Core",
     "name": "DOM Level 2: Core",
     "url": "https://www.w3.org/TR/DOM-Level-2-Core/",
     "catId": "core"

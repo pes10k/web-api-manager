@@ -1,6 +1,7 @@
 {
   "info": {
-    "id": "HTML",
+    "id": 41,
+    "origId": "HTML",
     "name": "HTML",
     "url": "https://html.spec.whatwg.org",
     "catId": "core"

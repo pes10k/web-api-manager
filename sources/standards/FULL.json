@@ -1,6 +1,7 @@
 {
   "info": {
-    "id": "Fullscreen API",
+    "id": 28,
+    "origId": "Fullscreen API",
     "name": "Fullscreen API",
     "url": "https://fullscreen.spec.whatwg.org/",
     "catId": "presentation"

@@ -1,6 +1,7 @@
 {
   "info": {
-    "id": "Pointer Lock",
+    "id": 52,
+    "origId": "Pointer Lock",
     "name": "Pointer Lock",
     "url": "https://w3c.github.io/pointerlock/",
     "catId": "presentation"

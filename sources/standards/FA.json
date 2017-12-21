@@ -1,6 +1,7 @@
 {
   "info": {
-    "id": "File API",
+    "id": 27,
+    "origId": "File API",
     "name": "File API",
     "url": "https://w3c.github.io/FileAPI/",
     "catId": "media"

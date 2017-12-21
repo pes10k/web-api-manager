@@ -56,10 +56,10 @@ module.exports.setStandardsAsBlockedScript = (function () {
     const funcToInject = function () {
         const doc = window.document;
         const callback = arguments[arguments.length - 1];
-        const standardsToBlockArray = "###REPLACE###";
+        const standardIdsToBlock = "###REPLACE###";
 
-        standardsToBlockArray.forEach(aStandardName => {
-            const input = doc.querySelector(`input[value='${aStandardName}']`);
+        standardIdsToBlock.forEach(aStandardId => {
+            const input = doc.querySelector(`input[value='${aStandardId}']`);
             input.click();
         });
 
@@ -69,7 +69,7 @@ module.exports.setStandardsAsBlockedScript = (function () {
     const funcSource = stripFuncFromSource(funcToInject.toString());
 
     return standardsToBlock => {
-        return funcSource.replace("\"###REPLACE###\"", JSON.stringify(standardsToBlock));
+        return funcSource.replace(`"###REPLACE###"`, JSON.stringify(standardsToBlock));
     };
 }());
 

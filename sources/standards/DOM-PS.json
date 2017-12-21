@@ -1,6 +1,7 @@
 {
   "info": {
-    "id": "DOM Parsing and Serialization",
+    "id": 11,
+    "origId": "DOM Parsing and Serialization",
     "name": "DOM Parsing and Serialization",
     "url": "https://w3c.github.io/DOM-Parsing/",
     "catId": "core"

@@ -27,7 +27,7 @@
         });
     };
 
-    const set = function (object, callback) {
+    const set = (object, callback) => {
         const valueToStore = {};
         valueToStore[webApiManagerKeySettingsKey] = object;
         storageObject.sync.set(valueToStore, callback);

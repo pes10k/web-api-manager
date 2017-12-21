@@ -1,6 +1,7 @@
 {
   "info": {
-    "id": "WebVTT: The Web Video Text Tracks Format",
+    "id": 78,
+    "origId": "WebVTT: The Web Video Text Tracks Format",
     "name": "WebVTT: The Web Video Text Tracks Format",
     "url": "https://w3c.github.io/webvtt/",
     "catId": "media"

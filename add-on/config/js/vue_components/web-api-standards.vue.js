@@ -6,7 +6,7 @@
     const Vue = window.Vue;
 
     Vue.component("web-api-standards", {
-        props: ["selectedStandardIds", "selectedDomain"],
+        props: ["dataCurrentStandardIds", "dataSelectedPattern"],
         render: window.WEB_API_MANAGER.vueComponents["web-api-standards"].render,
         staticRenderFns: window.WEB_API_MANAGER.vueComponents["web-api-standards"].staticRenderFns,
         computed: {
@@ -20,7 +20,7 @@
             getStandardsLib: () => standardsLib,
             areAllStandardsInCategoryBlocked: function (categoryId) {
                 const standardIdsInCat = standardsLib.standardIdsForCategoryId(categoryId);
-                const blockedStandardIds = this.$root.$data.currentStandardIds();
+                const blockedStandardIds = this.dataCurrentStandardIds;
 
                 if (standardIdsInCat.length !== blockedStandardIds.length) {
                     return false;
@@ -32,7 +32,7 @@
                 const standardIdsInCategory = standardsLib.standardIdsForCategoryId(categoryId);
 
                 const standardIdsInCatSet = new Set(standardIdsInCategory);
-                const currentBlockedIdsSet = new Set(this.selectedStandardIds);
+                const currentBlockedIdsSet = new Set(this.dataCurrentStandardIds);
 
                 // If shouldBlock === true, then the clicking the button should
                 // add all the standards in the category to the set of
@@ -44,29 +44,29 @@
                     : Set.prototype.delete;
 
                 standardIdsInCatSet.forEach(setOperation.bind(currentBlockedIdsSet));
-                this.$root.$data.setSelectedStandardIds(Array.from(currentBlockedIdsSet));
+                this.$root.$data.setCurrentStandardIds(Array.from(currentBlockedIdsSet));
             },
             sortedStandardIdsInCategory: categoryId => {
                 const standardIds = standardsLib.standardIdsForCategoryId(categoryId);
                 return standardIds.sort(standardsLib.sortStandardsById);
             },
             onStandardChecked: function () {
-                this.$root.$data.setSelectedStandardIds(this.selectedStandardIds);
+                this.$root.$data.setCurrentStandardIds(this.dataCurrentStandardIds);
             },
             onLiteClicked: function () {
-                this.$root.$data.setSelectedStandardIds(standardsDefaults.lite);
+                this.$root.$data.setCurrentStandardIds(standardsDefaults.lite);
             },
             onConservativeClicked: function () {
-                this.$root.$data.setSelectedStandardIds(standardsDefaults.conservative);
+                this.$root.$data.setCurrentStandardIds(standardsDefaults.conservative);
             },
             onAggressiveClicked: function () {
-                this.$root.$data.setSelectedStandardIds(standardsDefaults.aggressive);
+                this.$root.$data.setCurrentStandardIds(standardsDefaults.aggressive);
             },
             onClearClicked: function () {
-                this.$root.$data.setSelectedStandardIds([]);
+                this.$root.$data.setCurrentStandardIds([]);
             },
             onAllClicked: function () {
-                this.$root.$data.setSelectedStandardIds(standardsLib.allStandardIds());
+                this.$root.$data.setCurrentStandardIds(standardsLib.allStandardIds());
             },
         },
     });

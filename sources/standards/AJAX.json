@@ -1,7 +1,8 @@
 {
   "info": {
+    "id": 1,
+    "origId": "XMLHttpRequest",
     "name": "XMLHttpRequest",
-    "id": "XMLHttpRequest",
     "url": "https://xhr.spec.whatwg.org/",
     "catId": "networking"
   },

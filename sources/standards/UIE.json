@@ -1,6 +1,7 @@
 {
   "info": {
-    "id": "UI Events Specification",
+    "id": 67,
+    "origId": "UI Events Specification",
     "name": "UI Events Specification",
     "url": "https://w3c.github.io/uievents/",
     "catId": "presentation"

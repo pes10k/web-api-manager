@@ -1,6 +1,7 @@
 {
   "info": {
-    "id": "HTML 5",
+    "id": 42,
+    "origId": "HTML 5",
     "name": "HTML 5",
     "url": "https://www.w3.org/TR/html5/",
     "catId": "core"

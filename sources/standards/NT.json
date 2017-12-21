@@ -1,6 +1,7 @@
 {
   "info": {
-    "id": "Navigation Timing",
+    "id": 50,
+    "origId": "Navigation Timing",
     "name": "Navigation Timing",
     "url": "https://www.w3.org/TR/navigation-timing/",
     "catId": "timing"

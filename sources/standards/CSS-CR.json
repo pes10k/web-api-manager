@@ -1,6 +1,7 @@
 {
   "info": {
-    "id": "CSS Conditional Rules Module Level 3",
+    "id": 6,
+    "origId": "CSS Conditional Rules Module Level 3",
     "name": "CSS Conditional Rules (Level 3)",
     "url": "https://drafts.csswg.org/css-conditional-3/",
     "catId": "presentation"
