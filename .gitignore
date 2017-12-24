@@ -3,6 +3,7 @@ node_modules/
 *.swp
 test.config.js
 dist/
+webapi_manager.zip
 add-on/lib/standards.js
 add-on/lib/third_party/sjcl.js
 add-on/lib/third_party/uri.all.min.js
