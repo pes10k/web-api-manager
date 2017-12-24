@@ -1,13 +1,13 @@
 (function () {
     "use strict";
 
-    const {constants} = window.WEB_API_MANAGER;
+    const {constants, stateLib} = window.WEB_API_MANAGER;
     const Vue = window.Vue;
 
-    Vue.component("domain-rules", {
-        props: ["dataPatterns", "dataSelectedPattern"],
-        render: window.WEB_API_MANAGER.vueComponents["domain-rules"].render,
-        staticRenderFns: window.WEB_API_MANAGER.vueComponents["domain-rules"].staticRenderFns,
+    Vue.component("blocking-rules", {
+        props: ["dataPatterns", "dataSelectedPattern", "dataAllowingAllPatterns", "dataBlockingAnyPatterns"],
+        render: window.WEB_API_MANAGER.vueComponents["blocking-rules"].render,
+        staticRenderFns: window.WEB_API_MANAGER.vueComponents["blocking-rules"].staticRenderFns,
         data: function () {
             return {
                 newPattern: "",
@@ -15,12 +15,6 @@
             };
         },
         methods: {
-            blockingPatterns: function () {
-                return this.$root.$data.patternsBlockingStandards();
-            },
-            allowingPatterns: function () {
-                return this.$root.$data.patternsBlockingNoStandards();
-            },
             newPatternSubmitted: function () {
                 const state = this.$root.$data;
 
@@ -29,23 +23,26 @@
                     return;
                 }
 
-                if (this.dataPatterns.indexOf(this.newPattern) !== -1) {
+                if (state.preferences.getRuleForPattern(this.newPattern) !== undefined) {
                     this.errorMessage = "There are already settings for this pattern.";
                     return;
                 }
 
-                state.addPattern(this.newPattern);
+                stateLib.addPattern(state, this.newPattern);
                 this.newPattern = "";
             },
             onRadioChange: function () {
-                this.$root.$data.setSelectedPattern(this.dataSelectedPattern);
+                const state = this.$root.$data;
+                stateLib.setSelectedPattern(state, this.dataSelectedPattern);
             },
             onRemoveClick: function (event) {
+                const state = this.$root.$data;
                 const targetElement = event.target;
                 const pattern = targetElement.dataset.pattern;
                 event.stopPropagation();
                 event.preventDefault();
-                this.$root.$data.deletePattern(pattern);
+                stateLib.deletePattern(state, pattern);
+                this.$forceUpdate();
             },
             isDefault: function (pattern) {
                 return pattern === constants.defaultPattern;

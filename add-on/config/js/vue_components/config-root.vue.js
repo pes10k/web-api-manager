@@ -14,11 +14,9 @@
                 return;
             }
 
-            console.log({data});
             const preferences = preferencesLib.fromJSON(data);
-            const state = stateLib.generateStateObject(preferences);
-
-            state.dataActiveTab = "domain-rules";
+            const state = stateLib.init(preferences);
+            state.dataActiveTab = "blocking-rules";
 
             new Vue({
                 el: doc.querySelector("#config-root"),

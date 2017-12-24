@@ -6,7 +6,7 @@
  */
 (function () {
     "use strict";
-    const {constants, browserLib, blockRulesLib} = window.WEB_API_MANAGER;
+    const {constants, browserLib, blockRulesLib, migrationLib} = window.WEB_API_MANAGER;
     const defaultPattern = constants.defaultPattern;
     const rootObject = browserLib.getRootObject();
     const storageKey = "webApiManager";
@@ -23,6 +23,9 @@
      * @param {function(): BlockRule} getDefaultRule
      *   Returns the block rule object that should be used if no other
      *   blocking rules match a given url.
+     * @param {function(): Array.BlockRule} getNonDefaultRules
+     *   Returns an array all user-set block rules in the system (e.g. every
+     *   block rule that is not a default rule).
      * @param {function(string): BlockRule} getRuleForUrl
      *   Return the blocking rule that should be used for the given URL.
      * @param {function{MatchPattern}: ?BlockRule} getRuleForPattern
@@ -71,7 +74,6 @@
      *   The same results as calling the provided function.
      */
     const resync = func => {
-
         return function () {
             const funcResult = func.apply(undefined, arguments);
 
@@ -86,11 +88,11 @@
         };
     };
 
-    const init = (blockRulesRaw, shouldLogRaw, syncWithDb = false) => {
+    const init = (blockRulesRaw = [], shouldLogRaw = false, syncWithDb = false) => {
         let shouldLogLocal = shouldLogRaw;
 
         let defaultRule;
-        let nonDefaultRules = [];
+        const nonDefaultRules = [];
         blockRulesRaw.map(blockRulesLib.fromData).forEach(rule => {
             if (rule.pattern === defaultPattern) {
                 defaultRule = rule;
@@ -119,7 +121,9 @@
         };
 
         const getRuleForUrl = url => {
-            return Object.values(patternsToRulesMap).find(br => br.isMatchingUrl(url)) || defaultRule;
+            const matchingRule = Object.values(patternsToRulesMap)
+                .find(br => br.isMatchingUrl(url));
+            return matchingRule || defaultRule;
         };
 
         const getRuleForPattern = pattern => {
@@ -152,7 +156,6 @@
         };
 
         const upcertRule = (pattern, standardIds) => {
-
             if (pattern === defaultPattern) {
                 defaultRule.setStandardIds(standardIds);
                 return false;
@@ -178,7 +181,8 @@
 
         const toStorage = () => {
             return {
-                rules: getAllRules(),
+                schema: constants.schemaVersion,
+                rules: getAllRules().map(rule => rule.toData()),
                 shouldLog: getShouldLog(),
             };
         };
@@ -194,6 +198,7 @@
 
         const response = {
             getDefaultRule: () => defaultRule,
+            getNonDefaultRules: () => Object.values(patternsToRulesMap),
             getRuleForPattern,
             getAllRules,
             getRuleForUrl,
@@ -235,15 +240,22 @@
      * @return {undefined}
      */
     const load = callback => {
-        const fromStorage = storageResults => {
+        const fromStorage = storedData => {
+            console.log(storedData);
+            const [success, migratedData] = migrationLib.applyMigrations(storedData);
+
+            if (success !== true) {
+                throw "Stored preferences did not match a known format";
+            }
+
             let blockRulesRaw = [];
             let shouldLogRaw = false;
 
-            if (storageResults &&
-                    storageResults[storageKey] &&
-                    storageResults[storageKey].blockRules) {
-                blockRulesRaw = storageResults[storageKey].rules;
-                shouldLogRaw = storageResults[storageKey].shouldLog;
+            if (migratedData &&
+                    migratedData[storageKey] &&
+                    migratedData[storageKey].rules) {
+                blockRulesRaw = migratedData[storageKey].rules;
+                shouldLogRaw = migratedData[storageKey].shouldLog;
             }
 
             instance = init(blockRulesRaw, shouldLogRaw, true);
@@ -280,17 +292,43 @@
      *
      * @return {Preferences}
      *   A Preferences object.
+     *
+     * @throws If provided JSON string is not a valid serilization of
+     *   preferences data.
      */
     const fromJSON = jsonString => {
-        const prefData = JSON.parse(jsonString);
-        const {rules, shouldLog} = prefData;
-        console.log(prefData);
+        const data = JSON.parse(jsonString);
+        if (typeof data !== "object" || Array.isArray(data) === true) {
+            throw `Invalid preferences JSON: ${jsonString} does not encode an object.`;
+        }
+
+        if (data.rules === undefined || Array.isArray(data.rules) === false) {
+            throw `Invalid preferences JSON: ${jsonString} does not have an array for a "rules" property`;
+        }
+
+        if (typeof data.shouldLog !== "boolean") {
+            throw `Invalid preferences JSON: ${jsonString} does not have a boolean for a "shouldLog" property`;
+        }
+
+        const {rules, shouldLog} = data;
         return init(rules, shouldLog, false);
+    };
+
+    /**
+     * Returns a new preferences object, with no non-default state.  This is
+     * mainly only used for testing.
+     *
+     * @return {Preferences}
+     *   An empty preferences object.
+     */
+    const initNew = () => {
+        return init([], false);
     };
 
     window.WEB_API_MANAGER.preferencesLib = {
         load,
         get,
         fromJSON,
+        initNew,
     };
 }());

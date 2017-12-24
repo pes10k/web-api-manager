@@ -2,13 +2,13 @@
 (function () {
     "use strict";
 
-    const {browserLib, constants} = window.WEB_API_MANAGER;
+    const {browserLib, constants, preferencesLib} = window.WEB_API_MANAGER;
     const rootObject = browserLib.getRootObject();
     const doc = window.document;
     const configureButton = doc.getElementById("config-page-link");
     const reportButton = doc.getElementById("report-page-link");
-    const domainRuleTableBody = doc.querySelector("#domain-rule-table tbody");
-    const defaultDomainRule = constants.defaultDomainRule;
+    const rulesTableBody = doc.querySelector("#rules-table tbody");
+    const defaultPattern = constants.defaultPattern;
 
     /**
      * Returns a function for use as the "onclick" handler for a toggle button.
@@ -46,7 +46,7 @@
                     numApisBlockedTd.innerText = numAPIsBlocked;
 
                     if (action === "block") {
-                        appliedRuleTd.innerText = defaultDomainRule;
+                        appliedRuleTd.innerText = defaultPattern;
                     } else if (action === "allow") {
                         appliedRuleTd.innerText = hostName;
                     }
@@ -142,31 +142,36 @@
         event.stopImmediatePropagation();
     });
 
-    rootObject.tabs.executeScript(
-        {
-            allFrames: true,
-            code: "window.location.host",
-        },
-        function (response) {
-            const uniqueDomains = Array.from(new Set(response)).sort();
-            const message = ["rulesForDomains", uniqueDomains];
+    const executeScriptCallback = executeScriptResponse => {
+        const uniqueHosts = Array.from(new Set(executeScriptResponse)).sort();
+        const message = ["getPreferences", undefined];
 
-            rootObject.runtime.sendMessage(message, response => {
-                doc.body.className = "loaded";
+        rootObject.runtime.sendMessage(message, response => {
+            const [label, data] = response;
+            if (label !== "getPreferencesResponse") {
+                return;
+            }
+            doc.body.className = "loaded";
 
-                const {domainData, shouldLog} = response;
-                const currentDomains = Object.keys(domainData);
+            const preferences = preferencesLib.fromJSON(data);
 
-                currentDomains.forEach(aDomain => {
-                    const {ruleName, numRules} = domainData[aDomain];
-                    const rowElm = ruleToTr(aDomain, ruleName, numRules);
-                    domainRuleTableBody.appendChild(rowElm);
-                });
-
-                if (shouldLog === true) {
-                    reportButton.className = reportButton.className.replace(" hidden", "");
-                }
+            uniqueHosts.forEach(aHost => {
+                const blockRule = preferences.getRuleForUrl(aHost);
+                const stdIdsForRule = blockRule.getStandardIds();
+                const rowElm = ruleToTr(aHost, blockRule.pattern, stdIdsForRule.length);
+                rulesTableBody.appendChild(rowElm);
             });
-        }
-    );
+
+            if (preferences.getShouldLog() === true) {
+                reportButton.className = reportButton.className.replace(" hidden", "");
+            }
+        });
+    };
+
+    const injectedScript = {
+        allFrames: true,
+        code: "window.location.host",
+    };
+
+    rootObject.tabs.executeScript(injectedScript, executeScriptCallback);
 }());

@@ -1,7 +1,7 @@
 <section class="container">
     <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" :class="dataActiveTab === 'domain-rules' ? 'active' : ''">
-            <a href="#domain-rules" @click="setActiveTab">Domain Rules</a>
+        <li role="presentation" :class="dataActiveTab === 'blocking-rules' ? 'active' : ''">
+            <a href="#blocking-rules" @click="setActiveTab">Blocking Rules</a>
         </li>
         <li role="presentation" :class="dataActiveTab === 'import-export' ? 'active' : ''">
             <a href="#import-export" @click="setActiveTab">Import / Export</a>
@@ -9,7 +9,9 @@
     </ul>
 
     <div class="tab-content">
-        <div role="tabpanel" :class="['tab-pane', dataActiveTab === 'domain-rules' ? 'active' : '']" id="domain-rules">
+        <div role="tabpanel"
+           :class="['tab-pane', dataActiveTab === 'blocking-rules' ? 'active' : '']"
+               id="blocking-rules">
             <div class="row">
                 <div class="col-xs-12 col-md-12">
                     <p>
@@ -22,10 +24,12 @@
             </div>
             <div class="row">
                 <div class="col-xs-4 col-md-4">
-                    <domain-rules
+                    <blocking-rules
                         :data-patterns="dataPatterns"
                         :data-selected-pattern="dataSelectedPattern"
-                    ></domain-rules>
+                        :data-allowing-all-patterns="dataAllowingAllPatterns"
+                        :data-blocking-any-patterns="dataBlockingAnyPatterns">
+                    </blocking-rules>
 
                     <logging-settings :data-should-log="dataShouldLog"></logging-settings>
                 </div>

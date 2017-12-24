@@ -5,14 +5,13 @@
     const {standardsDefinitions} = window.WEB_API_MANAGER.standardsLib;
     delete window.WEB_API_MANAGER.standardsLib.standardsDefinitions;
 
-
     /**
      * Returns an array of all of the standard ids defined in the extension.
      *
-     * @return {Array.string}
+     * @return {Array.number}
      *   An array of standard ids.
      */
-    const allStandardIds = () => Object.keys(standardsDefinitions);
+    const allStandardIds = () => Object.keys(standardsDefinitions).map(strId => +strId);
 
     // Build a mapping of features to standard names, given the initial
     // mapping of standards to features.
@@ -31,7 +30,7 @@
      * @param {string} featureName
      *   The keypath defining a feature in the DOM.
      *
-     * @return {?string}
+     * @return {?number}
      *   Either the id for the standard that defines the given feature,
      *   or undefined if the feature name is not recognized.
      */
@@ -40,7 +39,7 @@
     /**
      * Returns the human readable name of a standard, from its unique identifier.
      *
-     * @param {string} standardId
+     * @param {number} standardId
      *   The unique, constant identifier for a DOM standard.
      *
      * @return {?string}
@@ -57,7 +56,7 @@
     /**
      * Returns the features that are included in a DOM standard.
      *
-     * @param {string} standardId
+     * @param {number} standardId
      *   The unique, constant identifier for a DOM standard.
      *
      * @return {?Array.string}
@@ -74,7 +73,7 @@
     /**
      * Returns the URL where the standard definition can be found.
      *
-     * @param {string} standardId
+     * @param {number} standardId
      *   The unique, constant identifier for a DOM standard.
      *
      * @return {?string}
@@ -95,7 +94,7 @@
      *
      * @see add-on/lib/categories.js
      *
-     * @param {string} standardId
+     * @param {number} standardId
      *   The unique, constant identifier for a DOM standard.
      *
      * @return {?string}
@@ -131,8 +130,8 @@
      * @param {string} categoryId
      *   The identifier for a category.
      *
-     * @return {?Array.string}
-     *   An array of zero or more strings, each an id for a DOM standard,
+     * @return {?Array.number}
+     *   An array of zero or more numbers, each an id for a DOM standard,
      *   or undefined if the given category id is not recognized.
      */
     const standardIdsForCategoryId = categoryId => catIdToStandardIdMapping[categoryId];
@@ -140,9 +139,9 @@
     /**
      * Sorts two standards based on their name, but identified by their id.
      *
-     * @param {string} standardIdA
+     * @param {number} standardIdA
      *   The unique identifier for a standard.
-     * @param {string} standardIdB
+     * @param {number} standardIdB
      *   The unique identifier for another standard.
      *
      * @return {number}
@@ -154,6 +153,32 @@
         return standardNameA.localeCompare(standardNameB);
     };
 
+    /**
+     * Retrieves the new, number style id for a standard, given the old
+     * string style id for a standard.
+     *
+     * Implementation wise, this is just giving the `info.id` value for a
+     * standard, given its `info.origId` value.
+     *
+     * @param {string} oldStdId
+     *   The old, string style id for a standard.
+     *
+     * @return {?number}
+     *   Either the new number id for the standard, or undefined if the given
+     *   string id doesn't match a known standard id.
+     */
+    const newIdForOldStandardId = oldStdId => {
+        const matchingDef = Object.values(standardsDefinitions).find(stdDef => {
+            return stdDef.info.origId === oldStdId;
+        });
+
+        if (matchingDef === undefined) {
+            return undefined;
+        }
+
+        return matchingDef.info.id;
+    };
+
     window.WEB_API_MANAGER.standardsLib = {
         allStandardIds,
         standardIdForFeature,
@@ -163,5 +188,6 @@
         categoryIdForStandardId,
         standardIdsForCategoryId,
         sortStandardsById,
+        newIdForOldStandardId,
     };
 }());

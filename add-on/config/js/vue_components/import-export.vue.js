@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    const {blockRulesLib} = window.WEB_API_MANAGER;
+    const {blockRulesLib, stateLib} = window.WEB_API_MANAGER;
     const Vue = window.Vue;
 
     /**
@@ -62,6 +62,8 @@
         },
         methods: {
             onImportClicked: function (event) {
+                const state = this.$root.$data;
+
                 if (!this.isValidToImport()) {
                     this.importError = true;
                     this.dataToImport = undefined;
@@ -70,8 +72,7 @@
                 }
 
                 const shouldOverwrite = !!this.shouldOverwrite;
-                const stateObject = this.$root.$data;
-                const preferences = stateObject.preferences;
+                const preferences = state.preferences;
                 const newRules = this.dataToImport;
                 this.importLog = "";
 
@@ -83,7 +84,7 @@
                     }
 
                     const newStandardIds = newRule.getStandardIds();
-                    this.$root.$data.setStandardIdsForPattern(newPattern, newStandardIds);
+                    stateLib.setStandardIdsForPattern(state, newPattern, newStandardIds);
                     return ` * ${newPattern}: Blocking ${newStandardIds.length} standards.\n`;
                 });
 
@@ -99,15 +100,17 @@
         },
         watch: {
             selectedStandardIds: function () {
+                const state = this.$root.$data;
                 this.exportedData = generateExportString(
                     this.patternsToExport,
-                    this.$root.$data.preferences
+                    state.preferences
                 );
             },
             patternsToExport: function (selectedPatterns) {
+                const state = this.$root.$data;
                 this.exportedData = generateExportString(
                     selectedPatterns,
-                    this.$root.$data.preferences
+                    state.preferences
                 );
             },
             importTextAreaValue: function () {

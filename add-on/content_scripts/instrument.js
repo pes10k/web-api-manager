@@ -64,6 +64,7 @@
 
     const eventName = "__wamEvent" + randNonce;
     doc.addEventListener(eventName, event => {
+        console.log(event);
         browserLib.getRootObject().runtime.sendMessage(["blockedFeature", event.detail]);
     });
 

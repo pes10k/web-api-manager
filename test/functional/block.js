@@ -7,16 +7,16 @@ const webdriver = require("selenium-webdriver");
 const by = webdriver.By;
 const until = webdriver.until;
 
-describe("Basic Functionality", function () {
+describe("Basic functionality", function () {
     const svgTestScript = injected.testSVGTestScript();
 
     let httpServer;
     let testUrl;
 
-    describe("blocking", function () {
+    describe("Blocking", function () {
         this.timeout = () => 20000;
 
-        it("SVG Not Blocking", function (done) {
+        it("SVG not blocking", function (done) {
             this.timeout = () => 10000;
 
             const [server, url] = testServer.start();

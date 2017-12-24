@@ -11,9 +11,9 @@ const svgId = 63;
 const ambientLightSensorId = 2;
 const webGLId = 73;
 
-const emptyRuleSet = `[{"pattern":"(default)","standardIds":[]}]`;
-const blockingSVGandBeacon = `[{"pattern":"(default)","standardIds":[${beaconId},${svgId}]}]`;
-const newDomainImport = `[{"pattern":"*.example.com","standardIds":[${ambientLightSensorId},${webGLId}]}]`;
+const emptyRuleSet = `[{"p":"(default)","s":[]}]`;
+const blockingSVGandBeacon = `[{"p":"(default)","s":[${beaconId},${svgId}]}]`;
+const newDomainImport = `[{"p":"*.example.com","s":[${ambientLightSensorId},${webGLId}]}]`;
 
 const promiseOpenImportExportTab = function (driver) {
     return utils.promiseExtensionConfigPage(driver)
@@ -52,7 +52,8 @@ describe("Import / Export", function () {
             utils.promiseGetDriver()
                 .then(function (driver) {
                     driverReference = driver;
-                    return utils.promiseSetBlockingRules(driverReference, utils.constants.svgBlockRule.concat([beaconId]));
+                    const svgAndBeconIds = utils.constants.svgBlockRule.concat([beaconId]);
+                    return utils.promiseSetBlockingRules(driverReference, svgAndBeconIds);
                 })
                 .then(() => promiseOpenImportExportTab(driverReference))
                 .then(() => driverReference.findElement(by.css(".export-section select option:nth-child(1)")).click())
@@ -83,7 +84,7 @@ describe("Import / Export", function () {
                 .then(() => driverReference.findElement(by.css(".import-section input[type='checkbox']")).click())
                 .then(() => driverReference.findElement(by.css(".import-section button")).click())
                 .then(() => utils.pause(500))
-                .then(() => driverReference.findElements(by.css("#domain-rules input[type='checkbox']:checked")))
+                .then(() => driverReference.findElements(by.css("#blocking-rules input[type='checkbox']:checked")))
                 .then(function (checkboxElms) {
                     checkedCheckboxes = checkboxElms;
                     assert.equal(checkboxElms.length, 2, "There should be two standards blocked.");
@@ -116,13 +117,13 @@ describe("Import / Export", function () {
                 .then(() => driverReference.findElement(by.css(".import-section textarea")).sendKeys(newDomainImport))
                 .then(() => driverReference.findElement(by.css(".import-section button")).click())
                 .then(() => utils.pause(500))
-                .then(() => driverReference.findElement(by.css("a[href='#domain-rules']")).click())
-                .then(() => driverReference.findElements(by.css("#domain-rules input[type='radio']")))
+                .then(() => driverReference.findElement(by.css("a[href='#blocking-rules']")).click())
+                .then(() => driverReference.findElements(by.css("#blocking-rules input[type='radio']")))
                 .then(function (radioElms) {
                     assert.equal(radioElms.length, 2, "There should be two domain rules in place.");
                     return radioElms[0].click();
                 })
-                .then(() => driverReference.findElements(by.css("#domain-rules input[type='checkbox']:checked")))
+                .then(() => driverReference.findElements(by.css("#blocking-rules input[type='checkbox']:checked")))
                 .then(function (checkboxElms) {
                     checkedCheckboxes = checkboxElms;
                     assert.equal(checkboxElms.length, 2, "There should be two standards blocked.");

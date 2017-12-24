@@ -55,8 +55,8 @@ const assertForFrameReport = (frameReport, features) => {
     const expectedStandardIds = frameReport.getAllStandardReports().map(report => report.id);
 
     assert.equal(
-        expectedStandardIds.length,
         foundStandardIds.length,
+        expectedStandardIds.length,
         `Found ${foundStandardIds.length} standards blocked for ${frameUrl}, expected ${expectedStandardIds.length}.`
     );
 
@@ -166,7 +166,7 @@ describe("Logging", function () {
 
             const testUrl = url;
             const httpServer = server;
-            const webCryptoStandardId = "Web Cryptography API";
+            const webCryptoStandardId = 71;
 
             const svgAndCryptoStandardIds = stdIdsToBlock.concat([webCryptoStandardId]);
 

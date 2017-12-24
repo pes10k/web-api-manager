@@ -80,7 +80,7 @@ Contributing
 Pull requests and contributions of all kinds are greatly appreciated. One
 thing that would be extremely helpful is help compiling information about
 new browser standards.  The process is not too tricky, and is documented at
-`contributing/ADDING_STANDARDS.md`.
+`docs/ADDING_STANDARDS.md`.
 
 And in general, please feel free to reach out, either through the issue queue
 or through email (psnyde2@uic.edu).
@@ -111,7 +111,7 @@ To run the tests, give the following a try:
 # install the development libraries
 npm install
 
-# copy the skelleton config file to where the test scripts expect it to be.
+# copy the skeleton config file to where the test scripts expect it to be.
 cp test.config.example.js test.config.js
 
 # edit the new test config file to add github and google account credentials

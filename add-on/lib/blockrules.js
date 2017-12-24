@@ -75,28 +75,51 @@
      *
      * @param {MatchPattern} matchPattern
      *   A match pattern, describing a set of URLs in RegEx like format.
-     * @param {string} url
+     * @param {string} host
      *   A url to test against the provided pattern.
      *
      * @return {boolean}
      *   Boolean description of whether the given match pattern matches
      *   the host name.
      */
-    const testPatternWithUrl = (matchPattern, url) => {
-        const hostName = window.URI.parse(url).host;
+    const testPatternWithHost = (matchPattern, host) => {
         const compiledPattern = makeRe(matchPattern);
 
-        if (compiledPattern.text(hostName) === false) {
-            return false;
+        if (compiledPattern.test(host) === true) {
+            return true;
         }
 
         if (matchPattern.startsWith("*.") &&
-                matchPattern.endsWith(hostName) &&
-                matchPattern.length === hostName.length + 2) {
+                matchPattern.endsWith(host) &&
+                matchPattern.length === host.length + 2) {
             return true;
         }
 
         return false;
+    };
+
+    /**
+     * Tests to see if a match pattern matches a given url.
+     *
+     * This function matches slightly more loosely than what is described by
+     * mozilla in the given link, since it treats a wildcard as segment
+     * as matching urls w/o that segment (e.g. "*.example.com" matches
+     * "example.com").
+     *
+     * @see https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Match_patterns
+     *
+     * @param {MatchPattern} matchPattern
+     *   A match pattern, describing a set of URLs in RegEx like format.
+     * @param {string} url
+     *   A url to test against the provided pattern.
+     *
+     * @return {boolean}
+     *   Boolean description of whether the given match pattern matches
+     *   the url.
+     */
+    const testPatternWithUrl = (matchPattern, url) => {
+        const hostName = window.URI.parse(url).host;
+        return testPatternWithHost(matchPattern, hostName);
     };
 
     /**
@@ -120,6 +143,9 @@
      * @property {function(string): boolean} isMatchingUrl
      *   Returns a boolean description of whether this block rule should
      *   be applied to a url.
+     * @property {function(string): boolean} isMatchingHost
+     *   Returns a boolean description of whether this block rule should
+     *   be applied to a host.
      * @property {MatchPattern} pattern
      *   Read only reference to the match pattern this rule applies to.
      * @property {function(): Array.number}
@@ -168,6 +194,7 @@
             setStandardIds,
             getStandardIds,
             pattern: matchPattern,
+            isMatchingHost: testPatternWithHost.bind(undefined, matchPattern),
             isMatchingUrl: testPatternWithUrl.bind(undefined, matchPattern),
         });
     };

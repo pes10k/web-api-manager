@@ -3,7 +3,7 @@
  * were blocked, on which frames, in which tabs.
  *
  * The entry point for all the code in this library is usually the
- * initBlockReport method, which returns a BlockReport object that manages
+ * init method, which returns a BlockReport object that manages
  * a record of all the feature blocking thats happened.
  *
  * The initTabReport method is provided to do the same, but when you're only
@@ -373,7 +373,7 @@
      *   Returns a blocking report object, either empty, or populated with the
      *   data depicted by the provided JSON string.
      */
-    const initBlockReport = jsonString => {
+    const init = jsonString => {
         const report = jsonString ? JSON.parse(jsonString) : Object.create(null);
 
         const getTabReportBound = getTabReport.bind(undefined, report);
@@ -420,7 +420,7 @@
     };
 
     window.WEB_API_MANAGER.reportsLib = {
-        initBlockReport,
+        init,
         tabReportFromJSON,
     };
 }());

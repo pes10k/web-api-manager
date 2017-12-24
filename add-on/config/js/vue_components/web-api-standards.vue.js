@@ -2,7 +2,7 @@
     "use strict";
 
     const standardsDefaults = window.WEB_API_MANAGER.defaults;
-    const {standardsLib, categoriesLib} = window.WEB_API_MANAGER;
+    const {standardsLib, categoriesLib, stateLib} = window.WEB_API_MANAGER;
     const Vue = window.Vue;
 
     Vue.component("web-api-standards", {
@@ -29,6 +29,7 @@
                 return standardIdsInCat.every(stdId => blockedStandardIds.indexOf(stdId) !== -1);
             },
             toggleCategory: function (event, shouldBlock, categoryId) {
+                const state = this.$root.$data;
                 const standardIdsInCategory = standardsLib.standardIdsForCategoryId(categoryId);
 
                 const standardIdsInCatSet = new Set(standardIdsInCategory);
@@ -44,29 +45,36 @@
                     : Set.prototype.delete;
 
                 standardIdsInCatSet.forEach(setOperation.bind(currentBlockedIdsSet));
-                this.$root.$data.setCurrentStandardIds(Array.from(currentBlockedIdsSet));
+                stateLib.setCurrentStandardIds(state, Array.from(currentBlockedIdsSet));
             },
             sortedStandardIdsInCategory: categoryId => {
                 const standardIds = standardsLib.standardIdsForCategoryId(categoryId);
                 return standardIds.sort(standardsLib.sortStandardsById);
             },
             onStandardChecked: function () {
-                this.$root.$data.setCurrentStandardIds(this.dataCurrentStandardIds);
+                const state = this.$root.$data;
+                const stdIdsAsNumbers = this.dataCurrentStandardIds;
+                stateLib.setCurrentStandardIds(state, stdIdsAsNumbers);
             },
             onLiteClicked: function () {
-                this.$root.$data.setCurrentStandardIds(standardsDefaults.lite);
+                const state = this.$root.$data;
+                stateLib.setCurrentStandardIds(state, standardsDefaults.lite);
             },
             onConservativeClicked: function () {
-                this.$root.$data.setCurrentStandardIds(standardsDefaults.conservative);
+                const state = this.$root.$data;
+                stateLib.setCurrentStandardIds(state, standardsDefaults.conservative);
             },
             onAggressiveClicked: function () {
-                this.$root.$data.setCurrentStandardIds(standardsDefaults.aggressive);
+                const state = this.$root.$data;
+                stateLib.setCurrentStandardIds(state, standardsDefaults.aggressive);
             },
             onClearClicked: function () {
-                this.$root.$data.setCurrentStandardIds([]);
+                const state = this.$root.$data;
+                stateLib.setCurrentStandardIds(state, []);
             },
             onAllClicked: function () {
-                this.$root.$data.setCurrentStandardIds(standardsLib.allStandardIds());
+                const state = this.$root.$data;
+                stateLib.setCurrentStandardIds(state, standardsLib.allStandardIds());
             },
         },
     });

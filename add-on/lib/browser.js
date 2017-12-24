@@ -35,8 +35,13 @@
                     environmentName = "standard";
                     _rootObject = browser;
                 } catch (e) {
-                    environmentName = "chrome";
-                    _rootObject = chrome;
+                    try {
+                        _rootObject = chrome;
+                        environmentName = "chrome";
+                    } catch (e) {
+                        _rootObject = undefined;
+                        environmentName = "node?";
+                    }
                 }
             }
 

@@ -5,45 +5,43 @@
 (function () {
     "use strict";
 
-    const {browserLib, tabBlockedFeaturesLib} = window.WEB_API_MANAGER;
+    const {browserLib, tabBlockedFeaturesLib, blockRulesLib} = window.WEB_API_MANAGER;
     const rootObject = browserLib.getRootObject();
 
     const register = preferences => {
         rootObject.runtime.onMessage.addListener((request, sender, sendResponse) => {
             const [label, data] = request;
 
+            // Message sent from the configuration page, specifiying that the
+            // user has changed some settings regarding which standards should
+            // be blocked.
+            if (label === "updatePreferenceRules") {
+                const {operation, ruleJSON} = data;
+                const rule = blockRulesLib.fromJSON(ruleJSON);
+                if (operation === "delete") {
+                    preferences.deleteRule(rule.pattern);
+                    return;
+                }
+                if (operation === "add") {
+                    preferences.addRule(rule);
+                    return;
+                }
+                if (operation === "update") {
+                    preferences.upcertRule(rule.pattern, rule.getStandardIds());
+                    return;
+                }
+            }
+
+            if (label === "updatePreferencesShouldLog") {
+                const {shouldLog} = data;
+                preferences.setShouldLog(shouldLog);
+                return;
+            }
+
+            // Message sent from configuration and popup pages, asking for read
+            // only version of the preferences.
             if (label === "getPreferences") {
                 sendResponse(["getPreferencesResponse", preferences.toJSON()]);
-                return;
-            }
-
-            // Sent from the config page, when the "which APIs should be
-            // blocked for which domains" has been changed on the config page.
-            if (label === "stateUpdate") {
-                // domainRules = data.domainRules;
-                // shouldLog = data.shouldLog;
-                return;
-            }
-
-            // Sent from the popup / browser action, asking for information about
-            // which blocking rules are being applied to which domains in the
-            // tab.
-            if (label === "rulesForDomains") {
-                const hostNames = data;
-                const domainToRuleMapping = {};
-
-                hostNames.forEach(aHostName => {
-                    const rule = preferences.getRuleForUrl(aHostName);
-                    domainToRuleMapping[aHostName] = {
-                        ruleName: rule.pattern,
-                        numRules: rule.getStandardIds().length,
-                    };
-                });
-
-                sendResponse({
-                    domainData: domainToRuleMapping,
-                    shouldLog: preferences.getShouldLog(),
-                });
                 return;
             }
 
@@ -68,7 +66,8 @@
                 let numBlockedStandardsForHost;
                 if (action === "block") {
                     preferences.deleteRule(hostName);
-                    numBlockedStandardsForHost = preferences.getDefaultRule().getStandardIds().length;
+                    const defaultStdIds = preferences.getDefaultRule().getStandardIds();
+                    numBlockedStandardsForHost = defaultStdIds.length;
                 } else if (action === "allow") {
                     preferences.upcertRule(hostName, []);
                     numBlockedStandardsForHost = 0;

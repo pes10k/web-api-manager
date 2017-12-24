@@ -8,7 +8,7 @@
     const {browserLib, reportsLib} = window.WEB_API_MANAGER;
     const rootObject = browserLib.getRootObject();
 
-    const blockingReport = reportsLib.initBlockReport();
+    const blockingReport = reportsLib.init();
 
     rootObject.tabs.onCreated.addListener(tab => {
         blockingReport.initTabReport(tab.id);

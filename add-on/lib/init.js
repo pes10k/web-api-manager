@@ -30,6 +30,9 @@
             // The name of the catch all rule set used when there are no
             // more specific matching domain rule sets.
             defaultPattern: "(default)",
+
+            // Version of schema used when serializing preferences to storage.
+            schemaVersion: 2,
         },
     };
 }());

@@ -22,15 +22,15 @@
                 <div class="col-xs-12">
 
                     <div class="loading-section">
-                        <p>Querying domain information…</p>
+                        <p>Querying block rules…</p>
                     </div>
 
                     <div class="loaded-section">
                         <p>The following origins are executing code on this page.</p>
-                        <table class="table table-striped" id="domain-rule-table">
+                        <table class="table table-striped" id="rules-table">
                             <thead>
                                 <tr>
-                                    <th>Domain</th>
+                                    <th>Host</th>
                                     <th>Rule</th>
                                     <th># APIs Blocked</th>
                                     <th>Action</th>
@@ -52,8 +52,11 @@
                 </div>
             </div>
         </section>
+        <script src="../../lib/third_party/uri.all.min.js"></script>
         <script src="../../lib/init.js"></script>
         <script src="../../lib/browser.js"></script>
+        <script src="../../lib/blockrules.js"></script>
+        <script src="../../lib/preferences.js"></script>
         <script src="js/popup.js"></script>
     </body>
 </html>

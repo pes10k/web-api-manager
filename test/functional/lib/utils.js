@@ -161,7 +161,7 @@ module.exports.promiseGetBlockReport = driver => {
             return driver.close();
         })
         .then(() => driver.switchTo().window(initialHandle))
-        .then(() => Promise.resolve(reportsLib.initBlockReport(blockReport)));
+        .then(() => Promise.resolve(reportsLib.init(blockReport)));
 };
 
 module.exports.promiseGetDriver = () => {

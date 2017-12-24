@@ -62,9 +62,10 @@
       "lib/cookieencoding.js",
       "lib/proxyblock.js",
       "lib/blockrules.js",
+      "lib/migration.js",
       "lib/preferences.js",
-      "background_scripts/messages.js",
       "background_scripts/tab_blocked_features.js",
+      "background_scripts/messages.js",
       "background_scripts/background.js"
     ]
   },
