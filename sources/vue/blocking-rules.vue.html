@@ -1,36 +1,43 @@
 <div class="patterns-container well">
     <div class="patterns-blocking-section">
-        <h3>Patterns</h3>
-        <div class="radio" v-for="pattern in dataBlockingAnyPatterns">
-            <label>
-                <input type="radio"
-                    :value="pattern"
-                    v-model="dataSelectedPattern"
-                    @change="onRadioChange">
-                {{ pattern }}
-                <span class="glyphicon glyphicon-remove"
-                    v-if="!isDefault(pattern)"
-            :data-pattern="pattern"
-                    @click="onRemoveClick"></span>
-            </label>
-        </div>
+        <h3>Blocking rules</h3>
+        <template v-if="dataBlockingAnyPatterns.length">
+            <div class="radio" v-for="pattern in dataBlockingAnyPatterns">
+                <label>
+                    <input type="radio"
+                        :value="pattern"
+                        v-model="dataSelectedPattern"
+                        @change="onRadioChange">
+                    {{ pattern }}
+                    <span class="glyphicon glyphicon-remove"
+                        v-if="!isDefault(pattern)"
+                :data-pattern="pattern"
+                        @click="onRemoveClick"></span>
+                </label>
+            </div>
+        </template>
+        <p v-else>No rules.</p>
     </div>
 
     <div class="patterns-allowing-all-section">
-        <h3>Patterns allowing all standards</h3>
-        <div class="radio" v-for="pattern in dataAllowingAllPatterns">
-            <label>
-                <input type="radio"
-                    :value="pattern"
-                    v-model="dataSelectedPattern"
-                    @change="onRadioChange">
-                {{ pattern }}
-                <span class="glyphicon glyphicon-remove"
-                    v-if="!isDefault(pattern)"
-            :data-pattern="pattern"
-                    @click="onRemoveClick"></span>
-            </label>
-        </div>
+        <h3>Permitting rules</h3>
+        <template v-if="dataAllowingAllPatterns.length">
+            <div class="radio"
+                v-for="pattern in dataAllowingAllPatterns">
+                <label>
+                    <input type="radio"
+                        :value="pattern"
+                        v-model="dataSelectedPattern"
+                        @change="onRadioChange">
+                    {{ pattern }}
+                    <span class="glyphicon glyphicon-remove"
+                        v-if="!isDefault(pattern)"
+                :data-pattern="pattern"
+                        @click="onRemoveClick"></span>
+                </label>
+            </div>
+        </template>
+        <p v-else>No rules.</p>
     </div>
 
     <div class="alert alert-danger" role="alert" v-if="errorMessage">

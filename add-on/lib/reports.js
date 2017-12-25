@@ -16,131 +16,6 @@
     const {standardsLib} = window.WEB_API_MANAGER;
 
     /**
-     * Describes all feature blocking that has occured in any frame in any tab.
-     *
-     * @see https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/tabs
-     * @see https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/webNavigation
-     *
-     * @typedef {object} BlockReport
-     * @property {function(): string} toJSON
-     *   Returns a string, that depicts all of the recorded blocking data
-     *   as a JSON string.
-     * @property {function(number): boolean} initTabReport
-     *   Initilizes a tab report for a given tab id in the block report.
-     *   Takes the id of the tab that should be initilized in the report,
-     *   and returns true if a new tab report was initilized in the report, or
-     *   false if otherwise (because there was already a report for the tab id).
-     * @property {function(number): ?TabReport} getTabReport
-     *   Takes an id for a tab, referring to one of the tabs open in the
-     *   browser.  Returns either a TabReport object that describes the blocking
-     *   that has occured in that tab, or undefined if the given tab id does
-     *   not match an open, tracked tab.
-     * @property {function(): Array.TabReport} getAllTabReports
-     *   Returns an array containing TabReport objects, collectivly describing
-     *   all of the blocking that has occured on all of the tabs in the system.
-     * @property {function(string): Array.FrameReport} getFrameReportsForUrl
-     *   Returns an array containing FrameReport objects, describing
-     *   blocking that has occured on any frames that initially loaded the
-     *   given url.
-     * @property {function(number): boolean} deleteTabReport
-     *   Takes a tab id, describing a tab that is or was open in the browser,
-     *   and deletes all logged information about the blocking that occured
-     *   in that tab (used to prune the logging data when a tab closes).
-     *   Returns true if information about a tab was deleted, and otherwise
-     *   false (such as if an unrecognized tab id was provided).
-     * @property {function(number, number, string): boolean} initFrameReport
-     *   Takes a tab id, frame id and a url, describing a frame that is being
-     *   loaded in the browser. Creates a record to record blocking in the frame
-     *   (used, for example, when the user opens a new tab, or a tab loads
-     *   an iframe).  Returns if a new FrameReport object was initilized, and
-     *   otherwise false (such as if an unrecognized tab id was provided,
-     *   or there is already a FrameReport for this frame in the specified tab).
-     * @property {function(number, number, FeaturePath)} recordBlockedFeature
-     *   Takes a tab id, frame id, and identifier for a feature that was blocked
-     *   in the frame.  Records that a given feature was blocked.
-     */
-
-    /**
-     * Represents a tab in the browser where blocking occured, and describes
-     * the standards and features that were blocked in the frames in this tab.
-     *
-     * @see https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/tabs
-     *
-     * @typedef {object} TabReport
-     * @property {function(): string} toJSON
-     *   Returns a string, that depicts the data in this tab report, serialized
-     *   as JSON.  Creates output designed to be consumed by
-     *   reportsLib.tabReportFromJSON.
-     * @property {number} id
-     *   The identifier for the tab in the browser (as defined in the
-     *   WebExtension Tabs API).
-     * @property {function(): boolean} isEmpty
-     *   Returns whether any blocking or frames have been recorded on this tab.
-     * @property {function(): Array.FrameReport} getAllFrameReports
-     *   Returns an array of FrameReport objects, each describing the blocking
-     *   that occured on a frame in this tab.
-     * @property {function(string): Array.FrameReport} getFrameReportsForUrl
-     *   Returns an array of FrameReport objects that represent frames
-     *   that initially loaded the passed URL.  This is a convience filtering
-     *   method that returns a subset of what `getAllFrameReports` returns.
-     * @property {function(number): ?FrameReport} getFrameReport
-     *   Takes a frameID (as defined in the WebExtension webNavigation API)
-     *   that describes a frame that was loaded in this tab, and returns
-     *   either a FrameReport object that describes the blocking that occured
-     *   on that frame, or undefined if no matching frame exists in this tab.
-     */
-
-    /**
-     * Represents a frame loaded in a tab, and desribes which standards and
-     * features were blocked on that frame.
-     *
-     * @see https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/webNavigation
-     *
-     * @typedef {object} FrameReport
-     * @property {string} url
-     *   The initial URL that this frame loaded (note that the URL could have
-     *   changed since its initial load, but this value will always give
-     *   at the initial URL that was loaded).
-     * @property {number} id
-     *   The frameID (as defined in the WebExtension webNavigation API)
-     *   describing this frame.
-     * @property {function(): Array.StandardReport} getAllStandardReports
-     *   Returns an array of StandardReport objects, each representing a
-     *   Web API standard that was blocked at least once in this frame.
-     * @property {function(string): ?StandardReport} getStandardReport
-     *   Takes a standard id, which describes a Web API standard in the
-     *   extension. Either returns a StandardReport object (describing
-     *   which features in that standard have been blocked in this frame),
-     *   or undefined if no methods in that standard have been blocked so far.
-     * @property {function(): boolean} hasBlocked
-     *   Returns a boolean description of whether any blocking of Web API
-     *   features and standards has occured on this frame.
-     */
-
-    /**
-     * Represents a standard that was blocked in a frame, and describes which
-     * features in the standard were blocked.
-     *
-     * @typedef {object} StandardReport
-     * @property {string} id
-     *   The unqiue identifier for a Web API standard in the extension.
-     * @property {string} name
-     *   The human readable name for this standard
-     * @property {function(): number} getNumBlockedFeatures
-     *   Returns the number of features in this standard that were blocked.
-     * @property {function(FeaturePath): boolean} wasFeatureBlocked
-     *   Returns whether the passed feature was blocked in this standard.
-     * @property {function(): Array.FeaturePath} featurePaths
-     *   Returns an array or strings, each describing a feature that was
-     *   blocked in this standard.
-     */
-
-    /**
-     * A string, describing a keypath to a feature's definition in the DOM.
-     * @typedef {string} FeaturePath
-     */
-
-    /**
      * Generates a standard report object, that describies which features
      * in a standard were blocked in on a given frame.
      *
@@ -323,7 +198,8 @@
         }
 
         // Don't track any information for trusted extension pages.
-        if (url.indexOf("moz-extension://") === 0) {
+        if (url.indexOf("moz-extension://") === 0 ||
+            url.indexOf("wyciwyg://") === 0) {
             return;
         }
 

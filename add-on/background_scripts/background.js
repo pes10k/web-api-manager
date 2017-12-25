@@ -12,35 +12,42 @@
 
     // Manage the state of the browser activity, by displaying the number
     // of origins / frames
-    const updateBrowserActionBadge = activeInfo => {
-        const tabId = activeInfo.tabId;
-        rootObject.tabs.executeScript(
-            tabId,
-            {
-                allFrames: true,
-                code: "window.location.host",
-            },
-            allHosts => {
-                if (rootObject.runtime.lastError && !allHosts) {
-                    rootObject.browserAction.setBadgeText({text: "-"});
-                    return;
-                }
+    const updateBrowserActionBadge = tabId => {
+        rootObject.webNavigation.getAllFrames({tabId})
+            .then(frameResults => {
+                const frameHosts = frameResults.map(frame => {
+                    if (frame.errorOccurred === true) {
+                        return false;
+                    }
 
-                const numFrames = allHosts
-                    ? Array.from(new Set(allHosts)).length.toString()
-                    : "-";
+                    return window.URI.parse(frame.url).host;
+                })
+                    .filter(url => !!url);
 
+                const uniqueHosts = Array.from(new Set(frameHosts));
                 rootObject.browserAction.setBadgeText({
-                    text: numFrames,
-                    tabId: tabId,
+                    text: uniqueHosts.length.toString(),
+                    tabId,
                 });
-            }
-        );
+            });
     };
 
-    rootObject.windows.onFocusChanged.addListener(updateBrowserActionBadge);
-    rootObject.tabs.onUpdated.addListener(updateBrowserActionBadge);
-    rootObject.tabs.onActivated.addListener(updateBrowserActionBadge);
+    rootObject.tabs.onUpdated.addListener(tabId => {
+        updateBrowserActionBadge(tabId);
+    });
+    rootObject.tabs.onActivated.addListener(activeInfo => {
+        updateBrowserActionBadge(activeInfo.tabId);
+    });
+
+    rootObject.webRequest.onCompleted.addListener(details => {
+        browserLib.queryTabs({active: true}, activeTabs => {
+            activeTabs.forEach(aTab => {
+                if (aTab.tabId === details.tabId) {
+                    updateBrowserActionBadge(details.tabId);
+                }
+            });
+        });
+    }, {urls: ["<all_urls>"]});
 
     const requestFilter = {
         urls: ["<all_urls>"],

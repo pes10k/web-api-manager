@@ -131,30 +131,6 @@
      */
 
     /**
-     * An structure that defines which stanards should be blocked on domains.
-     *
-     * @typedef {object} BlockRule
-     * @property {function(): string} toJSON
-     *   Returns a serialized version of the data contained in this object,
-     *   as a JSON string.
-     * @property {function(): object} toData
-     *   Returns an object, representing a copy of the data represented by this
-     *   object.  This is basically toJSON, but without the serialization step.
-     * @property {function(string): boolean} isMatchingUrl
-     *   Returns a boolean description of whether this block rule should
-     *   be applied to a url.
-     * @property {function(string): boolean} isMatchingHost
-     *   Returns a boolean description of whether this block rule should
-     *   be applied to a host.
-     * @property {MatchPattern} pattern
-     *   Read only reference to the match pattern this rule applies to.
-     * @property {function(): Array.number}
-     *   Returns a new array of the standard ids being blocked by this rule.
-     * @property {function(Array.number): undefined} setStandardIds
-     *   Sets the standard ids that should be blocked by this rule.
-     */
-
-    /**
      * Creates a new block rule object, specifying which standards to block
      * on which domains.
      *

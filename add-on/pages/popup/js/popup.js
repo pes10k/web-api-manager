@@ -24,8 +24,8 @@
      *   A function that takes a single event object as an argument.  For
      *   use as an event handler callback.
      */
-    const createOnToggleHandler = function (hostName, action) {
-        const onClickHandler = function (event) {
+    const createOnToggleHandler = (hostName, action) => {
+        const onClickHandler = event => {
             const message = ["toggleBlocking", {
                 "action": action,
                 "hostName": hostName,
@@ -76,7 +76,7 @@
      * @return {Node}
      *   a HTMLTRElement object.
      */
-    const ruleToTr = function (domainName, appliedRuleName, numAPIsBlocked) {
+    const ruleToTr = (domainName, appliedRuleName, numAPIsBlocked) => {
         const trElm = doc.createElement("tr");
 
         const domainTd = doc.createElement("td");
@@ -142,36 +142,29 @@
         event.stopImmediatePropagation();
     });
 
-    const executeScriptCallback = executeScriptResponse => {
-        const uniqueHosts = Array.from(new Set(executeScriptResponse)).sort();
-        const message = ["getPreferences", undefined];
+    const message = ["getPreferencesAndFrames", undefined];
 
-        rootObject.runtime.sendMessage(message, response => {
-            const [label, data] = response;
-            if (label !== "getPreferencesResponse") {
-                return;
-            }
-            doc.body.className = "loaded";
+    rootObject.runtime.onMessage.addListener(response => {
+        const [label, data] = response;
+        if (label !== "getPreferencesAndFramesResponse") {
+            return;
+        }
+        doc.body.className = "loaded";
 
-            const preferences = preferencesLib.fromJSON(data);
+        const preferences = preferencesLib.fromJSON(data.prefsJSON);
+        const uniqueHosts = data.uniqueHosts;
 
-            uniqueHosts.forEach(aHost => {
-                const blockRule = preferences.getRuleForUrl(aHost);
-                const stdIdsForRule = blockRule.getStandardIds();
-                const rowElm = ruleToTr(aHost, blockRule.pattern, stdIdsForRule.length);
-                rulesTableBody.appendChild(rowElm);
-            });
-
-            if (preferences.getShouldLog() === true) {
-                reportButton.className = reportButton.className.replace(" hidden", "");
-            }
+        uniqueHosts.forEach(aHost => {
+            const blockRule = preferences.getRuleForHost(aHost);
+            const stdIdsForRule = blockRule.getStandardIds();
+            const rowElm = ruleToTr(aHost, blockRule.pattern, stdIdsForRule.length);
+            rulesTableBody.appendChild(rowElm);
         });
-    };
 
-    const injectedScript = {
-        allFrames: true,
-        code: "window.location.host",
-    };
+        if (preferences.getShouldLog() === true) {
+            reportButton.className = reportButton.className.replace(" hidden", "");
+        }
+    });
 
-    rootObject.tabs.executeScript(injectedScript, executeScriptCallback);
+    rootObject.runtime.sendMessage(message);
 }());

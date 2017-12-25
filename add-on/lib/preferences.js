@@ -12,52 +12,6 @@
     const storageKey = "webApiManager";
 
     /**
-     * Represents and manages all of the user configuration in the extension.
-     *
-     * Manages the domains the user has set, which standards should be blocked
-     * for each domain-matching rule, whether logging is enabled, etc.
-     *
-     * @typedef {object} Preferences
-     * @param {function(): Array.BlockRule} getAllRules
-     *   Returns an array of all the blocking rules configured in the system.
-     * @param {function(): BlockRule} getDefaultRule
-     *   Returns the block rule object that should be used if no other
-     *   blocking rules match a given url.
-     * @param {function(): Array.BlockRule} getNonDefaultRules
-     *   Returns an array all user-set block rules in the system (e.g. every
-     *   block rule that is not a default rule).
-     * @param {function(string): BlockRule} getRuleForUrl
-     *   Return the blocking rule that should be used for the given URL.
-     * @param {function{MatchPattern}: ?BlockRule} getRuleForPattern
-     *   Returns the blocking rule that describes what to block on the given
-     *   pattern, or undefined if no such rule exists.
-     * @param {function{BlockRule}: boolean} addRule
-     *   Adds a blocking rule to the set of rules the user has set to block.
-     *   This will not overwrite any rules, and returns false if there is
-     *   already a rule in place for this pattern.  Otherwise returns true.
-     * @param {function(MatchPattern): boolean} deleteRule
-     *   Attempts to delete a blocking rule for the system, by looking to see
-     *   if there is a BlockRule that matches the given pattern match.
-     * @param {function(MatchPattern, Array.number): boolean} upcertRule
-     *   Either updates the set of standards blocked for a given match
-     *   pattern, or creates a new blocking rule.  Returns a boolean description
-     *   of whether a new BlockRule object was created.
-     * @param {function(boolean): undefined} setShouldLog
-     *   Sets whether the system should log what functionality was blocked.
-     * @param {function(): boolean} getShouldLog
-     *   Returns whether the system is currently configured to log
-     *   what standards / features are blocked.
-     * @param {function(): object} toStorage
-     *   Returns an encoding of the preferences object that can be saved
-     *   using the storage API.
-     * @param {function(): string} toJSON
-     *   Returns a serialized version of the current state of user preferences,
-     *   encoded as a JSON string. Used when sending user preferences to
-     *   contexts across process boundaries or to other contexts where they
-     *   should have read only access to user preferences.
-     */
-
-    /**
      *  Singleton, disk-sync'ed representation of the users preferences.
      * @param {?Preferences}
      */
@@ -123,6 +77,12 @@
         const getRuleForUrl = url => {
             const matchingRule = Object.values(patternsToRulesMap)
                 .find(br => br.isMatchingUrl(url));
+            return matchingRule || defaultRule;
+        };
+
+        const getRuleForHost = host => {
+            const matchingRule = Object.values(patternsToRulesMap)
+                .find(br => br.isMatchingHost(host));
             return matchingRule || defaultRule;
         };
 
@@ -202,6 +162,7 @@
             getRuleForPattern,
             getAllRules,
             getRuleForUrl,
+            getRuleForHost,
             deleteRule,
             addRule,
             upcertRule,
@@ -241,7 +202,6 @@
      */
     const load = callback => {
         const fromStorage = storedData => {
-            console.log(storedData);
             const [success, migratedData] = migrationLib.applyMigrations(storedData);
 
             if (success !== true) {
