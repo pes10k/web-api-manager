@@ -49,25 +49,25 @@
                 if (tabs.length === 0) {
                     return;
                 }
-                rootObject.webNavigation.getAllFrames({tabId: tabs[0].id})
-                    .then(frameResults => {
-                        const frameHosts = frameResults.map(frame => {
+                browserLib.getAllFrames({tabId: tabs[0].id}, frameResults => {
+                    const frameHosts = frameResults
+                        .map(frame => {
                             if (frame.errorOccurred === true) {
                                 return false;
                             }
 
                             return window.URI.parse(frame.url).host;
                         })
-                            .filter(url => !!url);
+                        .filter(url => !!url);
 
-                        const uniqueHosts = Array.from(new Set(frameHosts));
-                        const data = {
-                            prefsJSON: preferences.toJSON(),
-                            uniqueHosts,
-                        };
+                    const uniqueHosts = Array.from(new Set(frameHosts));
+                    const data = {
+                        prefsJSON: preferences.toJSON(),
+                        uniqueHosts,
+                    };
 
-                        rootObject.runtime.sendMessage(["getPreferencesAndFramesResponse", data]);
-                    });
+                    rootObject.runtime.sendMessage(["getPreferencesAndFramesResponse", data]);
+                });
             });
         }
 

@@ -13,23 +13,22 @@
     // Manage the state of the browser activity, by displaying the number
     // of origins / frames
     const updateBrowserActionBadge = tabId => {
-        rootObject.webNavigation.getAllFrames({tabId})
-            .then(frameResults => {
-                const frameHosts = frameResults.map(frame => {
+        browserLib.getAllFrames({tabId}, frameResults => {
+            const frameHosts = frameResults
+                .map(frame => {
                     if (frame.errorOccurred === true) {
                         return false;
                     }
-
                     return window.URI.parse(frame.url).host;
                 })
-                    .filter(url => !!url);
+                .filter(url => !!url);
 
-                const uniqueHosts = Array.from(new Set(frameHosts));
-                rootObject.browserAction.setBadgeText({
-                    text: uniqueHosts.length.toString(),
-                    tabId,
-                });
+            const uniqueHosts = Array.from(new Set(frameHosts));
+            rootObject.browserAction.setBadgeText({
+                text: uniqueHosts.length.toString(),
+                tabId,
             });
+        });
     };
 
     rootObject.tabs.onUpdated.addListener(tabId => {

@@ -72,12 +72,39 @@
             return;
         }
 
-        rootObject.tabs.query(query)
-            .then(result => callback(result));
+        rootObject.tabs.query(query).then(callback);
+    };
+
+    /**
+     * Provides a common interface for querying frames in browser tabs.
+     *
+     * The chrome interface wants a callback function, and the standard
+     * specifies a promise.  This function provides a common interface
+     * between both environments.
+     *
+     * @see https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/webNavigation/getAllFrames
+     * @see https://developer.chrome.com/extensions/webNavigation#method-getAllFrames
+     *
+     * @param {object} details
+     *   A object used to filter which frames to return.
+     * @param {function} callback
+     *  Function that is called with the results of the frame query.
+     *
+     * @return {undefined}
+     */
+    const getAllFrames = (details, callback) => {
+        const rootObject = getRootObject();
+        if (environmentName === "chrome") {
+            rootObject.webNavigation.getAllFrames(details, callback);
+            return;
+        }
+
+        rootObject.webNavigation.getAllFrames(details).then(callback);
     };
 
     window.WEB_API_MANAGER.browserLib = {
         getRootObject,
+        getAllFrames,
         queryTabs,
     };
 }());
