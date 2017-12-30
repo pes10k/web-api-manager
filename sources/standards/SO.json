@@ -4,7 +4,10 @@
     "origId": "Screen Orientation API",
     "name": "Screen Orientation API",
     "url": "https://w3c.github.io/screen-orientation/",
-    "catId": "hardware"
+    "catId": "hardware",
+    "otherLegacyIds": [
+        "The Screen Orientation API"
+    ]
   },
   "features": [
     "screen.onmozorientationchange",

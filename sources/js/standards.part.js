@@ -158,7 +158,10 @@
      * string style id for a standard.
      *
      * Implementation wise, this is just giving the `info.id` value for a
-     * standard, given its `info.origId` value.
+     * standard, given its `info.origId` value. For the small number of
+     * standards that used a couple of other identifiers before standardizing
+     * on things, this also checks the `otherLegacyIds` field in the
+     * standards definition (when it exists).
      *
      * @param {string} oldStdId
      *   The old, string style id for a standard.
@@ -169,7 +172,16 @@
      */
     const newIdForOldStandardId = oldStdId => {
         const matchingDef = Object.values(standardsDefinitions).find(stdDef => {
-            return stdDef.info.origId === oldStdId;
+            if (stdDef.info.origId === oldStdId) {
+                return true;
+            }
+
+            if (stdDef.info.otherLegacyIds !== undefined &&
+                    stdDef.info.otherLegacyIds.indexOf(oldStdId) !== -1) {
+                return true;
+            }
+
+            return false;
         });
 
         if (matchingDef === undefined) {
