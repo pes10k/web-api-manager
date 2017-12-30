@@ -6,7 +6,7 @@
 
     const consoleLog = window.console.log;
     const cookies2 = window.Cookies.noConflict();
-    const {constants, cookieEncodingLib} = window.WEB_API_MANAGER;
+    const {constants, cookieEncodingLib, enums} = window.WEB_API_MANAGER;
     const {browserLib, proxyBlockLib} = window.WEB_API_MANAGER;
     const standardsCookieName = constants.cookieName;
 
@@ -51,8 +51,11 @@
     const [standardIdsToBlock, shouldLog, randNonce] = decodedCookieValues;
 
     // If there are no standards to block on this domain, then don't
-    // insert any script into the page.
-    if (standardIdsToBlock.length === 0) {
+    // insert any script into the page *unless* we're in passive
+    // logging mode, in which case we want to log everything despite logging
+    // settings.
+    if (standardIdsToBlock.length === 0 &&
+            shouldLog !== enums.ShouldLogVal.PASSIVE) {
         return;
     }
 

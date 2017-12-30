@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Basic DOM modification case</title>
+    </head>
+    <body>
+        <h1 id="old-header">Old dusty title</h1>
+        <script>
+            const h1Elm = document.createElement("h1");
+            h1Elm.id = "new-header";
+            h1Elm.appendChild(document.createTextNode("Call me king title"));
+
+            const oldH1 = document.getElementsByTagName("h1")[0];
+            oldH1.parentNode.removeChild(oldH1);
+
+            document.body.appendChild(h1Elm);
+        </script>
+    </body>
+</html>

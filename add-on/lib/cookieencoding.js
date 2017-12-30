@@ -1,8 +1,7 @@
 (function () {
     "use strict";
-    const {packingLib, standardsLib, constants} = window.WEB_API_MANAGER;
-    const shouldLogKey = constants.shouldLogKey;
-    const allStandardIdsWithShouldLogOption = standardsLib.allStandardIds().concat([shouldLogKey]);
+    const {packingLib, standardsLib} = window.WEB_API_MANAGER;
+    const allStandardIds = standardsLib.allStandardIds();
 
     /**
      * Creates a cookie-safe encoding of standard ids to block, and
@@ -19,8 +18,8 @@
      *
      * @param {array} standardIdsToBlock
      *   An array of strings, each a standard that should be blocked.
-     * @param {boolean} shouldLog
-     *   Whether logging should be enabled.
+     * @param {ShouldLogVal} shouldLog
+     *   Whether whether and how logging should be enabled.
      * @param {string} randNonce
      *   A unique, unguessable identifier, used so that the injected content
      *   script can communicate with the content script, using an unguessable
@@ -31,20 +30,18 @@
      *   A cookie safe string encoding the above values.
      */
     const toCookieValue = (standardIdsToBlock, shouldLog, randNonce) => {
-        const standardIdsToBlockWithShouldLogKey = shouldLog
-            ? standardIdsToBlock.concat(shouldLogKey)
-            : standardIdsToBlock;
+        const cookieValueParts = [];
 
         const packedValues = packingLib.pack(
-            allStandardIdsWithShouldLogOption,
-            standardIdsToBlockWithShouldLogKey
+            allStandardIds,
+            standardIdsToBlock
         );
 
-        // Next, append the rand nonce to the end of the cookie string.  Since
-        // "@" is guaranteed to never be a character in a base64 encoded
-        // string, we can use it as a separator between the packed cookie
-        // values and the nonce.
-        const packedCookieValue = packedValues + "@" + randNonce;
+        cookieValueParts.push(packedValues);
+        cookieValueParts.push(shouldLog);
+        cookieValueParts.push(randNonce);
+
+        const packedCookieValue = cookieValueParts.join("@");
 
         // Last, replace "=" with "-" in the base64 string, to avoid
         // silly ambiguities in the cookie value.
@@ -52,7 +49,7 @@
     };
 
     /**
-     * Takes a encoded string (created from the `toCookieValue` function
+     * Takes a encoded string (created from the `   ` function
      * in this module) and returns to values, one an array of
      * standard names, and two, a boolean flag of whether the logging option
      * is enabled.
@@ -60,26 +57,16 @@
      * @param {string} data
      *   A string created from `toCookieValue`
      *
-     * @return {[array, bool, string]}
-     *   An array of length three.  The first value in the returned array is
+     * @return {[array, ShouldLogVal, string]}
+     *   An array of length three. The first value in the returned array is
      *   an array of strings of standard ids (representing standards to
-     *   block).  The second value is a boolean describing whether to log
-     *   blocking behavior.  The third value is a random nonce.
+     *   block). The second value is a ShouldLogVal string, describing the
+     *   logging settings. The third value is a random nonce.
      */
     const fromCookieValue = data => {
-        const [packedValues, randNonce] = data.replace(/-/g, "=").split("@");
-        const unpackedValues = packingLib.unpack(allStandardIdsWithShouldLogOption, packedValues);
-
-        let shouldLog;
+        const [packedValues, shouldLog, randNonce] = data.replace(/-/g, "=").split("@");
+        const unpackedValues = packingLib.unpack(allStandardIds, packedValues);
         const standardIdsToBlock = unpackedValues;
-        const indexOfShouldLog = unpackedValues.indexOf(shouldLogKey);
-
-        if (indexOfShouldLog === -1) {
-            shouldLog = false;
-        } else {
-            shouldLog = true;
-            standardIdsToBlock.splice(indexOfShouldLog, 1);
-        }
 
         return [standardIdsToBlock, shouldLog, randNonce];
     };

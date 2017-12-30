@@ -5,18 +5,23 @@
 
 "use strict";
 
+const path = require("path");
+
+const webdriver = require("selenium-webdriver");
+const {until} = webdriver;
+const by = webdriver.By;
 const assert = require("assert");
+
 const utils = require("./lib/utils");
 const injected = require("./lib/injected");
 const testServer = require("./lib/server");
 
-const path = require("path");
 const addonLibPath = path.join(__dirname, "..", "..", "add-on", "lib");
 // These will returning anything, but are called to populate
 // window.WEB_API_MANAGER.
 require(path.join(addonLibPath, "init.js"));
 require(path.join(addonLibPath, "standards.js"));
-const standardsLib = window.WEB_API_MANAGER.standardsLib;
+const {standardsLib, enums}  = window.WEB_API_MANAGER;
 
 const svgTestScript = injected.testSVGTestScript();
 const stdIdsToBlock = utils.constants.svgBlockRule;
@@ -32,7 +37,7 @@ const stdIdsToBlock = utils.constants.svgBlockRule;
  * @param {FrameReport} frameReport
  *   Object describing which features were blocked for a given frame.
  * @param {Array.FeaturePath} features
- *   An array of strings, each describing a key path in the dom to a feature
+ *   An array of strings, each describing a key path in the DOM To a feature
  *   that should have been blocked.
  *
  * @return {undefined}
@@ -85,9 +90,8 @@ const assertForFrameReport = (frameReport, features) => {
 };
 
 describe("Logging", function () {
-    describe("Single tab", function () {
+    describe("No logging", function () {
         this.timeout = () => 20000;
-
         it("Blocking nothing", function (done) {
             this.timeout = () => 10000;
             const [server, url] = testServer.start();
@@ -95,15 +99,15 @@ describe("Logging", function () {
             const testUrl = url;
             const httpServer = server;
 
-            let driverReference;
+            let driverRef;
             utils.promiseGetDriver()
                 .then(driver => {
-                    driverReference = driver;
+                    driverRef = driver;
                     return utils.promiseSetBlockingRules(driver, stdIdsToBlock);
                 })
-                .then(() => utils.promiseSetShouldLog(driverReference, true))
-                .then(() => driverReference.get(testUrl))
-                .then(() => utils.promiseGetBlockReport(driverReference))
+                .then(() => utils.promiseSetShouldLog(driverRef, enums.ShouldLogVal.STANDARD))
+                .then(() => driverRef.get(testUrl))
+                .then(() => utils.promiseGetBlockReport(driverRef))
                 .then(blockReport => {
                     const frameReports = blockReport.getFrameReportsForUrl(testUrl);
                     assert.equal(frameReports.length, 1, "There should be one frame reported that had no content blocked on it.");
@@ -112,150 +116,221 @@ describe("Logging", function () {
                     assert.equal(frameReport.url, testUrl, "Frame should report the test URL was not blocked.");
                     const numStandardsInFrame = frameReport.getAllStandardReports().length;
                     assert.equal(numStandardsInFrame, 0, "There should be no features blocked in the frame");
-                    driverReference.quit();
+                    driverRef.quit();
                     testServer.stop(httpServer);
                     done();
                 })
                 .catch(e => {
-                    driverReference.quit();
-                    testServer.stop(httpServer);
-                    done(e);
-                });
-        });
-
-        it("Blocking SVG", function (done) {
-            this.timeout = () => 10000;
-
-            const [server, url] = testServer.start();
-
-            const testUrl = url;
-            const httpServer = server;
-
-            let driverReference;
-            utils.promiseGetDriver()
-                .then(driver => {
-                    driverReference = driver;
-                    return utils.promiseSetBlockingRules(driver, stdIdsToBlock);
-                })
-                .then(() => utils.promiseSetShouldLog(driverReference, true))
-                .then(() => driverReference.get(testUrl))
-                .then(() => driverReference.executeAsyncScript(svgTestScript))
-                .then(() => utils.promiseGetBlockReport(driverReference))
-                .then(blockReport => {
-                    const frameReports = blockReport.getFrameReportsForUrl(testUrl);
-                    assert.equal(frameReports.length, 1, "There should be one frame reported.");
-
-                    const frameReport = frameReports[0];
-                    assertForFrameReport(frameReport, ["HTMLEmbedElement.prototype.getSVGDocument"]);
-
-                    driverReference.quit();
-                    testServer.stop(httpServer);
-                    done();
-                })
-                .catch(e => {
-                    driverReference.quit();
-                    testServer.stop(httpServer);
-                    done(e);
-                });
-        });
-
-        it("Blocking Crypto in a frame, and SVG in the parent document", function (done) {
-            this.timeout = () => 10000;
-
-            const [server, url] = testServer.startWithFile("embedded-frames.html");
-
-            const testUrl = url;
-            const httpServer = server;
-            const webCryptoStandardId = 71;
-
-            const svgAndCryptoStandardIds = stdIdsToBlock.concat([webCryptoStandardId]);
-
-            let driverReference;
-            utils.promiseGetDriver()
-                .then(driver => {
-                    driverReference = driver;
-                    return utils.promiseSetBlockingRules(driver, svgAndCryptoStandardIds);
-                })
-                .then(() => utils.promiseSetShouldLog(driverReference, true))
-                .then(() => driverReference.get(testUrl))
-                .then(() => driverReference.executeAsyncScript(svgTestScript))
-                .then(() => utils.promiseGetBlockReport(driverReference))
-                .then(blockReport => {
-                    const frameReportsForParentFrame = blockReport.getFrameReportsForUrl(testUrl);
-                    assert.equal(
-                        frameReportsForParentFrame.length,
-                        1,
-                        `There should be one frame report for ${testUrl}.`
-                    );
-                    const [frameReportForParentFrame] = frameReportsForParentFrame;
-                    assertForFrameReport(frameReportForParentFrame, ["HTMLEmbedElement.prototype.getSVGDocument"]);
-
-                    // Next, check that the given report contains the expected
-                    // blocked features for the injected frame.
-                    const frameReportsForChildFrame = blockReport.getFrameReportsForUrl("about:srcdoc");
-                    assert.equal(
-                        frameReportsForChildFrame.length,
-                        1,
-                        `There should be one frame report for about:blank.`
-                    );
-                    const frameReportForChildFrame = frameReportsForChildFrame[0];
-                    assertForFrameReport(frameReportForChildFrame, ["Crypto.prototype.getRandomValues"]);
-                    driverReference.quit();
-                    testServer.stop(httpServer);
-                    done();
-                })
-                .catch(e => {
-                    driverReference.quit();
+                    driverRef.quit();
                     testServer.stop(httpServer);
                     done(e);
                 });
         });
     });
 
-    describe("Two tabs", function () {
+    describe("Standard logging", function () {
+        describe("Single tab", function () {
+            this.timeout = () => 20000;
+
+            it("Blocking SVG", function (done) {
+                this.timeout = () => 10000;
+
+                const [server, url] = testServer.start();
+
+                const testUrl = url;
+                const httpServer = server;
+
+                let driverRef;
+                utils.promiseGetDriver()
+                    .then(driver => {
+                        driverRef = driver;
+                        return utils.promiseSetBlockingRules(driver, stdIdsToBlock);
+                    })
+                    .then(() => utils.promiseSetShouldLog(driverRef, enums.ShouldLogVal.STANDARD))
+                    .then(() => driverRef.get(testUrl))
+                    .then(() => driverRef.executeAsyncScript(svgTestScript))
+                    .then(() => utils.promiseGetBlockReport(driverRef))
+                    .then(blockReport => {
+                        const frameReports = blockReport.getFrameReportsForUrl(testUrl);
+                        assert.equal(frameReports.length, 1, "There should be one frame reported.");
+
+                        const frameReport = frameReports[0];
+                        assertForFrameReport(frameReport, ["HTMLEmbedElement.prototype.getSVGDocument"]);
+
+                        driverRef.quit();
+                        testServer.stop(httpServer);
+                        done();
+                    })
+                    .catch(e => {
+                        driverRef.quit();
+                        testServer.stop(httpServer);
+                        done(e);
+                    });
+            });
+
+            it("Blocking Crypto in a frame, and SVG in the parent document", function (done) {
+                this.timeout = () => 10000;
+
+                const [server, url] = testServer.startWithFile("embedded-frames.html");
+
+                const testUrl = url;
+                const httpServer = server;
+                const webCryptoStandardId = 71;
+
+                const svgAndCryptoStandardIds = stdIdsToBlock.concat([webCryptoStandardId]);
+
+                let driverRef;
+                utils.promiseGetDriver()
+                    .then(driver => {
+                        driverRef = driver;
+                        return utils.promiseSetBlockingRules(driver, svgAndCryptoStandardIds);
+                    })
+                    .then(() => utils.promiseSetShouldLog(driverRef, enums.ShouldLogVal.STANDARD))
+                    .then(() => driverRef.get(testUrl))
+                    .then(() => driverRef.executeAsyncScript(svgTestScript))
+                    .then(() => utils.promiseGetBlockReport(driverRef))
+                    .then(blockReport => {
+                        const parentFrameReports = blockReport.getFrameReportsForUrl(testUrl);
+                        assert.equal(
+                            parentFrameReports.length,
+                            1,
+                            `There should be one frame report for ${testUrl}.`
+                        );
+                        const [frameReportForParentFrame] = parentFrameReports;
+                        assertForFrameReport(frameReportForParentFrame, ["HTMLEmbedElement.prototype.getSVGDocument"]);
+
+                        // Next, check that the given report contains the expected
+                        // blocked features for the injected frame.
+                        const frameReportsForChildFrame = blockReport.getFrameReportsForUrl("about:srcdoc");
+                        assert.equal(
+                            frameReportsForChildFrame.length,
+                            1,
+                            `There should be one frame report for about:blank.`
+                        );
+                        const frameReportForChildFrame = frameReportsForChildFrame[0];
+                        assertForFrameReport(frameReportForChildFrame, ["Crypto.prototype.getRandomValues"]);
+                        driverRef.quit();
+                        testServer.stop(httpServer);
+                        done();
+                    })
+                    .catch(e => {
+                        driverRef.quit();
+                        testServer.stop(httpServer);
+                        done(e);
+                    });
+            });
+        });
+
+        describe("Two tabs", function () {
+            this.timeout = () => 20000;
+
+            it("Handling closed tabs", function (done) {
+                this.timeout = () => 10000;
+                const [server, url] = testServer.start();
+                const testUrl = url;
+                const httpServer = server;
+
+                let firstTabHandle;
+                let driverRef;
+
+                utils.promiseGetDriver()
+                    .then(driver => {
+                        driverRef = driver;
+                        return utils.promiseSetShouldLog(driverRef, enums.ShouldLogVal.STANDARD);
+                    })
+                    .then(() => driverRef.get(testUrl))
+                    .then(() => utils.promiseGetBlockReport(driverRef))
+                    .then(blockReport => {
+                        const tabReports = blockReport.getAllTabReports();
+                        assert.equal(tabReports.length, 1, "There should be one tab report.");
+                        return utils.promiseOpenNewTab(driverRef, testUrl);
+                    })
+                    .then(tabHandles => {
+                        firstTabHandle = tabHandles.prior;
+                        return utils.promiseGetBlockReport(driverRef);
+                    })
+                    .then(blockReport => {
+                        const tabReports = blockReport.getAllTabReports();
+                        assert.equal(tabReports.length, 2, "There should be two tab reports.");
+                        return driverRef.close();
+                    })
+                    .then(() => driverRef.switchTo().window(firstTabHandle))
+                    .then(() => utils.promiseGetBlockReport(driverRef))
+                    .then(blockReport => {
+                        const tabReports = blockReport.getAllTabReports();
+                        assert.equal(tabReports.length, 1, "There should be one tab report again now.");
+                        driverRef.quit();
+                        testServer.stop(httpServer);
+                        done();
+                    })
+                    .catch(e => {
+                        driverRef.quit();
+                        testServer.stop(httpServer);
+                        done(e);
+                    });
+            });
+        });
+    });
+
+    describe("Passive logging", function () {
         this.timeout = () => 20000;
 
-        it("Handling closed tabs", function (done) {
-            this.timeout = () => 10000;
-            const [server, url] = testServer.start();
+        it("Check standard DOM functionality works", function (done) {
+            this.timeout = () => 5000;
+
+            const [server, url] = testServer.startWithFile("basic-modification.html");
             const testUrl = url;
             const httpServer = server;
-
-            let firstTabHandle;
-            let driverReference;
+            let driverRef;
 
             utils.promiseGetDriver()
                 .then(driver => {
-                    driverReference = driver;
-                    return utils.promiseSetShouldLog(driverReference, true);
+                    driverRef = driver;
+                    return utils.promiseSetShouldLog(driverRef, enums.ShouldLogVal.PASSIVE);
                 })
-                .then(() => driverReference.get(testUrl))
-                .then(() => utils.promiseGetBlockReport(driverReference))
+                .then(() => driverRef.get(testUrl))
+                // First check to see if the document looks the way we expect
+                // it to (ie the script was able to run as expected).  We
+                // don't expect to find the old header, and do expect to
+                // find the new header.
+                .then(() => driverRef.wait(until.elementLocated(by.css("#old-header")), 250))
+                // If this then branch executes, it means that the page
+                // wasn't modified as expected, since the old
+                // header element was found.
+                .then(() => {
+                    driverRef.quit();
+                    testServer.stop(server);
+                    done(new Error("Page was not modified as expected, old header element still found."));
+                })
+                // This catch block is the expected, "success" condition.
+                // Now check that the new header is present in the page
+                // too.
+                .catch(() => driverRef.wait(until.elementLocated(by.css("#new-header")), 250))
+                // Next check the block report, to make sure all the
+                // captured functionality on the page was recorded.
+                .then(() => utils.promiseGetBlockReport(driverRef))
                 .then(blockReport => {
-                    const tabReports = blockReport.getAllTabReports();
-                    assert.equal(tabReports.length, 1, "There should be one tab report.");
-                    return utils.promiseOpenNewTab(driverReference, testUrl);
-                })
-                .then(tabHandles => {
-                    firstTabHandle = tabHandles.prior;
-                    return utils.promiseGetBlockReport(driverReference);
-                })
-                .then(blockReport => {
-                    const tabReports = blockReport.getAllTabReports();
-                    assert.equal(tabReports.length, 2, "There should be two tab reports.");
-                    return driverReference.close();
-                })
-                .then(() => driverReference.switchTo().window(firstTabHandle))
-                .then(() => utils.promiseGetBlockReport(driverReference))
-                .then(blockReport => {
-                    const tabReports = blockReport.getAllTabReports();
-                    assert.equal(tabReports.length, 1, "There should be one tab report again now.");
-                    driverReference.quit();
+                    const frameReports = blockReport.getFrameReportsForUrl(testUrl);
+                    assert.equal(frameReports.length, 1, "There should be one frame reported.");
+
+                    const frameReport = frameReports[0];
+                    assertForFrameReport(frameReport, [
+                        "Document.prototype.createElement",
+                        "Document.prototype.createTextNode",
+                        "Document.prototype.getElementsByTagName",
+                        "Node.prototype.appendChild",
+                        "Node.prototype.removeChild",
+                        // Not called by the fixture, but by the test runner
+                        "EventTarget.prototype.removeEventListener",
+                        "window.open",
+
+                    ]);
+                    driverRef.quit();
                     testServer.stop(httpServer);
                     done();
                 })
                 .catch(e => {
-                    driverReference.quit();
+                    driverRef.quit();
                     testServer.stop(httpServer);
                     done(e);
                 });

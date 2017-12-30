@@ -55,15 +55,12 @@ module.exports.temporaryAddOnInstallScript = (function () {
 module.exports.setStandardsAsBlockedScript = (function () {
     const funcToInject = function () {
         const doc = window.document;
-        const callback = arguments[arguments.length - 1];
         const standardIdsToBlock = "###REPLACE###";
 
         standardIdsToBlock.forEach(aStandardId => {
-            const input = doc.querySelector(`input[value='${aStandardId}']`);
+            const input = doc.querySelector(`.web-api-standards-group input[value='${aStandardId}']`);
             input.click();
         });
-
-        callback();
     };
 
     const funcSource = stripFuncFromSource(funcToInject.toString());

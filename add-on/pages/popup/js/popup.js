@@ -2,7 +2,7 @@
 (function () {
     "use strict";
 
-    const {browserLib, constants, preferencesLib} = window.WEB_API_MANAGER;
+    const {browserLib, constants, enums, preferencesLib} = window.WEB_API_MANAGER;
     const rootObject = browserLib.getRootObject();
     const doc = window.document;
     const configureButton = doc.getElementById("config-page-link");
@@ -161,8 +161,28 @@
             rulesTableBody.appendChild(rowElm);
         });
 
-        if (preferences.getShouldLog() === true) {
-            reportButton.className = reportButton.className.replace(" hidden", "");
+        switch (preferences.getShouldLog()) {
+            // If the current logging preference is "don't log", then
+            // don't change the default setup, which is to hide the "show
+            // the log" button.
+            case enums.ShouldLogVal.NONE:
+                break;
+
+            // If the logging preference is "standard", the show the button
+            // with the template's text, which prompts users to press
+            // the button to show blocked features.  Also we need
+            // to un-hide the button.
+            case enums.ShouldLogVal.STANDARD:
+                reportButton.className = reportButton.className.replace(" hidden", "");
+                break;
+
+            // Finally, if the logging preference is "passive", then
+            // show the button and change the text to be be
+            // about "used" features, instead of "blocked" features.
+            case enums.ShouldLogVal.PASSIVE:
+                reportButton.className = reportButton.className.replace(" hidden", "");
+                reportButton.innerText = "Show used features";
+                break;
         }
     });
 

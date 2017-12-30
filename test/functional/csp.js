@@ -9,7 +9,7 @@ describe("Content-Security-Protocol Issues", function () {
         this.timeout = () => 20000;
 
         it("default-src and script-src (from Pitchfork.com)", function (done) {
-            const [server, testUrl] = testServer.start(function (headers) {
+            const [server, testUrl] = testServer.start(headers => {
                 // Add the CSP header to every request
                 const pitchforkCSP = [
                     "default-src https: data: 'unsafe-inline' 'unsafe-eval';",

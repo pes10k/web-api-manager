@@ -27,13 +27,13 @@ describe("Cross frame protections", function () {
                         return driverReference.get(url);
                     })
                     .then(() => driverReference.executeScript(testScript))
-                    .then(function (response) {
+                    .then(response => {
                         assert.equal(response, false, "When not blocking, SVGGraphicsElement.prototype.getBBox and SVGTransformList.prototype.createSVGTransformFromMatrix should reference different functions.");
                         driverReference.quit();
                         testServer.stop(server);
                         done();
                     })
-                    .catch(function (e) {
+                    .catch(e => {
                         driverReference.quit();
                         testServer.stop(server);
                         done(e);
@@ -45,20 +45,20 @@ describe("Cross frame protections", function () {
                 let driverReference;
 
                 utils.promiseGetDriver()
-                    .then(function (driver) {
+                    .then(driver => {
                         driverReference = driver;
                         return driverReference.get(url);
                     })
                     .then(() => utils.promiseSetBlockingRules(driverReference, standardsToBlock))
                     .then(() => driverReference.get(url))
                     .then(() => driverReference.executeScript(testScript))
-                    .then(function (response) {
+                    .then(response => {
                         assert.equal(response, true, "When blocking, SVGGraphicsElement.prototype.getBBox and SVGTransformList.prototype.createSVGTransformFromMatrix should reference the same proxy object.");
                         driverReference.quit();
                         testServer.stop(server);
                         done();
                     })
-                    .catch(function (e) {
+                    .catch(e => {
                         driverReference.quit();
                         testServer.stop(server);
                         done(e);

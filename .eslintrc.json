@@ -13,7 +13,7 @@
         "no-console": "off",
         "no-unused-vars": ["error", {"varsIgnorePattern": "ignore"}],
         "semi": ["error", "always"],
-        "indent": ["error", 4],
+        "indent": ["error", 4, {"SwitchCase": 1}],
         "eol-last": "error",
         "quotes": ["error", "double", {"allowTemplateLiterals": true}],
         "comma-dangle": ["error", "only-multiline"],

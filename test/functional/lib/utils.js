@@ -19,8 +19,7 @@ const addonLibPath = path.join(__dirname, "..", "..", "..", "add-on", "lib");
 require(path.join(addonLibPath, "init.js"));
 require(path.join(addonLibPath, "standards.js"));
 require(path.join(addonLibPath, "reports.js"));
-const {reportsLib} = window.WEB_API_MANAGER;
-
+const {reportsLib, enums} = window.WEB_API_MANAGER;
 
 module.exports.shouldRunRemoteTests = process.argv.indexOf("--only-local-tests") === -1;
 
@@ -81,21 +80,19 @@ module.exports.promiseSetBlockingRules = (driver, standardsToBlock) => {
     driver.setContext(Context.CONTENT);
 
     return module.exports.promiseExtensionConfigPage(driver)
-        .then(() => driver.executeAsyncScript(setStandardsScript))
+        .then(() => driver.executeScript(setStandardsScript))
         .then(() => module.exports.pause(100));
 };
 
 module.exports.promiseSetShouldLog = (driver, shouldLog) => {
+    enums.utils.assertValidEnum(enums.ShouldLogVal, shouldLog);
     driver.setContext(Context.CONTENT);
+
+    const cssSelectorString = `.logging-settings .radio input[value='${shouldLog}']`;
+
     return module.exports.promiseExtensionConfigPage(driver)
-        .then(() => driver.wait(until.elementLocated(by.css(".logging-settings input"))))
-        .then(elm => {
-            const isCurrentlyLogging = elm.value === "on";
-            if (shouldLog === isCurrentlyLogging) {
-                return Promise.resolve(true);
-            }
-            return elm.click();
-        });
+        .then(() => driver.wait(until.elementLocated(by.css(cssSelectorString)), 1000))
+        .then(elm => elm.click());
 };
 
 module.exports.promiseOpenLoggingTab = (driver, tabId) => {

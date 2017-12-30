@@ -1,22 +1,55 @@
 <div class="logging-settings">
-    <div class="checkbox">
+    <h3>Logging setting</h3>
+    <div class="radio">
         <label>
-            <input type="checkbox"
+            <input type="radio"
                 v-model="dataShouldLog"
-                @change="shouldLogChanged">
-
-            Log blocked functionality?
-
-            <p class="help-block">
-                Enabling logging will add a <em>View blocked features</em>
-                option to the popup, which will allow you to view which
-                standards were blocked for each page.  This option may have
-                a slight negative impact on page performance.
-            </p>
-
-            <a id="logging-raw-report-link" href="/pages/report/report-json.html" class="hidden">
-                View raw logged data
-            </a>
+                 :value="enums.ShouldLogVal.NONE"
+                @change="shouldLogChanged"
+       aria-describedby="should-log-help-none">
+            No logging
         </label>
+
+        <p class="help-block" id="should-log-help-none">
+            No information about what features and standards were blocked
+            is stored.  This is the default option, and what you should
+            choose for normal use.
+        </p>
     </div>
+
+    <div class="radio">
+        <label>
+            <input type="radio"
+                v-model="dataShouldLog"
+                 :value="enums.ShouldLogVal.STANDARD"
+                @change="shouldLogChanged"
+       aria-describedby="should-log-help-standard">
+            Log blocked functionality
+        </label>
+
+        <p class="help-block" id="should-log-help-standard">
+            Information about functionality that web pages want to access,
+            but the extension prevents pages from accessing, is logged.
+        </p>
+    </div>
+
+    <div class="radio">
+        <label>
+            <input type="radio"
+                v-model="dataShouldLog"
+                 :value="enums.ShouldLogVal.PASSIVE"
+                @change="shouldLogChanged"
+       aria-describedby="should-log-help-passive">
+            Passive logging
+        </label>
+
+        <p class="help-block" id="should-log-help-passive">
+            No functionality is blocked, but the extension logs all
+            functionality that pages use.
+        </p>
+    </div>
+
+    <a id="logging-raw-report-link" href="/pages/report/report-json.html" class="hidden">
+        View raw logged data
+    </a>
 </div>

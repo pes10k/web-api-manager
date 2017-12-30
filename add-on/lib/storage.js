@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    const {constants, browserLib} = window.WEB_API_MANAGER;
+    const {constants, enums, browserLib} = window.WEB_API_MANAGER;
     const rootObject = browserLib.getRootObject();
     const webApiManagerKeySettingsKey = "webApiManager";
     const storageObject = rootObject.storage;
@@ -17,7 +17,7 @@
                     Object.keys(loadedValues.domainRules).length === 0) {
                 loadedValues = {
                     domainRules: {},
-                    shouldLog: false,
+                    shouldLog: enums.ShouldLogVal.NONE,
                 };
 
                 loadedValues.domainRules[constants.defaultDomainRule] = [];

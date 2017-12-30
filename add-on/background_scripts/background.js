@@ -3,7 +3,7 @@
     "use strict";
     const {preferencesLib, constants, messagesLib} = window.WEB_API_MANAGER;
     const {cookieEncodingLib, proxyBlockLib, httpHeadersLib} = window.WEB_API_MANAGER;
-    const {standardsLib, browserLib} = window.WEB_API_MANAGER;
+    const {standardsLib, browserLib, enums} = window.WEB_API_MANAGER;
     const rootObject = browserLib.getRootObject();
 
     preferencesLib.load(loadedPrefs => {
@@ -122,10 +122,11 @@
             value: encodedOptions,
         });
 
-        // If there are no standards to block on this domain, then there is
-        // no need to modify the CSP headers, since no script will be injected
-        // into the page.
-        if (standardIdsToBlock.length === 0) {
+        // If there are no standards to block on this domain, and we're not
+        // in "passive" logging mode, then there is no need to modify the CSP
+        // headers, since no script will be injected into the page.
+        if (standardIdsToBlock.length === 0 &&
+                shouldLog !== enums.ShouldLogVal.PASSIVE) {
             return;
         }
 

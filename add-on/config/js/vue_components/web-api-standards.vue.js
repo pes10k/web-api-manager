@@ -2,17 +2,20 @@
     "use strict";
 
     const standardsDefaults = window.WEB_API_MANAGER.defaults;
-    const {standardsLib, categoriesLib, stateLib} = window.WEB_API_MANAGER;
+    const {standardsLib, categoriesLib, stateLib, enums} = window.WEB_API_MANAGER;
     const Vue = window.Vue;
 
     Vue.component("web-api-standards", {
-        props: ["dataCurrentStandardIds", "dataSelectedPattern"],
+        props: ["dataCurrentStandardIds", "dataSelectedPattern", "dataShouldLog"],
         render: window.WEB_API_MANAGER.vueComponents["web-api-standards"].render,
         staticRenderFns: window.WEB_API_MANAGER.vueComponents["web-api-standards"].staticRenderFns,
         computed: {
             sortedCategoryIds: () => {
                 const categoryIds = categoriesLib.allCategoryIds();
                 return categoryIds.sort(categoriesLib.sortCategoriesById);
+            },
+            isPassiveMode: function () {
+                return this.dataShouldLog === enums.ShouldLogVal.PASSIVE;
             },
         },
         methods: {

@@ -52,12 +52,12 @@
                 rootObject.webNavigation.getAllFrames({tabId: tabs[0].id})
                     .then(frameResults => {
                         const frameHosts = frameResults.map(frame => {
-                                if (frame.errorOccurred === true) {
-                                    return false;
-                                }
+                            if (frame.errorOccurred === true) {
+                                return false;
+                            }
 
-                                return window.URI.parse(frame.url).host;
-                            })
+                            return window.URI.parse(frame.url).host;
+                        })
                             .filter(url => !!url);
 
                         const uniqueHosts = Array.from(new Set(frameHosts));
@@ -69,7 +69,7 @@
                         rootObject.runtime.sendMessage(["getPreferencesAndFramesResponse", data]);
                     });
             });
-        };
+        }
 
         // Sent from the popup / browser action, that the user wants to view
         // the blocking report for the currently active tab.

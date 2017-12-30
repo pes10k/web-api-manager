@@ -179,6 +179,20 @@
         return matchingDef.info.id;
     };
 
+    /**
+     * Returns an array of every feature known to the extension.
+     *
+     * @return {Array.FeaturePath}
+     *   An array of FeaturePath objects (strings), each describing the
+     *   key path to a feature in the DOM.
+     */
+    const allFeatures = () => {
+        return Object.values(standardsDefinitions)
+            .reduce((collection, standard) => {
+                return collection.concat(standard.features);
+            }, []);
+    };
+
     window.WEB_API_MANAGER.standardsLib = {
         allStandardIds,
         standardIdForFeature,
@@ -189,5 +203,6 @@
         standardIdsForCategoryId,
         sortStandardsById,
         newIdForOldStandardId,
+        allFeatures,
     };
 }());

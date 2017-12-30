@@ -26,45 +26,45 @@ describe("Import / Export", function () {
 
     describe("Exporting", function () {
         it("Exporting empty blocking rule", function (done) {
-            let driverReference;
+            let driverRef;
 
             utils.promiseGetDriver()
                 .then(function (driver) {
-                    driverReference = driver;
-                    return promiseOpenImportExportTab(driverReference);
+                    driverRef = driver;
+                    return promiseOpenImportExportTab(driverRef);
                 })
-                .then(() => driverReference.findElement(by.css(".export-section select option:nth-child(1)")).click())
-                .then(() => driverReference.findElement(by.css(".export-section textarea")).getAttribute("value"))
+                .then(() => driverRef.findElement(by.css(".export-section select option:nth-child(1)")).click())
+                .then(() => driverRef.findElement(by.css(".export-section textarea")).getAttribute("value"))
                 .then(function (exportValue) {
-                    driverReference.quit();
+                    driverRef.quit();
                     assert.equal(exportValue.trim(), emptyRuleSet, "Exported ruleset does not match expected value.");
                     done();
                 })
                 .catch(function (e) {
-                    driverReference.quit();
+                    driverRef.quit();
                     done(e);
                 });
         });
 
         it("Exporting SVG and Beacon blocking rules", function (done) {
-            let driverReference;
+            let driverRef;
 
             utils.promiseGetDriver()
                 .then(function (driver) {
-                    driverReference = driver;
+                    driverRef = driver;
                     const svgAndBeconIds = utils.constants.svgBlockRule.concat([beaconId]);
-                    return utils.promiseSetBlockingRules(driverReference, svgAndBeconIds);
+                    return utils.promiseSetBlockingRules(driverRef, svgAndBeconIds);
                 })
-                .then(() => promiseOpenImportExportTab(driverReference))
-                .then(() => driverReference.findElement(by.css(".export-section select option:nth-child(1)")).click())
-                .then(() => driverReference.findElement(by.css(".export-section textarea")).getAttribute("value"))
+                .then(() => promiseOpenImportExportTab(driverRef))
+                .then(() => driverRef.findElement(by.css(".export-section select option:nth-child(1)")).click())
+                .then(() => driverRef.findElement(by.css(".export-section textarea")).getAttribute("value"))
                 .then(exportValue => {
                     assert.equal(exportValue.trim(), blockingSVGandBeacon, "Exported ruleset does not match expected value.");
-                    driverReference.quit();
+                    driverRef.quit();
                     done();
                 })
                 .catch(e => {
-                    driverReference.quit();
+                    driverRef.quit();
                     done(e);
                 });
         });
@@ -72,19 +72,19 @@ describe("Import / Export", function () {
 
     describe("Importing", function () {
         it("Importing SVG and Beacon blocking rules", function (done) {
-            let driverReference;
+            let driverRef;
             let checkedCheckboxes;
 
             utils.promiseGetDriver()
                 .then(driver => {
-                    driverReference = driver;
-                    return promiseOpenImportExportTab(driverReference);
+                    driverRef = driver;
+                    return promiseOpenImportExportTab(driverRef);
                 })
-                .then(() => driverReference.findElement(by.css(".import-section textarea")).sendKeys(blockingSVGandBeacon))
-                .then(() => driverReference.findElement(by.css(".import-section input[type='checkbox']")).click())
-                .then(() => driverReference.findElement(by.css(".import-section button")).click())
+                .then(() => driverRef.findElement(by.css(".import-section textarea")).sendKeys(blockingSVGandBeacon))
+                .then(() => driverRef.findElement(by.css(".import-section input[type='checkbox']")).click())
+                .then(() => driverRef.findElement(by.css(".import-section button")).click())
                 .then(() => utils.pause(500))
-                .then(() => driverReference.findElements(by.css("#blocking-rules input[type='checkbox']:checked")))
+                .then(() => driverRef.findElements(by.css("#blocking-rules input[type='checkbox']:checked")))
                 .then(function (checkboxElms) {
                     checkedCheckboxes = checkboxElms;
                     assert.equal(checkboxElms.length, 2, "There should be two standards blocked.");
@@ -96,34 +96,34 @@ describe("Import / Export", function () {
                 })
                 .then(secondCheckboxValue => {
                     assert.equal(secondCheckboxValue, utils.constants.svgBlockRule[0], "The other blocked standard should be SVG.");
-                    driverReference.quit();
+                    driverRef.quit();
                     done();
                 })
                 .catch(e => {
-                    driverReference.quit();
+                    driverRef.quit();
                     done(e);
                 });
         });
 
         it("Importing rules for new domain", function (done) {
-            let driverReference;
+            let driverRef;
             let checkedCheckboxes;
 
             utils.promiseGetDriver()
                 .then(function (driver) {
-                    driverReference = driver;
-                    return promiseOpenImportExportTab(driverReference);
+                    driverRef = driver;
+                    return promiseOpenImportExportTab(driverRef);
                 })
-                .then(() => driverReference.findElement(by.css(".import-section textarea")).sendKeys(newDomainImport))
-                .then(() => driverReference.findElement(by.css(".import-section button")).click())
+                .then(() => driverRef.findElement(by.css(".import-section textarea")).sendKeys(newDomainImport))
+                .then(() => driverRef.findElement(by.css(".import-section button")).click())
                 .then(() => utils.pause(500))
-                .then(() => driverReference.findElement(by.css("a[href='#blocking-rules']")).click())
-                .then(() => driverReference.findElements(by.css("#blocking-rules input[type='radio']")))
+                .then(() => driverRef.findElement(by.css("a[href='#blocking-rules']")).click())
+                .then(() => driverRef.findElements(by.css("#blocking-rules .patterns-container input[type='radio']")))
                 .then(function (radioElms) {
                     assert.equal(radioElms.length, 2, "There should be two domain rules in place.");
                     return radioElms[0].click();
                 })
-                .then(() => driverReference.findElements(by.css("#blocking-rules input[type='checkbox']:checked")))
+                .then(() => driverRef.findElements(by.css("#blocking-rules input[type='checkbox']:checked")))
                 .then(function (checkboxElms) {
                     checkedCheckboxes = checkboxElms;
                     assert.equal(checkboxElms.length, 2, "There should be two standards blocked.");
@@ -135,11 +135,11 @@ describe("Import / Export", function () {
                 })
                 .then(function (secondCheckboxValue) {
                     assert.equal(secondCheckboxValue, webGLId, "The other blocked standard should be 'WebGL Specification'.");
-                    driverReference.quit();
+                    driverRef.quit();
                     done();
                 })
                 .catch(function (e) {
-                    driverReference.quit();
+                    driverRef.quit();
                     done(e);
                 });
         });

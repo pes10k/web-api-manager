@@ -7,7 +7,7 @@
 (function () {
     "use strict";
 
-    const {standardsLib} = window.WEB_API_MANAGER;
+    const {standardsLib, enums} = window.WEB_API_MANAGER;
 
     // This function is what does the instrumenting of the DOM,
     // based on values set in the global window.WEB_API_MANAGER_PAGE
@@ -22,8 +22,14 @@
         // with recording what standards are blocked / logged.
         const consoleLog = console.log;
         const dispatchEvent = document.dispatchEvent;
+        const doc = window.document;
 
-        const {shouldLog, randNonce, featuresToBlock} = window.WEB_API_MANAGER_PAGE;
+        const {shouldLog, randNonce} = window.WEB_API_MANAGER_PAGE;
+
+        // Prevent ambiguity from shadowing the module's enum's property.
+        const localEnums = window.WEB_API_MANAGER_PAGE.enums;
+
+        let {featuresToBlock} = window.WEB_API_MANAGER_PAGE;
 
         // Its possible that the Web API removal code will block direct references
         // to the following methods, so grab references to them before the
@@ -50,6 +56,16 @@
             const thisScript = scriptTags[0];
             removeChild.call(thisScript.parentNode, thisScript);
         };
+
+        // If we're in passive mode, then we want to "block" (which in
+        // passive mode really just means 'log and allow') every feature.
+        // Otherwise, only interpose on the features specified by the
+        // user for this domain / match pattern.  The
+        // `window.WEB_API_MANAGER_PAGE.allFeatures` property is only set
+        // if the script was injected in passive mode.
+        if (shouldLog === localEnums.ShouldLogVal.PASSIVE) {
+            featuresToBlock = window.WEB_API_MANAGER_PAGE.allFeatures;
+        }
 
         if (featuresToBlock.length === 0) {
             removeSelfFromPage();
@@ -100,23 +116,26 @@
             }, []);
         };
 
-        const createBlockingProxy = keyPath => {
-            let hasBeenLogged = false;
+        const logKeyPath = (function () {
+            const loggedKeyPaths = new Set();
 
-            const logKeyPath = () => {
-                if (keyPath !== undefined &&
-                        hasBeenLogged === false &&
-                        shouldLog) {
-                    hasBeenLogged = true;
+            return keyPath => {
+                if (loggedKeyPaths.has(keyPath) === true) {
+                    return;
+                }
+                loggedKeyPaths.add(keyPath);
+                if (keyPath !== undefined && shouldLog !== localEnums.ShouldLogVal.NONE) {
                     const featureReport = {feature: keyPath};
                     const blockEvent = new window.CustomEvent(eventName, {
                         detail: featureReport,
                     });
 
-                    dispatchEvent.call(document, blockEvent);
+                    dispatchEvent.call(doc, blockEvent);
                 }
             };
+        }());
 
+        const createBlockingProxy = keyPath => {
             // Every time the proxy has been called 1000 times, return
             // undefined instead of the proxy object, to ensure that the
             // proxy doesn't get stuck in an infinite loop.
@@ -124,7 +143,7 @@
 
             const blockingProxy = new Proxy(defaultFunction, {
                 get: function (ignore, property) {
-                    logKeyPath();
+                    logKeyPath(keyPath);
 
                     if (recursionGuardCounter === 1000) {
                         recursionGuardCounter = 0;
@@ -144,11 +163,11 @@
                     return blockingProxy;
                 },
                 set: function () {
-                    logKeyPath();
+                    logKeyPath(keyPath);
                     return blockingProxy;
                 },
                 apply: function () {
-                    logKeyPath();
+                    logKeyPath(keyPath);
                     return blockingProxy;
                 },
                 ownKeys: function () {
@@ -191,18 +210,28 @@
             }
 
             try {
-                if (shouldLog === true) {
-                    parentRef[lastPropertyName] = createBlockingProxy(keyPath);
-                    return true;
-                }
+                switch (shouldLog) {
+                    case localEnums.ShouldLogVal.NONE:
+                        parentRef[lastPropertyName] = defaultBlockingProxy;
+                        return true;
 
-                parentRef[lastPropertyName] = defaultBlockingProxy;
-                return true;
+                    case localEnums.ShouldLogVal.STANDARD:
+                        parentRef[lastPropertyName] = createBlockingProxy(keyPath);
+                        return true;
+
+                    case localEnums.ShouldLogVal.PASSIVE: {
+                        const origRef = parentRef[lastPropertyName];
+                        parentRef[lastPropertyName] = function () {
+                            logKeyPath(keyPath);
+                            return origRef.apply(this, arguments);
+                        };
+                        return true;
+                    }
+                }
             } catch (e) {
-                if (shouldLog) {
+                if (shouldLog !== localEnums.ShouldLogVal.NONE) {
                     consoleLog.call(console, "Error instrumenting " + keyPath + ": " + e);
                 }
-
                 return false;
             }
         };
@@ -261,8 +290,10 @@
      *
      * @param {Array.string} standardIds
      *   An array of strings, each being a standard id that should be blocked.
-     * @param {boolean} shouldLog
-     *   Whether to log the behavior of the blocking proxy.
+     * @param {ShouldLogVal} shouldLog
+     *   The behavior of the blocking proxy object, whether it should not
+     *   log, block page access to features and log those "blocking actions",
+     *   or allow the page to access all functionality, and log everything.
      * @param {string} randNonce
      *   A unique, unguessable identififer, used so that the injected content
      *   script can communicate with the content script, using an unguessable
@@ -284,12 +315,21 @@
             return collection;
         }, []);
 
+        const injectedValues = {
+            randNonce,
+            featuresToBlock: featuresToBlock,
+            shouldLog,
+            enums: {
+                ShouldLogVal: enums.ShouldLogVal,
+            },
+        };
+
+        if (shouldLog === enums.ShouldLogVal.PASSIVE) {
+            injectedValues.allFeatures = standardsLib.allFeatures();
+        }
+
         const proxyBlockingSettings = `
-            window.WEB_API_MANAGER_PAGE = {
-                randNonce: "${randNonce}",
-                featuresToBlock: ${JSON.stringify(featuresToBlock)},
-                shouldLog: ${shouldLog ? "true" : "false"}
-            };
+            window.WEB_API_MANAGER_PAGE = ${JSON.stringify(injectedValues)};
         `;
 
         const proxyingBlockingSrc = "(" + proxyBlockingFunction.toString() + "())";

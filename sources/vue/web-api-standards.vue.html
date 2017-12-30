@@ -7,19 +7,19 @@
         </div>
 
         <div class="panel-body">
-            <button @click="onLiteClicked">
+            <button @click="onLiteClicked" :disabled="isPassiveMode">
                 Use Lite Settings
             </button>
-            <button @click="onConservativeClicked">
+            <button @click="onConservativeClicked" :disabled="isPassiveMode">
                 Use Conservative Settings
             </button>
-            <button @click="onAggressiveClicked">
+            <button @click="onAggressiveClicked" :disabled="isPassiveMode">
                 Use Aggressive Settings
             </button>
-            <button @click="onClearClicked">
+            <button @click="onClearClicked" :disabled="isPassiveMode">
                 Clear Settings
             </button>
-            <button @click="onAllClicked">
+            <button @click="onAllClicked" :disabled="isPassiveMode">
                 Block All
             </button>
         </div>
@@ -40,6 +40,7 @@
 
             <button v-if="areAllStandardsInCategoryBlocked(categoryId)"
                   @click="toggleCategory($event, false, categoryId)"
+               :disabled="isPassiveMode"
                    class="pull-right toggle-button toggle-button-allow">
                 Allow all
             </button>
@@ -51,7 +52,7 @@
         </div>
 
         <ul class="list-group">
-            <li class="list-group-item"
+            <li class="list-group-item web-api-standards-group"
                 v-for="standardId in sortedStandardIdsInCategory(categoryId)">
                 <span v-if="getStandardsLib().urlForStandardId(standardId)"
                      class="badge">
@@ -61,6 +62,7 @@
                 <input type="checkbox"
                      :value="standardId"
                     v-model="dataCurrentStandardIds"
+                  :disabled="isPassiveMode"
                     @change="onStandardChecked">
                 {{ getStandardsLib().nameForStandardId(standardId) }}
             </li>

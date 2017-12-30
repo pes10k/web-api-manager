@@ -17,7 +17,7 @@ require(path.join(addonLibPath, "init.js"));
 require(path.join(addonLibPath, "browser.js"));
 require(path.join(addonLibPath, "blockrules.js"));
 require(path.join(addonLibPath, "preferences.js"));
-const {preferencesLib, blockRulesLib, constants} = window.WEB_API_MANAGER;
+const {preferencesLib, enums, blockRulesLib, constants} = window.WEB_API_MANAGER;
 
 const areArraysEqual = (arrayOne, arrayTwo) => {
     if (arrayOne.length !== arrayTwo.length) {
@@ -34,7 +34,11 @@ describe("Preferences management", function () {
             assert.equal(numRules, 1, "New preferences should have default rule.");
 
             const shouldLog = prefs.getShouldLog();
-            assert.equal(shouldLog, false, "By default, preferences should be set to not log.");
+            assert.equal(
+                shouldLog,
+                enums.ShouldLogVal.NONE,
+                "By default, preferences should be set to not log."
+            );
             done();
         });
 

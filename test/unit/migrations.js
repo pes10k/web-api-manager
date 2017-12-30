@@ -18,7 +18,7 @@ require(path.join(addonLibPath, "browser.js"));
 require(path.join(addonLibPath, "standards.js"));
 require(path.join(addonLibPath, "migration.js"));
 require(path.join(addonLibPath, "preferences.js"));
-const {migrationLib, preferencesLib} = window.WEB_API_MANAGER;
+const {migrationLib, preferencesLib, constants, enums} = window.WEB_API_MANAGER;
 
 const validV1Data = {
     webApiManager: {
@@ -36,10 +36,28 @@ const validV1Data = {
         },
     },
 };
+
 const validV2Data = {
     webApiManager: {
         schema: 2,
         shouldLog: false,
+        rules: [
+            {
+                p: "www.example.com",
+                s: [1, 2, 3],
+            },
+            {
+                p: "(default)",
+                s: [4, 5, 6],
+            },
+        ],
+    },
+};
+
+const validV3Data = {
+    webApiManager: {
+        schema: 3,
+        shouldLog: enums.ShouldLogVal.NONE,
         rules: [
             {
                 p: "www.example.com",
@@ -119,29 +137,29 @@ describe("Migrations", function () {
                 },
             };
 
-            const [success, v2data] = migrationLib.applyMigrations(v1data);
+            const [success, migratedData] = migrationLib.applyMigrations(v1data);
 
             assert.equal(success, true, "On valid data, migration should return true.");
 
             assert.equal(
-                v2data.webApiManager.shouldLog,
-                v1data.webApiManager.shouldLog,
-                "Before and after should log settings should match."
+                migratedData.webApiManager.shouldLog,
+                enums.ShouldLogVal.NONE,
+                "The false v1 `shouldLog` settings should be migrated to `none`."
             );
 
             assert.equal(
-                v2data.webApiManager.rules.length,
+                migratedData.webApiManager.rules.length,
                 Object.keys(v1data.webApiManager.domainRules).length,
                 "All v1 rules should be migrated."
             );
 
             assert.equal(
-                2,
-                v2data.webApiManager.schema,
-                "Migrated schema should indicate its vs2"
+                constants.schemaVersion,
+                migratedData.webApiManager.schema,
+                "Migrated schema should indicate its up to date."
             );
 
-            v2data.webApiManager.rules.forEach(ruleData => {
+            migratedData.webApiManager.rules.forEach(ruleData => {
                 const rulePattern = ruleData.p;
                 const priorRule = v1data.webApiManager.domainRules[rulePattern];
 
@@ -161,29 +179,29 @@ describe("Migrations", function () {
         });
 
         it("With two blocking rules", function (done) {
-            const [success, v2data] = migrationLib.applyMigrations(validV1Data);
+            const [success, migratedData] = migrationLib.applyMigrations(validV1Data);
 
             assert.equal(success, true, "On valid data, migration should return true.");
 
             assert.equal(
-                v2data.webApiManager.shouldLog,
-                validV1Data.webApiManager.shouldLog,
-                "Before and after should log settings should match."
+                migratedData.webApiManager.shouldLog,
+                enums.ShouldLogVal.STANDARD,
+                "v1 true `shouldLog` setting should be migrated to `standard` string in v3."
             );
 
             assert.equal(
-                2,
-                v2data.webApiManager.schema,
-                "Migrated schema should indicate its vs2"
+                constants.schemaVersion,
+                migratedData.webApiManager.schema,
+                "Migrated schema should indicate its up to date"
             );
 
             assert.equal(
-                v2data.webApiManager.rules.length,
+                migratedData.webApiManager.rules.length,
                 Object.keys(validV1Data.webApiManager.domainRules).length,
                 "All v1 rules should be migrated."
             );
 
-            v2data.webApiManager.rules.forEach(ruleData => {
+            migratedData.webApiManager.rules.forEach(ruleData => {
                 const rulePattern = ruleData.p;
                 const priorRule = validV1Data.webApiManager.domainRules[rulePattern];
 
@@ -203,19 +221,19 @@ describe("Migrations", function () {
         });
 
         it("Converting to preferences", function (done) {
-            const [ignore, v2data] = migrationLib.applyMigrations(validV1Data);
+            const [ignore, migratedData] = migrationLib.applyMigrations(validV1Data);
 
-            const prefs = preferencesLib.fromJSON(JSON.stringify(v2data.webApiManager));
+            const prefs = preferencesLib.fromJSON(JSON.stringify(migratedData.webApiManager));
 
             assert.equal(
-                validV1Data.webApiManager.shouldLog,
+                enums.ShouldLogVal.STANDARD,
                 prefs.getShouldLog(),
                 "Should log setting should be correctly migrated from migrated data."
             );
 
             const prefRules = prefs.getAllRules();
             assert.equal(
-                2,
+                Object.keys(validV1Data.webApiManager.domainRules).length,
                 prefRules.length,
                 "Preferences should be populated with two blocking rules"
             );
@@ -239,46 +257,36 @@ describe("Migrations", function () {
     });
 
     describe("Handling v2 data", function () {
-        it("Empty data", function (done) {
-            const testData = {};
-
-            const [success, v2data] = migrationLib.applyMigrations(testData);
-
-            assert.equal(success, true, "On valid data, migration should return true.");
-            assert.equal(0, Object.keys(v2data).length, `On given an empty object, ${{}} should be returned}`);
-            done();
-        });
-
         it("Valid v2 data", function (done) {
-            const [success, v2data] = migrationLib.applyMigrations(validV2Data);
+            const [success, migratedData] = migrationLib.applyMigrations(validV2Data);
             assert.equal(success, true, "On valid data, migration should return true.");
 
             assert.equal(
-                2,
-                v2data.webApiManager.schema,
-                "Schema of migrated data should be 2"
+                constants.schemaVersion,
+                migratedData.webApiManager.schema,
+                `Schema of migrated data should be ${constants.schemaVersion}`
             );
 
             assert.equal(
-                validV2Data.webApiManager.shouldLog,
-                v2data.webApiManager.shouldLog,
-                "Should log settings should be maintained across migrations"
+                enums.ShouldLogVal.NONE,
+                migratedData.webApiManager.shouldLog,
+                "false `shouldLog` value in v2 data should become `none`"
             );
 
             assert.equal(
                 validV2Data.webApiManager.rules.length,
-                v2data.webApiManager.rules.length,
+                migratedData.webApiManager.rules.length,
                 "All rules should be migrated"
             );
             done();
         });
 
         it("Converting to preferences", function (done) {
-            const [ignore, v2data] = migrationLib.applyMigrations(validV2Data);
-            const prefs = preferencesLib.fromJSON(JSON.stringify(v2data.webApiManager));
+            const [ignore, migratedData] = migrationLib.applyMigrations(validV2Data);
+            const prefs = preferencesLib.fromJSON(JSON.stringify(migratedData.webApiManager));
 
             assert.equal(
-                validV2Data.webApiManager.shouldLog,
+                enums.ShouldLogVal.NONE,
                 prefs.getShouldLog(),
                 "Should log value should be correctly handled through v2 migration."
             );
@@ -295,6 +303,45 @@ describe("Migrations", function () {
                 JSON.stringify(validV2Data.webApiManager.rules[0].s),
                 JSON.stringify(exampleRule.getStandardIds()),
                 "Blocked standards for www.example.com rule should be maintained through v2 migration."
+            );
+
+            done();
+        });
+    });
+
+    describe("Handling v3 data", function () {
+        it("Empty data", function (done) {
+            const testData = {};
+
+            const [success, migratedData] = migrationLib.applyMigrations(testData);
+
+            assert.equal(success, true, "On valid data, migration should return true.");
+            assert.equal(0, Object.keys(migratedData).length, `On given an empty object, ${{}} should be returned}`);
+            done();
+        });
+
+        it("Converting to preferences", function (done) {
+            const [ignore, migratedData] = migrationLib.applyMigrations(validV3Data);
+            const prefs = preferencesLib.fromJSON(JSON.stringify(migratedData.webApiManager));
+
+            assert.equal(
+                "0",
+                prefs.getShouldLog(),
+                "Should log value should be correctly handled through v3 (NOOP) migration."
+            );
+
+            const defaultRule = prefs.getDefaultRule();
+            assert.equal(
+                JSON.stringify(validV3Data.webApiManager.rules[1].s),
+                JSON.stringify(defaultRule.getStandardIds()),
+                "Blocked standards for the default rule should be maintained through v3 (NOOP) migration."
+            );
+
+            const exampleRule = prefs.getRuleForPattern("www.example.com");
+            assert.equal(
+                JSON.stringify(validV3Data.webApiManager.rules[0].s),
+                JSON.stringify(exampleRule.getStandardIds()),
+                "Blocked standards for www.example.com rule should be maintained through v3 (NOOP) migration."
             );
 
             done();

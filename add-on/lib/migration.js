@@ -5,7 +5,7 @@
 (function () {
     "use strict";
 
-    const {constants, standardsLib} = window.WEB_API_MANAGER;
+    const {constants, enums, standardsLib} = window.WEB_API_MANAGER;
     const currentVersion = constants.schemaVersion;
 
     /**
@@ -38,6 +38,12 @@
             // "schema" property, that its version 1.
             if (data.webApiManager.schema === undefined) {
                 return 1;
+            }
+
+            // Small sanity check to make sure the data doesn't advertise
+            // some version of the schema we don't understand.
+            if (data.webApiManager.schema > currentVersion) {
+                return false;
             }
 
             return data.webApiManager.schema;
@@ -86,6 +92,29 @@
     };
 
     /**
+     * Creates a new object, with the settings stored in the given v-2
+     * preferences data, but in the v-3 format.
+     *
+     * @param {object} data
+     *   Persistent data loaded from the storage API in the extension.
+     *
+     * @return {object}
+     *   A new read only object, describing the same preferences, but in the
+     *   schema 3 format.
+     */
+    const twoToThree = data => {
+        const migratedData = JSON.parse(JSON.stringify(data));
+
+        migratedData.webApiManager.shouldLog = (data.webApiManager.shouldLog === true)
+            ? enums.ShouldLogVal.STANDARD
+            : enums.ShouldLogVal.NONE;
+
+        migratedData.webApiManager.schema = 3;
+
+        return Object.freeze(migratedData);
+    };
+
+    /**
      * Apply any needed migrations to bring the structure of the given
      * stored preferences data to the current version.
      *
@@ -110,6 +139,7 @@
 
         const migrations = [
             oneToTwo,
+            twoToThree,
         ];
 
         let currentMigratedVersion = foundDataVersion;

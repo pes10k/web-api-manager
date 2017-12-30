@@ -13,16 +13,26 @@
         global.window = {};
     }
 
+    /**
+     * @enum {ShouldLogVal} string
+     * Enum style value that stores all possible setting for the "should log"
+     * value.
+     *
+     * NONE indicates that no logging should occur, STANDARD that selected
+     * features should be blocked and loged, and PASSIVE means that nothing
+     * should be blocked, but everything should be logged.
+     */
+    const ShouldLogVal = Object.freeze({
+        NONE: "0",
+        STANDARD: "1",
+        PASSIVE: "2",
+    });
+
     window.WEB_API_MANAGER = {
         constants: {
             // The name of the cookie that will be used to push domain
             // configuration information into pages.
             cookieName: "_wamtcstandards",
-
-            // The value in the packed array of options thats used to
-            // include the shouldLog option in the in bitfield encoded in
-            // the above cookie.
-            shouldLogKey: "shouldLogKey",
 
             // The homepage of the extension.
             homepage: "https://github.com/snyderp/web-api-manager",
@@ -32,7 +42,40 @@
             defaultPattern: "(default)",
 
             // Version of schema used when serializing preferences to storage.
-            schemaVersion: 2,
+            schemaVersion: 3,
+        },
+        enums: {
+            utils: {
+                /**
+                 * Enum helper function that throws if the given value is
+                 * not a valid value in the enumeration.
+                 *
+                 * @param {object} enumValues
+                 *   An enumerated set of valid values, likely defined in
+                 *   window.WEB_API_MANAGER.enums.
+                 * @param {*} value
+                 *   A value that is expected to be one of the valid values
+                 *   in the enumeration.  Implementaton side, this function
+                 *   checks that the give value is the value of one of the
+                 *   keys in the provided enumValues object.
+                 *
+                 * @throws
+                 *   Throws if the given value is not an expected enumerated
+                 *   value.
+                 *
+                 * @return {undefined}
+                 */
+                assertValidEnum: (enumValues, value) => {
+                    const validValues = new Set(Object.values(enumValues));
+                    if (!validValues.has(value)) {
+                        throw `${value} is not a valid value for enum ${JSON.stringify(enumValues)}.`;
+                    }
+                },
+            },
+            ShouldLogVal,
         },
     };
+
+    Object.freeze(window.WEB_API_MANAGER.constants);
+    Object.freeze(window.WEB_API_MANAGER.enums);
 }());

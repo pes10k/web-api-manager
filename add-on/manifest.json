@@ -38,6 +38,7 @@
         "lib/pack.js",
         "lib/cookieencoding.js",
         "lib/proxyblock.js",
+        "lib/preferences.js",
         "content_scripts/instrument.js"
       ],
       "matches": [

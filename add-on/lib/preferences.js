@@ -6,7 +6,7 @@
  */
 (function () {
     "use strict";
-    const {constants, browserLib, blockRulesLib, migrationLib} = window.WEB_API_MANAGER;
+    const {constants, enums, browserLib, blockRulesLib, migrationLib} = window.WEB_API_MANAGER;
     const defaultPattern = constants.defaultPattern;
     const rootObject = browserLib.getRootObject();
     const storageKey = "webApiManager";
@@ -42,8 +42,27 @@
         };
     };
 
-    const init = (blockRulesRaw = [], shouldLogRaw = false, syncWithDb = false) => {
-        let shouldLogLocal = shouldLogRaw;
+    /**
+     * Initilizes a Preferences object
+     *
+     * @param {Array.object} blockRulesRaw
+     *   The underlying data representation of all the blocking rules
+     *   the user has set.  This will be equal to an array of the results
+     *   of calling BlockRule.toData
+     * @param {?ShouldLogVal} shouldLog
+     *   Either a valid ShouldLog enum value, describing how logging should
+     *   be performed, or undefined, in which case shouldLog.NONE is used,
+     *   indicating no logging should be performed.
+     * @param {?boolean} syncWithDb
+     *   A boolean value, describing whether the given preferences object
+     *   should automatically be kept in sync with the underlying, persistant
+     *   data store.  If no value is provided,
+     *
+     * @return {Preferences}
+     *   An initilized, preferences object.
+     */
+    const init = (blockRulesRaw = [], shouldLog = enums.shouldLog.NONE, syncWithDb = false) => {
+        let shouldLogLocal = shouldLog;
 
         let defaultRule;
         const nonDefaultRules = [];
@@ -134,6 +153,7 @@
         };
 
         const setShouldLog = newShouldLog => {
+            enums.utils.assertValidEnum(enums.ShouldLogVal, newShouldLog);
             shouldLogLocal = newShouldLog;
         };
 
@@ -209,16 +229,16 @@
             }
 
             let blockRulesRaw = [];
-            let shouldLogRaw = false;
+            let shouldLog = enums.ShouldLogVal.NONE;
 
             if (migratedData &&
                     migratedData[storageKey] &&
                     migratedData[storageKey].rules) {
                 blockRulesRaw = migratedData[storageKey].rules;
-                shouldLogRaw = migratedData[storageKey].shouldLog;
+                shouldLog = migratedData[storageKey].shouldLog;
             }
 
-            instance = init(blockRulesRaw, shouldLogRaw, true);
+            instance = init(blockRulesRaw, shouldLog, true);
 
             if (callback !== undefined) {
                 callback(instance);
@@ -266,9 +286,7 @@
             throw `Invalid preferences JSON: ${jsonString} does not have an array for a "rules" property`;
         }
 
-        if (typeof data.shouldLog !== "boolean") {
-            throw `Invalid preferences JSON: ${jsonString} does not have a boolean for a "shouldLog" property`;
-        }
+        enums.utils.assertValidEnum(enums.ShouldLogVal, data.shouldLog);
 
         const {rules, shouldLog} = data;
         return init(rules, shouldLog, false);
@@ -282,7 +300,7 @@
      *   An empty preferences object.
      */
     const initNew = () => {
-        return init([], false);
+        return init([], enums.ShouldLogVal.NONE);
     };
 
     window.WEB_API_MANAGER.preferencesLib = {

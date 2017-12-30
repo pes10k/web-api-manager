@@ -123,14 +123,6 @@
     };
 
     /**
-     * A shorthand, reg-ex like rule for matching domains.
-     *
-     * @see https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Match_patterns
-     *
-     * @typedef {string} MatchPattern
-     */
-
-    /**
      * Creates a new block rule object, specifying which standards to block
      * on which domains.
      *

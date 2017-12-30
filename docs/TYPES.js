@@ -2,6 +2,25 @@
  * Definitions of interfaces used throughout the system.
  */
 
+
+/**
+ * @enum {string} ShouldLogVal
+ * Enum style value that stores all possible setting for the "should log"
+ * value.
+ *
+ * NONE indicates that no logging should occur, STANDARD that selected
+ * features should be blocked and loged, and PASSIVE means that nothing
+ * should be blocked, but everything should be logged.
+ */
+
+/**
+ * A shorthand, reg-ex like rule for matching domains.
+ *
+ * @see https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Match_patterns
+ *
+ * @typedef {string} MatchPattern
+ */
+
 /**
  * Represents and manages all of the user configuration in the extension.
  *
@@ -35,9 +54,10 @@
  *   Either updates the set of standards blocked for a given match
  *   pattern, or creates a new blocking rule.  Returns a boolean description
  *   of whether a new BlockRule object was created.
- * @param {function(boolean): undefined} setShouldLog
- *   Sets whether the system should log what functionality was blocked.
- * @param {function(): boolean} getShouldLog
+ * @param {function(ShouldLogVal): undefined} setShouldLog
+ *   Sets whether the system should log what functionality was blocked.  Throws
+ *   if the given value is not a valid ShouldLogVal value.
+ * @param {function(): ShouldLogVal} getShouldLog
  *   Returns whether the system is currently configured to log
  *   what standards / features are blocked.
  * @param {function(): object} toStorage
