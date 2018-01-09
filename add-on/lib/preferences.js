@@ -53,6 +53,9 @@
      *   Either a valid ShouldLog enum value, describing how logging should
      *   be performed, or undefined, in which case shouldLog.NONE is used,
      *   indicating no logging should be performed.
+     * @param {?Array.number} template
+     *   An optional array of standard ids that can be used as a template
+     *   rule, that can applied to other domains / patterns.
      * @param {?boolean} syncWithDb
      *   A boolean value, describing whether the given preferences object
      *   should automatically be kept in sync with the underlying, persistant
@@ -61,8 +64,9 @@
      * @return {Preferences}
      *   An initilized, preferences object.
      */
-    const init = (blockRulesRaw = [], shouldLog = enums.shouldLog.NONE, syncWithDb = false) => {
-        let shouldLogLocal = shouldLog;
+    const init = (blockRulesRaw = [], shouldLog, template, syncWithDb) => {
+        let shouldLogLocal = shouldLog || enums.shouldLog.NONE;
+        let templateLocal = template.slice() || [];
 
         let defaultRule;
         const nonDefaultRules = [];
@@ -159,12 +163,12 @@
 
         const getShouldLog = () => shouldLogLocal;
 
-        const toStorage = () => {
-            return {
-                schema: constants.schemaVersion,
-                rules: getAllRules().map(rule => rule.toData()),
-                shouldLog: getShouldLog(),
-            };
+        const getTemplate = () => {
+            return templateLocal.slice();
+        };
+
+        const setTemplate = templateStandardIds => {
+            templateLocal = templateStandardIds.slice();
         };
 
         const toJSON = () => {
@@ -173,7 +177,17 @@
             return JSON.stringify({
                 rules: rulesData,
                 shouldLog: getShouldLog(),
+                template: getTemplate(),
             });
+        };
+
+        const toStorage = () => {
+            return {
+                schema: constants.schemaVersion,
+                rules: getAllRules().map(rule => rule.toData()),
+                shouldLog: getShouldLog(),
+                template: getTemplate(),
+            };
         };
 
         const response = {
@@ -188,6 +202,8 @@
             upcertRule,
             setShouldLog,
             getShouldLog,
+            getTemplate,
+            setTemplate,
             toStorage,
             toJSON,
         };
@@ -229,6 +245,7 @@
             }
 
             let blockRulesRaw = [];
+            let template = [];
             let shouldLog = enums.ShouldLogVal.NONE;
 
             if (migratedData &&
@@ -236,9 +253,10 @@
                     migratedData[storageKey].rules) {
                 blockRulesRaw = migratedData[storageKey].rules;
                 shouldLog = migratedData[storageKey].shouldLog;
+                template = migratedData[storageKey].template;
             }
 
-            instance = init(blockRulesRaw, shouldLog, true);
+            instance = init(blockRulesRaw, shouldLog, template, true);
 
             if (callback !== undefined) {
                 callback(instance);
@@ -283,13 +301,17 @@
         }
 
         if (data.rules === undefined || Array.isArray(data.rules) === false) {
-            throw `Invalid preferences JSON: ${jsonString} does not have an array for a "rules" property`;
+            throw `Invalid preferences JSON: ${jsonString} does not have an array for a "rules" property.`;
         }
 
         enums.utils.assertValidEnum(enums.ShouldLogVal, data.shouldLog);
 
-        const {rules, shouldLog} = data;
-        return init(rules, shouldLog, false);
+        if (Array.isArray(data.template) === false) {
+            throw `Invalid preferences JSON: ${jsonString} does not have an array for a rule template.`;
+        }
+
+        const {rules, shouldLog, template} = data;
+        return init(rules, shouldLog, template, false);
     };
 
     /**
@@ -300,7 +322,7 @@
      *   An empty preferences object.
      */
     const initNew = () => {
-        return init([], enums.ShouldLogVal.NONE);
+        return init([], enums.ShouldLogVal.NONE, []);
     };
 
     window.WEB_API_MANAGER.preferencesLib = {

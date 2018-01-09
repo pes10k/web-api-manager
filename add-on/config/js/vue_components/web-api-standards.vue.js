@@ -6,7 +6,7 @@
     const Vue = window.Vue;
 
     Vue.component("web-api-standards", {
-        props: ["dataCurrentStandardIds", "dataSelectedPattern", "dataShouldLog"],
+        props: ["dataCurrentStandardIds", "dataSelectedPattern", "dataShouldLog", "dataTemplate"],
         render: window.WEB_API_MANAGER.vueComponents["web-api-standards"].render,
         staticRenderFns: window.WEB_API_MANAGER.vueComponents["web-api-standards"].staticRenderFns,
         computed: {
@@ -78,6 +78,14 @@
             onAllClicked: function () {
                 const state = this.$root.$data;
                 stateLib.setCurrentStandardIds(state, standardsLib.allStandardIds());
+            },
+            onSaveTemplateClicked: function () {
+                const state = this.$root.$data;
+                stateLib.setTemplate(state, state.dataCurrentStandardIds);
+            },
+            onApplyTemplateClicked: function () {
+                const state = this.$root.$data;
+                stateLib.setCurrentStandardIds(state, state.preferences.getTemplate());
             },
         },
     });

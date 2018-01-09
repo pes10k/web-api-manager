@@ -35,12 +35,12 @@ describe("Import / Export", function () {
                 })
                 .then(() => driverRef.findElement(by.css(".export-section select option:nth-child(1)")).click())
                 .then(() => driverRef.findElement(by.css(".export-section textarea")).getAttribute("value"))
-                .then(function (exportValue) {
+                .then(exportValue => {
                     driverRef.quit();
                     assert.equal(exportValue.trim(), emptyRuleSet, "Exported ruleset does not match expected value.");
                     done();
                 })
-                .catch(function (e) {
+                .catch(e => {
                     driverRef.quit();
                     done(e);
                 });
@@ -85,7 +85,7 @@ describe("Import / Export", function () {
                 .then(() => driverRef.findElement(by.css(".import-section button")).click())
                 .then(() => utils.pause(500))
                 .then(() => driverRef.findElements(by.css("#blocking-rules input[type='checkbox']:checked")))
-                .then(function (checkboxElms) {
+                .then(checkboxElms => {
                     checkedCheckboxes = checkboxElms;
                     assert.equal(checkboxElms.length, 2, "There should be two standards blocked.");
                     return checkedCheckboxes[1].getAttribute("value");
@@ -119,26 +119,26 @@ describe("Import / Export", function () {
                 .then(() => utils.pause(500))
                 .then(() => driverRef.findElement(by.css("a[href='#blocking-rules']")).click())
                 .then(() => driverRef.findElements(by.css("#blocking-rules .patterns-container input[type='radio']")))
-                .then(function (radioElms) {
+                .then(radioElms => {
                     assert.equal(radioElms.length, 2, "There should be two domain rules in place.");
                     return radioElms[0].click();
                 })
                 .then(() => driverRef.findElements(by.css("#blocking-rules input[type='checkbox']:checked")))
-                .then(function (checkboxElms) {
+                .then(checkboxElms => {
                     checkedCheckboxes = checkboxElms;
                     assert.equal(checkboxElms.length, 2, "There should be two standards blocked.");
                     return checkedCheckboxes[1].getAttribute("value");
                 })
-                .then(function (firstCheckboxValue) {
+                .then(firstCheckboxValue => {
                     assert.equal(firstCheckboxValue, ambientLightSensorId, "One blocked standard should be 'Ambient Light Sensor API'.");
                     return checkedCheckboxes[0].getAttribute("value");
                 })
-                .then(function (secondCheckboxValue) {
+                .then(secondCheckboxValue => {
                     assert.equal(secondCheckboxValue, webGLId, "The other blocked standard should be 'WebGL Specification'.");
                     driverRef.quit();
                     done();
                 })
-                .catch(function (e) {
+                .catch(e => {
                     driverRef.quit();
                     done(e);
                 });

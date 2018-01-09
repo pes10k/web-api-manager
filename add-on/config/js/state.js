@@ -21,7 +21,7 @@
      *
      * @return {undefined}
      */
-    const updateBackgroundPreference = (operation, rule) => {
+    const notifyBackgroundProcessOfNewRules = (operation, rule) => {
         if (validUpdateOperations.has(operation) === false) {
             throw `Invalid background operation specified: '${operation}'`;
         }
@@ -42,9 +42,25 @@
      *
      * @return {undefined}
      */
-    const updateBackgroundShouldLog = shouldLog => {
+    const updateBackgroundProcessOfShouldLogChange = shouldLog => {
         rootObject.runtime.sendMessage(["updatePreferencesShouldLog", {
             shouldLog,
+        }]);
+    };
+
+    /**
+     * Sends a message to the background script that the user's template value
+     * has been updated.
+     *
+     * @param {Array.number} template
+     *   An array of standard ids that are the users new template of standards
+     *   to block.
+     *
+     * @return {undefined}
+     */
+    const notifyBackgroundProcessOfTemplateChange = template => {
+        rootObject.runtime.sendMessage(["updatePreferencesTemplate", {
+            template,
         }]);
     };
 
@@ -60,6 +76,7 @@
         state.dataBlockingAnyPatterns = preferences.getAllRules()
             .filter(rule => rule.getStandardIds().length !== 0)
             .map(rule => rule.pattern);
+        state.dataTemplate = preferences.getTemplate();
         state.preferences = preferences;
 
         return state;
@@ -70,6 +87,7 @@
     };
 
     const resyncWithPrefs = state => {
+        state.dataTemplate = state.preferences.getTemplate();
         state.dataPatterns = state.preferences.getAllRules().map(rule => rule.pattern).sort();
         const currentRule = getCurrentRule(state);
         state.dataCurrentStandardIds = currentRule.getStandardIds();
@@ -101,11 +119,17 @@
             .sort();
     };
 
+    const setTemplate = (state, standardIds) => {
+        state.preferences.setTemplate(standardIds);
+        resyncWithPrefs(state);
+        notifyBackgroundProcessOfTemplateChange(standardIds);
+    };
+
     const setCurrentStandardIds = (state, standardIds) => {
         state.preferences.upcertRule(state.dataSelectedPattern, arrayStrsToNums(standardIds));
         resyncWithPrefs(state);
         // Notify background process to keep preferences in sync.
-        updateBackgroundPreference("update", getCurrentRule(state));
+        notifyBackgroundProcessOfNewRules("update", getCurrentRule(state));
     };
 
     const deletePattern = (state, pattern) => {
@@ -118,7 +142,7 @@
         state.preferences.deleteRule(pattern);
         // Notify background process to keep preferences in sync
         resyncWithPrefs(state);
-        updateBackgroundPreference("delete", ruleToDelete);
+        notifyBackgroundProcessOfNewRules("delete", ruleToDelete);
     };
 
     const addPattern = (state, pattern, standardIds = []) => {
@@ -126,21 +150,21 @@
         state.preferences.upcertRule(pattern, arrayStrsToNums(standardIds));
         // Notify background process to keep preferences in sync
         resyncWithPrefs(state);
-        updateBackgroundPreference("add", getCurrentRule(state));
+        notifyBackgroundProcessOfNewRules("add", getCurrentRule(state));
     };
 
     const setShouldLog = (state, shouldLog) => {
         state.preferences.setShouldLog(shouldLog);
         resyncWithPrefs(state);
         // Notify background process to keep preferences in sync
-        updateBackgroundShouldLog(shouldLog);
+        updateBackgroundProcessOfShouldLogChange(shouldLog);
     };
 
     const setStandardIdsForPattern = (state, pattern, standardIds) => {
         state.preferences.upcertRule(pattern, arrayStrsToNums(standardIds));
         resyncWithPrefs(state);
         // Notify background process to keep preferences in sync
-        updateBackgroundPreference("update", state.preferences.getRuleForPattern(pattern));
+        notifyBackgroundProcessOfNewRules("update", state.preferences.getRuleForPattern(pattern));
     };
 
     window.WEB_API_MANAGER.stateLib = {
@@ -149,6 +173,7 @@
         setSelectedPattern,
         patternsBlockingNoStandards,
         patternsBlockingStandards,
+        setTemplate,
         setCurrentStandardIds,
         deletePattern,
         addPattern,

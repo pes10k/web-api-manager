@@ -58,6 +58,7 @@ Version 2
 ```
 
 Version 3
+---
 ```
 {
     "webApiManager": {
@@ -80,6 +81,39 @@ Version 3
             ...
         ],
         "shouldLog": "0" | "1" | "2" (a ShouldLogVal enum)
+    }
+}
+```
+
+Version 4
+---
+```
+{
+    "webApiManager": {
+        "schema": 3,
+        "rules": [
+            {
+                "p": "the match pattern this rule applies to, <string>",
+                "s": [
+                    integer id of a standard, taken from the info.id property,
+                    integer id of another standard, taken from the info.id property,
+                    etc...
+                ]
+            },
+            {
+                "p": ...
+                "s": [
+                    ...
+                ]
+            },
+            ...
+        ],
+        "shouldLog": "0" | "1" | "2" (a ShouldLogVal enum),
+        "template": [
+            integer id of a standard, taken from the info.id property,
+            integer id of another standard, taken from the info.id property,
+            etc...
+        ]
     }
 }
 ```

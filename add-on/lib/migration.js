@@ -115,6 +115,27 @@
     };
 
     /**
+     * Creates a new object, with the settings store in the give v-3 preferences
+     * data, but in the v-4 format.
+     *
+     * In practice, this really just creates an empty array at
+     * webApiManager.template.
+     *
+     * @param {object} data
+     *   Persistent data loaded from the storage API in the extension.
+     *
+     * @return {object}
+     *   A new read only object, describing the same preferences, but in the
+     *   schema 4 format.
+     */
+    const threeToFour = data => {
+        const migratedData = JSON.parse(JSON.stringify(data));
+        migratedData.webApiManager.template = [];
+        migratedData.webApiManager.schema = 4;
+        return Object.freeze(migratedData);
+    };
+
+    /**
      * Apply any needed migrations to bring the structure of the given
      * stored preferences data to the current version.
      *
@@ -140,6 +161,7 @@
         const migrations = [
             oneToTwo,
             twoToThree,
+            threeToFour,
         ];
 
         let currentMigratedVersion = foundDataVersion;

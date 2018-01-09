@@ -37,6 +37,15 @@
             return;
         }
 
+        // Message sent from the configuration page, indicating that the
+        // user's "template" (easily re-apply-able set of standards to block)
+        // has changed.
+        if (label === "updatePreferencesTemplate") {
+            const {template} = data;
+            preferences.setTemplate(template);
+            return;
+        }
+
         // Message sent from configuration and popup pages, asking for read
         // only version of the preferences.
         if (label === "getPreferences") {

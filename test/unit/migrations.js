@@ -71,6 +71,24 @@ const validV3Data = {
     },
 };
 
+const validV4Data = {
+    webApiManager: {
+        schema: 4,
+        shouldLog: enums.ShouldLogVal.NONE,
+        rules: [
+            {
+                p: "www.example.com",
+                s: [1, 2, 3],
+            },
+            {
+                p: "(default)",
+                s: [4, 5, 6],
+            },
+        ],
+        template: [7, 8, 9],
+    },
+};
+
 describe("Migrations", function () {
     describe("Handling invalid data", function () {
         it("Invalid shaped object", function (done) {
@@ -157,6 +175,12 @@ describe("Migrations", function () {
                 constants.schemaVersion,
                 migratedData.webApiManager.schema,
                 "Migrated schema should indicate its up to date."
+            );
+
+            assert.equal(
+                0,
+                migratedData.webApiManager.template.length,
+                "Migrated schema should include an empty template."
             );
 
             migratedData.webApiManager.rules.forEach(ruleData => {
@@ -310,9 +334,44 @@ describe("Migrations", function () {
     });
 
     describe("Handling v3 data", function () {
+        it("Converting to preferences", function (done) {
+            const [ignore, migratedData] = migrationLib.applyMigrations(validV3Data);
+            const prefs = preferencesLib.fromJSON(JSON.stringify(migratedData.webApiManager));
+
+            assert.equal(
+                enums.ShouldLogVal.NONE,
+                prefs.getShouldLog(),
+                "Should log value should be correctly handled through migration."
+            );
+
+            const defaultRule = prefs.getDefaultRule();
+            assert.equal(
+                JSON.stringify(validV3Data.webApiManager.rules[1].s),
+                JSON.stringify(defaultRule.getStandardIds()),
+                "Blocked standards for the default rule should be maintained through migration."
+            );
+
+            const exampleRule = prefs.getRuleForPattern("www.example.com");
+            assert.equal(
+                JSON.stringify(validV3Data.webApiManager.rules[0].s),
+                JSON.stringify(exampleRule.getStandardIds()),
+                "Blocked standards for www.example.com rule should be maintained through migration."
+            );
+
+            const template = prefs.getTemplate();
+            assert.equal(
+                0,
+                template.length,
+                "Migration from v3 data should result in an empty template."
+            );
+
+            done();
+        });
+    });
+
+    describe("Handling v4 data", function () {
         it("Empty data", function (done) {
             const testData = {};
-
             const [success, migratedData] = migrationLib.applyMigrations(testData);
 
             assert.equal(success, true, "On valid data, migration should return true.");
@@ -321,27 +380,34 @@ describe("Migrations", function () {
         });
 
         it("Converting to preferences", function (done) {
-            const [ignore, migratedData] = migrationLib.applyMigrations(validV3Data);
+            const [ignore, migratedData] = migrationLib.applyMigrations(validV4Data);
             const prefs = preferencesLib.fromJSON(JSON.stringify(migratedData.webApiManager));
 
             assert.equal(
-                "0",
+                enums.ShouldLogVal.NONE,
                 prefs.getShouldLog(),
-                "Should log value should be correctly handled through v3 (NOOP) migration."
+                "Should log value should be correctly handled through migration."
             );
 
             const defaultRule = prefs.getDefaultRule();
             assert.equal(
                 JSON.stringify(validV3Data.webApiManager.rules[1].s),
                 JSON.stringify(defaultRule.getStandardIds()),
-                "Blocked standards for the default rule should be maintained through v3 (NOOP) migration."
+                "Blocked standards for the default rule should be maintained through migration."
             );
 
             const exampleRule = prefs.getRuleForPattern("www.example.com");
             assert.equal(
                 JSON.stringify(validV3Data.webApiManager.rules[0].s),
                 JSON.stringify(exampleRule.getStandardIds()),
-                "Blocked standards for www.example.com rule should be maintained through v3 (NOOP) migration."
+                "Blocked standards for www.example.com rule should be maintained through migration."
+            );
+
+            const template = prefs.getTemplate();
+            assert.equal(
+                JSON.stringify(template.sort()),
+                JSON.stringify(validV4Data.webApiManager.template),
+                "Templates should be correctly store through JSON translaiton."
             );
 
             done();

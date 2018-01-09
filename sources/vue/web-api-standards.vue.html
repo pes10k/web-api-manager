@@ -1,38 +1,52 @@
 <div class="web-api-standards-container">
     <h3>Pattern: <code>{{ dataSelectedPattern }}</code></h3>
 
-    <div class="panel panel-default form-horizontal">
-        <div class="panel-heading">
-            Default configurations
-        </div>
-
-        <div class="panel-body">
+    <ul class="list-group form-horizontal">
+        <li class="list-group-item">
+            <h4 class="list-group-item-heading">Suggested configurations</h4>
             <button @click="onLiteClicked" :disabled="isPassiveMode">
-                Use Lite Settings
+                Use lite settings
             </button>
             <button @click="onConservativeClicked" :disabled="isPassiveMode">
-                Use Conservative Settings
+                Use conservative settings
             </button>
             <button @click="onAggressiveClicked" :disabled="isPassiveMode">
-                Use Aggressive Settings
+                Use aggressive settings
             </button>
+            <div class="help-block">
+                <strong>Lite</strong> is designed to have a minimal
+                impact on typical browsing while still providing
+                security and privacy improvements.
+                <strong>Conservative</strong> and <strong>Aggressive</strong>
+                provide extra protections, though will impact the
+                functionality of more sites.
+            </div>
+        </li>
+        <li class="list-group-item">
+            <h4 class="list-group-item-heading">Custom configurations</h4>
+            <button @click="onSaveTemplateClicked" :disable="isPassiveMode">
+                Save template
+            </button>
+            <button @click="onApplyTemplateClicked" :disable="isPassiveMode">
+                Apply template ({{ dataTemplate.length === 1 ? "1 standard" : dataTemplate.length.toString() + " standards" }})
+            </button>
+            <p class="help-block">
+                The template is a set of standards to block that you
+                easily reapply to other domains.  <strong>Saving</strong> a template
+                will copy the currently selected standards, and <strong>Applying</strong>
+                the template will set those standards to be blocked.
+            </p>
+        </li>
+        <li class="list-group-item">
+            <h4 class="list-group-item-heading">Frequent actions</h4>
             <button @click="onClearClicked" :disabled="isPassiveMode">
-                Clear Settings
+                Clear settings
             </button>
             <button @click="onAllClicked" :disabled="isPassiveMode">
-                Block All
+                Block all
             </button>
-        </div>
-
-        <div class="panel-footer">
-            <strong>Lite</strong> is designed to have a minimal
-            impact on typical browsing while still providing
-            security and privacy improvements.
-            <strong>Conservative</strong> and <strong>Aggressive</strong>
-            provide extra protections, though will impact the
-            functionality of more sites.
-        </div>
-    </div>
+        </li>
+    </ul>
 
     <div class="panel panel-default" v-for="categoryId in sortedCategoryIds">
         <div class="panel-heading">

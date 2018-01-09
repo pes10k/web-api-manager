@@ -54,6 +54,10 @@
  *   Either updates the set of standards blocked for a given match
  *   pattern, or creates a new blocking rule.  Returns a boolean description
  *   of whether a new BlockRule object was created.
+ * @param {function(Array.number): undefined} setTemplate
+ *   Sets the standard ids that should be blocked in the user's template rule.
+ * @param {function(): Array.number} getTemplate
+ *   Gets the standards that should be used for a reusable blocking template.
  * @param {function(ShouldLogVal): undefined} setShouldLog
  *   Sets whether the system should log what functionality was blocked.  Throws
  *   if the given value is not a valid ShouldLogVal value.
@@ -88,7 +92,7 @@
  *   be applied to a host.
  * @property {MatchPattern} pattern
  *   Read only reference to the match pattern this rule applies to.
- * @property {function(): Array.number}
+ * @property {function(): Array.number} getStandardIds
  *   Returns a new array of the standard ids being blocked by this rule.
  * @property {function(Array.number): undefined} setStandardIds
  *   Sets the standard ids that should be blocked by this rule.
