@@ -1,0 +1,13 @@
+{
+  "methods": [
+    "Document.prototype.exitPointerLock",
+    "Element.prototype.requestPointerLock"
+  ],
+  "properties": [
+    "Document.prototype.onpointerlockchange",
+    "Document.prototype.onpointerlockerror",
+    "DocumentOrShadowRoot.prototype.pointerLockElement",
+    "MouseEvent.prototype.movementX",
+    "MouseEvent.prototype.movementY"
+  ]
+}

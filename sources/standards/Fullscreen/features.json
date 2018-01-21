@@ -1,0 +1,15 @@
+{
+  "methods": [
+    "Document.prototype.exitFullscreen",
+    "Element.prototype.requestFullscreen"
+  ],
+  "properties": [
+    "Document.prototype.fullscreen",
+    "Document.prototype.fullscreenEnabled",
+    "Document.prototype.onfullscreenchange",
+    "Document.prototype.onfullscreenerror",
+    "DocumentOrShadowRoot.prototype.fullscreenElement",
+    "Element.prototype.onfullscreenchange",
+    "Element.prototype.onfullscreenerror"
+  ]
+}

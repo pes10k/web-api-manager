@@ -1,0 +1,8 @@
+{
+  "methods": [],
+  "properties": [
+    "Document.prototype.hidden",
+    "Document.prototype.onvisibilitychange",
+    "Document.prototype.visibilityState"
+  ]
+}

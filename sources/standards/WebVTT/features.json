@@ -1,0 +1,25 @@
+{
+  "methods": [
+    "VTTCue.prototype.getCueAsHTML"
+  ],
+  "properties": [
+    "VTTCue.prototype.align",
+    "VTTCue.prototype.line",
+    "VTTCue.prototype.lineAlign",
+    "VTTCue.prototype.position",
+    "VTTCue.prototype.positionAlign",
+    "VTTCue.prototype.region",
+    "VTTCue.prototype.size",
+    "VTTCue.prototype.snapToLines",
+    "VTTCue.prototype.text",
+    "VTTCue.prototype.vertical",
+    "VTTRegion.prototype.id",
+    "VTTRegion.prototype.lines",
+    "VTTRegion.prototype.regionAnchorX",
+    "VTTRegion.prototype.regionAnchorY",
+    "VTTRegion.prototype.scroll",
+    "VTTRegion.prototype.viewportAnchorX",
+    "VTTRegion.prototype.viewportAnchorY",
+    "VTTRegion.prototype.width"
+  ]
+}

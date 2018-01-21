@@ -1,0 +1,26 @@
+{
+  "methods": [
+    "MediaRecorder.isTypeSupported",
+    "MediaRecorder.prototype.pause",
+    "MediaRecorder.prototype.requestData",
+    "MediaRecorder.prototype.resume",
+    "MediaRecorder.prototype.start",
+    "MediaRecorder.prototype.stop"
+  ],
+  "properties": [
+    "BlobEvent.prototype.data",
+    "BlobEvent.prototype.timecode",
+    "MediaRecorder.prototype.audioBitsPerSecond",
+    "MediaRecorder.prototype.mimeType",
+    "MediaRecorder.prototype.ondataavailable",
+    "MediaRecorder.prototype.onerror",
+    "MediaRecorder.prototype.onpause",
+    "MediaRecorder.prototype.onresume",
+    "MediaRecorder.prototype.onstart",
+    "MediaRecorder.prototype.onstop",
+    "MediaRecorder.prototype.state",
+    "MediaRecorder.prototype.stream",
+    "MediaRecorder.prototype.videoBitsPerSecond",
+    "MediaRecorderErrorEvent.prototype.error"
+  ]
+}

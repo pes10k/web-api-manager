@@ -1,0 +1,18 @@
+{
+  "methods": [
+    "Navigator.prototype.getGamepads"
+  ],
+  "properties": [
+    "Gamepad.prototype.axes",
+    "Gamepad.prototype.buttons",
+    "Gamepad.prototype.connected",
+    "Gamepad.prototype.id",
+    "Gamepad.prototype.index",
+    "Gamepad.prototype.mapping",
+    "Gamepad.prototype.timestamp",
+    "GamepadButton.prototype.pressed",
+    "GamepadButton.prototype.touched",
+    "GamepadButton.prototype.value",
+    "GamepadEvent.prototype.gamepad"
+  ]
+}

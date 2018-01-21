@@ -1,0 +1,11 @@
+{
+  "methods": [
+    "Document.prototype.querySelector",
+    "Document.prototype.querySelectorAll",
+    "DocumentFragment.prototype.querySelector",
+    "DocumentFragment.prototype.querySelectorAll",
+    "Element.prototype.querySelector",
+    "Element.prototype.querySelectorAll"
+  ],
+  "properties": []
+}

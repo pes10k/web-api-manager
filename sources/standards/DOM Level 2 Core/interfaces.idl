@@ -1,0 +1,229 @@
+typedef   unsigned long long DOMTimeStamp;
+
+interface DOMImplementation {
+  boolean            hasFeature(DOMString feature, DOMString version);
+  // Introduced DOM Level 2:
+  DocumentType       createDocumentType(DOMString qualifiedName,
+                                        DOMString publicId,
+                                        DOMString systemId);
+  // Introduced DOM Level 2:
+  Document           createDocument(DOMString namespaceURI,
+                                    DOMString qualifiedName,
+                                    DocumentType doctype);
+};
+
+interface Node {
+
+  // NodeType
+  const unsigned short      ELEMENT_NODE                   = 1;
+  const unsigned short      ATTRIBUTE_NODE                 = 2;
+  const unsigned short      TEXT_NODE                      = 3;
+  const unsigned short      CDATA_SECTION_NODE             = 4;
+  const unsigned short      ENTITY_REFERENCE_NODE          = 5;
+  const unsigned short      ENTITY_NODE                    = 6;
+  const unsigned short      PROCESSING_INSTRUCTION_NODE    = 7;
+  const unsigned short      COMMENT_NODE                   = 8;
+  const unsigned short      DOCUMENT_NODE                  = 9;
+  const unsigned short      DOCUMENT_TYPE_NODE             = 10;
+  const unsigned short      DOCUMENT_FRAGMENT_NODE         = 11;
+  const unsigned short      NOTATION_NODE                  = 12;
+
+  readonly attribute DOMString        nodeName;
+           attribute DOMString        nodeValue;
+                                      // raises(DOMException) on setting
+                                      // raises(DOMException) on retrieval
+
+  readonly attribute unsigned short   nodeType;
+  readonly attribute Node             parentNode;
+  readonly attribute NodeList         childNodes;
+  readonly attribute Node             firstChild;
+  readonly attribute Node             lastChild;
+  readonly attribute Node             previousSibling;
+  readonly attribute Node             nextSibling;
+  readonly attribute NamedNodeMap     attributes;
+  // Modified DOM Level 2:
+  readonly attribute Document         ownerDocument;
+  Node               insertBefore(Node newChild,
+                                  Node refChild);
+  Node               replaceChild(Node newChild,
+                                  Node oldChild);
+  Node               removeChild(Node oldChild);
+  Node               appendChild(Node newChild);
+  boolean            hasChildNodes();
+  Node               cloneNode(boolean deep);
+  // Modified DOM Level 2:
+  void               normalize();
+  // Introduced DOM Level 2:
+  boolean            isSupported(DOMString feature,
+                                 DOMString version);
+  // Introduced DOM Level 2:
+  readonly attribute DOMString        namespaceURI;
+  // Introduced DOM Level 2:
+           attribute DOMString        prefix;
+                                      // raises(DOMException) on setting
+
+  // Introduced DOM Level 2:
+  readonly attribute DOMString        localName;
+  // Introduced DOM Level 2:
+  boolean            hasAttributes();
+};
+
+interface NodeList {
+  Node               item(unsigned long index);
+  readonly attribute unsigned long    length;
+};
+
+interface NamedNodeMap {
+  Node               getNamedItem(DOMString name);
+  Node               setNamedItem(Node arg);
+  Node               removeNamedItem(DOMString name);
+  Node               item(unsigned long index);
+  readonly attribute unsigned long    length;
+  // Introduced DOM Level 2:
+  Node               getNamedItemNS(DOMString namespaceURI,
+                                    DOMString localName);
+  // Introduced DOM Level 2:
+  Node               setNamedItemNS(Node arg);
+  // Introduced DOM Level 2:
+  Node               removeNamedItemNS(DOMString namespaceURI,
+                                       DOMString localName);
+};
+
+interface CharacterData : Node {
+           attribute DOMString        data;
+                                      // raises(DOMException) on setting
+                                      // raises(DOMException) on retrieval
+
+  readonly attribute unsigned long    length;
+  DOMString          substringData(unsigned long offset,
+                                   unsigned long count);
+  void               appendData(DOMString arg);
+  void               insertData(unsigned long offset,
+                                DOMString arg);
+  void               deleteData(unsigned long offset,
+                                unsigned long count);
+  void               replaceData(unsigned long offset,
+                                 unsigned long count,
+                                 DOMString arg);
+};
+
+interface Attr : Node {
+  readonly attribute DOMString        name;
+  readonly attribute boolean          specified;
+           attribute DOMString        value;
+                                      // raises(DOMException) on setting
+
+  // Introduced DOM Level 2:
+  readonly attribute Element          ownerElement;
+};
+
+interface Element : Node {
+  readonly attribute DOMString        tagName;
+  DOMString          getAttribute(DOMString name);
+  void               setAttribute(DOMString name,
+                                  DOMString value);
+  void               removeAttribute(DOMString name);
+  Attr               getAttributeNode(DOMString name);
+  Attr               setAttributeNode(Attr newAttr);
+  Attr               removeAttributeNode(Attr oldAttr);
+  NodeList           getElementsByTagName(DOMString name);
+  // Introduced DOM Level 2:
+  DOMString          getAttributeNS(DOMString namespaceURI,
+                                    DOMString localName);
+  // Introduced DOM Level 2:
+  void               setAttributeNS(DOMString namespaceURI,
+                                    DOMString qualifiedName,
+                                    DOMString value);
+  // Introduced DOM Level 2:
+  void               removeAttributeNS(DOMString namespaceURI,
+                                       DOMString localName);
+  // Introduced DOM Level 2:
+  Attr               getAttributeNodeNS(DOMString namespaceURI,
+                                        DOMString localName);
+  // Introduced DOM Level 2:
+  Attr               setAttributeNodeNS(Attr newAttr);
+  // Introduced DOM Level 2:
+  NodeList           getElementsByTagNameNS(DOMString namespaceURI,
+                                            DOMString localName);
+  // Introduced DOM Level 2:
+  boolean            hasAttribute(DOMString name);
+  // Introduced DOM Level 2:
+  boolean            hasAttributeNS(DOMString namespaceURI,
+                                    DOMString localName);
+};
+
+interface Text : CharacterData {
+  Text               splitText(unsigned long offset);
+};
+
+interface Comment : CharacterData {
+};
+
+interface CDATASection : Text {
+};
+
+interface DocumentType : Node {
+  readonly attribute DOMString        name;
+  readonly attribute NamedNodeMap     entities;
+  readonly attribute NamedNodeMap     notations;
+  // Introduced DOM Level 2:
+  readonly attribute DOMString        publicId;
+  // Introduced DOM Level 2:
+  readonly attribute DOMString        systemId;
+  // Introduced DOM Level 2:
+  readonly attribute DOMString        internalSubset;
+};
+
+interface Notation : Node {
+  readonly attribute DOMString        publicId;
+  readonly attribute DOMString        systemId;
+};
+
+interface Entity : Node {
+  readonly attribute DOMString        publicId;
+  readonly attribute DOMString        systemId;
+  readonly attribute DOMString        notationName;
+};
+
+interface EntityReference : Node {
+};
+
+interface ProcessingInstruction : Node {
+  readonly attribute DOMString        target;
+           attribute DOMString        data;
+                                      // raises(DOMException) on setting
+
+};
+
+interface DocumentFragment : Node {
+};
+
+interface Document : Node {
+  readonly attribute DocumentType     doctype;
+  readonly attribute DOMImplementation  implementation;
+  readonly attribute Element          documentElement;
+  Element            createElement(DOMString tagName);
+  DocumentFragment   createDocumentFragment();
+  Text               createTextNode(DOMString data);
+  Comment            createComment(DOMString data);
+  CDATASection       createCDATASection(DOMString data);
+  ProcessingInstruction createProcessingInstruction(DOMString target,
+                                                    DOMString data);
+  Attr               createAttribute(DOMString name);
+  EntityReference    createEntityReference(DOMString name);
+  NodeList           getElementsByTagName(DOMString tagname);
+  // Introduced DOM Level 2:
+  Node               importNode(Node importedNode,
+                                boolean deep);
+  // Introduced DOM Level 2:
+  Element            createElementNS(DOMString namespaceURI,
+                                     DOMString qualifiedName);
+  // Introduced DOM Level 2:
+  Attr               createAttributeNS(DOMString namespaceURI,
+                                       DOMString qualifiedName);
+  // Introduced DOM Level 2:
+  NodeList           getElementsByTagNameNS(DOMString namespaceURI,
+                                            DOMString localName);
+  // Introduced DOM Level 2:
+  Element            getElementById(DOMString elementId);
+};

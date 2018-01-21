@@ -1,0 +1,27 @@
+{
+  "methods": [
+    "URL.prototype.toJSON",
+    "URLSearchParams.prototype.",
+    "URLSearchParams.prototype.append",
+    "URLSearchParams.prototype.delete",
+    "URLSearchParams.prototype.get",
+    "URLSearchParams.prototype.getAll",
+    "URLSearchParams.prototype.has",
+    "URLSearchParams.prototype.set",
+    "URLSearchParams.prototype.sort"
+  ],
+  "properties": [
+    "URL.prototype.hash",
+    "URL.prototype.host",
+    "URL.prototype.hostname",
+    "URL.prototype.href",
+    "URL.prototype.origin",
+    "URL.prototype.password",
+    "URL.prototype.pathname",
+    "URL.prototype.port",
+    "URL.prototype.protocol",
+    "URL.prototype.search",
+    "URL.prototype.searchParams",
+    "URL.prototype.username"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "methods": [
+    "Storage.prototype.clear",
+    "Storage.prototype.getItem",
+    "Storage.prototype.key",
+    "Storage.prototype.removeItem",
+    "Storage.prototype.setItem"
+  ],
+  "properties": [
+    "Storage.prototype.length",
+    "StorageEvent.prototype.key",
+    "StorageEvent.prototype.newValue",
+    "StorageEvent.prototype.oldValue",
+    "StorageEvent.prototype.storageArea",
+    "StorageEvent.prototype.url"
+  ]
+}

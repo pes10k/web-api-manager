@@ -1,0 +1,12 @@
+{
+  "methods": [
+    "CSS.supports",
+    "CSSGroupingRule.prototype.deleteRule",
+    "CSSGroupingRule.prototype.insertRule"
+  ],
+  "properties": [
+    "CSSConditionRule.prototype.conditionText",
+    "CSSGroupingRule.prototype.cssRules",
+    "CSSMediaRule.prototype.media"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "methods": [
+    "WebSocket.prototype.close",
+    "WebSocket.prototype.send"
+  ],
+  "properties": [
+    "WebSocket.prototype.binaryType",
+    "WebSocket.prototype.bufferedAmount",
+    "WebSocket.prototype.extensions",
+    "WebSocket.prototype.onclose",
+    "WebSocket.prototype.onerror",
+    "WebSocket.prototype.onmessage",
+    "WebSocket.prototype.onopen",
+    "WebSocket.prototype.protocol",
+    "WebSocket.prototype.readyState",
+    "WebSocket.prototype.url"
+  ]
+}

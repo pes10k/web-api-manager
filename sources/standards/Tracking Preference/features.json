@@ -1,0 +1,10 @@
+{
+  "methods": [
+    "Navigator.prototype.removeTrackingException",
+    "Navigator.prototype.storeTrackingException",
+    "Navigator.prototype.trackingExceptionExists"
+  ],
+  "properties": [
+    "Navigator.prototype.doNotTrack"
+  ]
+}

@@ -1,0 +1,105 @@
+// Introduced DOM Level 2:
+interface EventTarget {
+  void               addEventListener(DOMString type,
+                                      EventListener listener,
+                                      boolean useCapture);
+  void               removeEventListener(DOMString type,
+                                         EventListener listener,
+                                         boolean useCapture);
+  boolean            dispatchEvent(Event evt);
+};
+
+// Introduced DOM Level 2:
+interface EventListener {
+  void               handleEvent(Event evt);
+};
+
+// Introduced DOM Level 2:
+interface Event {
+
+  // PhaseType
+  const unsigned short      CAPTURING_PHASE                = 1;
+  const unsigned short      AT_TARGET                      = 2;
+  const unsigned short      BUBBLING_PHASE                 = 3;
+
+  readonly attribute DOMString        type;
+  readonly attribute EventTarget      target;
+  readonly attribute EventTarget      currentTarget;
+  readonly attribute unsigned short   eventPhase;
+  readonly attribute boolean          bubbles;
+  readonly attribute boolean          cancelable;
+  readonly attribute DOMTimeStamp     timeStamp;
+  void               stopPropagation();
+  void               preventDefault();
+  void               initEvent(DOMString eventTypeArg,
+                               boolean canBubbleArg,
+                               boolean cancelableArg);
+};
+
+// Introduced DOM Level 2:
+interface DocumentEvent {
+  Event              createEvent(DOMString eventType);
+};
+
+// Introduced DOM Level 2:
+interface UIEvent : Event {
+  readonly attribute AbstractView  view;
+  readonly attribute long             detail;
+  void               initUIEvent(DOMString typeArg,
+                                 boolean canBubbleArg,
+                                 boolean cancelableArg,
+                                 AbstractView viewArg,
+                                 long detailArg);
+};
+
+// Introduced DOM Level 2:
+interface MouseEvent : UIEvent {
+  readonly attribute long             screenX;
+  readonly attribute long             screenY;
+  readonly attribute long             clientX;
+  readonly attribute long             clientY;
+  readonly attribute boolean          ctrlKey;
+  readonly attribute boolean          shiftKey;
+  readonly attribute boolean          altKey;
+  readonly attribute boolean          metaKey;
+  readonly attribute unsigned short   button;
+  readonly attribute EventTarget      relatedTarget;
+  void               initMouseEvent(DOMString typeArg,
+                                    boolean canBubbleArg,
+                                    boolean cancelableArg,
+                                    AbstractView viewArg,
+                                    long detailArg,
+                                    long screenXArg,
+                                    long screenYArg,
+                                    long clientXArg,
+                                    long clientYArg,
+                                    boolean ctrlKeyArg,
+                                    boolean altKeyArg,
+                                    boolean shiftKeyArg,
+                                    boolean metaKeyArg,
+                                    unsigned short buttonArg,
+                                    EventTarget relatedTargetArg);
+};
+
+// Introduced DOM Level 2:
+interface MutationEvent : Event {
+
+  // attrChangeType
+  const unsigned short      MODIFICATION                   = 1;
+  const unsigned short      ADDITION                       = 2;
+  const unsigned short      REMOVAL                        = 3;
+
+  readonly attribute Node             relatedNode;
+  readonly attribute DOMString        prevValue;
+  readonly attribute DOMString        newValue;
+  readonly attribute DOMString        attrName;
+  readonly attribute unsigned short   attrChange;
+  void               initMutationEvent(DOMString typeArg,
+                                       boolean canBubbleArg,
+                                       boolean cancelableArg,
+                                       Node relatedNodeArg,
+                                       DOMString prevValueArg,
+                                       DOMString newValueArg,
+                                       DOMString attrNameArg,
+                                       unsigned short attrChangeArg);
+};

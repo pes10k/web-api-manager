@@ -1,0 +1,23 @@
+{
+  "methods": [
+    "MimeTypeArray.prototype.item",
+    "MimeTypeArray.prototype.namedItem",
+    "Plugin.prototype.item",
+    "Plugin.prototype.namedItem",
+    "PluginArray.prototype.item",
+    "PluginArray.prototype.namedItem",
+    "PluginArray.prototype.refresh"
+  ],
+  "properties": [
+    "MimeType.prototype.description",
+    "MimeType.prototype.enabledPlugin",
+    "MimeType.prototype.suffixes",
+    "MimeType.prototype.type",
+    "MimeTypeArray.prototype.length",
+    "Plugin.prototype.description",
+    "Plugin.prototype.filename",
+    "Plugin.prototype.length",
+    "Plugin.prototype.name",
+    "PluginArray.prototype.length"
+  ]
+}

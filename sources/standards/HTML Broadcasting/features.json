@@ -1,0 +1,12 @@
+{
+  "methods": [
+    "MessageEvent.prototype.initMessageEvent"
+  ],
+  "properties": [
+    "MessageEvent.prototype.data",
+    "MessageEvent.prototype.lastEventId",
+    "MessageEvent.prototype.origin",
+    "MessageEvent.prototype.ports",
+    "MessageEvent.prototype.source"
+  ]
+}

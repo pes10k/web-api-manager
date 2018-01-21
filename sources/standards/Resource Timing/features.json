@@ -1,0 +1,27 @@
+{
+  "methods": [
+    "Performance.prototype.clearResourceTimings",
+    "Performance.prototype.setResourceTimingBufferSize",
+    "PerformanceResourceTiming.prototype.toJSON"
+  ],
+  "properties": [
+    "Performance.prototype.onresourcetimingbufferfull",
+    "PerformanceResourceTiming.prototype.connectEnd",
+    "PerformanceResourceTiming.prototype.connectStart",
+    "PerformanceResourceTiming.prototype.decodedBodySize",
+    "PerformanceResourceTiming.prototype.domainLookupEnd",
+    "PerformanceResourceTiming.prototype.domainLookupStart",
+    "PerformanceResourceTiming.prototype.encodedBodySize",
+    "PerformanceResourceTiming.prototype.fetchStart",
+    "PerformanceResourceTiming.prototype.initiatorType",
+    "PerformanceResourceTiming.prototype.nextHopProtocol",
+    "PerformanceResourceTiming.prototype.redirectEnd",
+    "PerformanceResourceTiming.prototype.redirectStart",
+    "PerformanceResourceTiming.prototype.requestStart",
+    "PerformanceResourceTiming.prototype.responseEnd",
+    "PerformanceResourceTiming.prototype.responseStart",
+    "PerformanceResourceTiming.prototype.secureConnectionStart",
+    "PerformanceResourceTiming.prototype.transferSize",
+    "PerformanceResourceTiming.prototype.workerStart"
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "methods": [
+    "Notification.prototype.close",
+    "Notification.requestPermission",
+    "ServiceWorkerRegistration.prototype.getNotifications",
+    "ServiceWorkerRegistration.prototype.showNotification"
+  ],
+  "properties": [
+    "Notification.maxActions",
+    "Notification.permission",
+    "Notification.prototype.actions",
+    "Notification.prototype.badge",
+    "Notification.prototype.body",
+    "Notification.prototype.data",
+    "Notification.prototype.dir",
+    "Notification.prototype.icon",
+    "Notification.prototype.image",
+    "Notification.prototype.lang",
+    "Notification.prototype.onclick",
+    "Notification.prototype.onerror",
+    "Notification.prototype.renotify",
+    "Notification.prototype.requireInteraction",
+    "Notification.prototype.silent",
+    "Notification.prototype.sound",
+    "Notification.prototype.tag",
+    "Notification.prototype.timestamp",
+    "Notification.prototype.title",
+    "Notification.prototype.vibrate",
+    "NotificationEvent.prototype.action",
+    "NotificationEvent.prototype.notification",
+    "ServiceWorkerGlobalScope.prototype.onnotificationclick",
+    "ServiceWorkerGlobalScope.prototype.onnotificationclose"
+  ]
+}

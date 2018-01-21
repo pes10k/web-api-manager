@@ -1,0 +1,8 @@
+{
+  "methods": [],
+  "properties": [
+    "ProximitySensor.prototype.distance",
+    "ProximitySensor.prototype.max",
+    "ProximitySensor.prototype.near"
+  ]
+}

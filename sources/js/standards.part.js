@@ -15,12 +15,14 @@
 
     // Build a mapping of features to standard names, given the initial
     // mapping of standards to features.
-    const featureToStandardIdMapping = Object.keys(standardsDefinitions)
-        .reduce((collection, standardId) => {
-            const standardDefinition = standardsDefinitions[standardId];
-            standardDefinition.features.forEach(featureName => {
-                collection[featureName] = standardId;
-            });
+    const featureToStandardIdMapping = Object.entries(standardsDefinitions)
+        .reduce((collection, value) => {
+            const [standardId, standardDefinition] = value;
+            standardDefinition.methods
+                .concat(standardsDefinitions.properties)
+                .forEach(featureName => {
+                    collection[featureName] = standardId;
+                });
             return collection;
         }, {});
 
@@ -54,20 +56,37 @@
     };
 
     /**
-     * Returns the features that are included in a DOM standard.
+     * Returns the methods that are defined in a DOM standard.
      *
      * @param {number} standardId
      *   The unique, constant identifier for a DOM standard.
      *
      * @return {?Array.string}
      *   Undefined if the given standardId is not recognized, otherwise
-     *   an array of strings, each depicting a keypath to a feature in the DOM.
+     *   an array of strings, each depicting a keypath to a method in the DOM.
      */
-    const featuresForStandardId = standardId => {
+    const methodsForStandardId = standardId => {
         if (standardsDefinitions[standardId] === undefined) {
             return undefined;
         }
-        return standardsDefinitions[standardId].features;
+        return standardsDefinitions[standardId].methods;
+    };
+
+    /**
+     * Returns the properties that are defined in a DOM standard.
+     *
+     * @param {number} standardId
+     *   The unique, constant identifier for a DOM standard.
+     *
+     * @return {?Array.string}
+     *   Undefined if the given standardId is not recognized, otherwise
+     *   an array of strings, each depicting a keypath to a property in the DOM.
+     */
+    const propertiesForStandardId = standardId => {
+        if (standardsDefinitions[standardId] === undefined) {
+            return undefined;
+        }
+        return standardsDefinitions[standardId].methods;
     };
 
     /**
@@ -192,6 +211,36 @@
     };
 
     /**
+     * Returns an array of all methods known to the extension.
+     *
+     * @return {Array.FeaturePath}
+     *   An array of FeaturePath objects (strings), each describing the
+     *   key path to a method in the DOM.
+     */
+    const allMethods = () => {
+        const methods = Object.values(standardsDefinitions)
+            .reduce((collection, standard) => {
+                return collection.concat(standard.methods);
+            }, []);
+        return Array.from(new Set(methods));
+    };
+
+    /**
+     * Returns an array of all properties known to the extension.
+     *
+     * @return {Array.FeaturePath}
+     *   An array of FeaturePath objects (strings), each describing the
+     *   key path to a method in the DOM.
+     */
+    const allProperties = () => {
+        const properties = Object.values(standardsDefinitions)
+            .reduce((collection, standard) => {
+                return collection.concat(standard.properties);
+            }, []);
+        return Array.from(new Set(properties));
+    };
+
+    /**
      * Returns an array of every feature known to the extension.
      *
      * @return {Array.FeaturePath}
@@ -199,22 +248,26 @@
      *   key path to a feature in the DOM.
      */
     const allFeatures = () => {
-        return Object.values(standardsDefinitions)
+        const features = Object.values(standardsDefinitions)
             .reduce((collection, standard) => {
-                return collection.concat(standard.features);
+                return collection.concat(standard.features).concat(standard.methods);
             }, []);
+        return Array.from(new Set(features));
     };
 
     window.WEB_API_MANAGER.standardsLib = {
         allStandardIds,
         standardIdForFeature,
         nameForStandardId,
-        featuresForStandardId,
+        methodsForStandardId,
+        propertiesForStandardId,
         urlForStandardId,
         categoryIdForStandardId,
         standardIdsForCategoryId,
         sortStandardsById,
         newIdForOldStandardId,
+        allMethods,
+        allProperties,
         allFeatures,
     };
 }());

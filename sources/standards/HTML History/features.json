@@ -1,0 +1,15 @@
+{
+  "methods": [
+    "History.prototype.back",
+    "History.prototype.forward",
+    "History.prototype.go",
+    "History.prototype.pushState",
+    "History.prototype.replaceState"
+  ],
+  "properties": [
+    "History.prototype.index",
+    "History.prototype.length",
+    "History.prototype.scrollRestoration",
+    "History.prototype.state"
+  ]
+}

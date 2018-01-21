@@ -1,0 +1,12 @@
+{
+  "methods": [
+    "DOMParser.prototype.parseFromString",
+    "Element.prototype.insertAdjacentHTML",
+    "Range.prototype.createContextualFragment",
+    "XMLSerializer.prototype.serializeToString"
+  ],
+  "properties": [
+    "Element.prototype.innerHTML",
+    "Element.prototype.outerHTML"
+  ]
+}

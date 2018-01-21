@@ -1,0 +1,34 @@
+{
+  "methods": [
+    "HTMLMediaElement.prototype.setMediaKeys",
+    "MediaKeySession.prototype.close",
+    "MediaKeySession.prototype.generateRequest",
+    "MediaKeySession.prototype.load",
+    "MediaKeySession.prototype.remove",
+    "MediaKeySession.prototype.update",
+    "MediaKeyStatusMap.prototype.get",
+    "MediaKeyStatusMap.prototype.has",
+    "MediaKeySystemAccess.prototype.createMediaKeys",
+    "MediaKeySystemAccess.prototype.getConfiguration",
+    "MediaKeys.prototype.createSession",
+    "MediaKeys.prototype.setServerCertificate",
+    "Navigator.prototype.requestMediaKeySystemAccess"
+  ],
+  "properties": [
+    "HTMLMediaElement.prototype.mediaKeys",
+    "HTMLMediaElement.prototype.onencrypted",
+    "HTMLMediaElement.prototype.onwaitingforkey",
+    "MediaEncryptedEvent.prototype.initData",
+    "MediaEncryptedEvent.prototype.initDataType",
+    "MediaKeyMessageEvent.prototype.message",
+    "MediaKeyMessageEvent.prototype.messageType",
+    "MediaKeySession.prototype.closed",
+    "MediaKeySession.prototype.expiration",
+    "MediaKeySession.prototype.keyStatuses",
+    "MediaKeySession.prototype.onkeystatuseschange",
+    "MediaKeySession.prototype.onmessage",
+    "MediaKeySession.prototype.sessionId",
+    "MediaKeyStatusMap.prototype.size",
+    "MediaKeySystemAccess.prototype.keySystem"
+  ]
+}

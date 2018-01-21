@@ -29,7 +29,7 @@
         // Prevent ambiguity from shadowing the module's enum's property.
         const localEnums = window.WEB_API_MANAGER_PAGE.enums;
 
-        let {featuresToBlock} = window.WEB_API_MANAGER_PAGE;
+        let {methodsToBlock} = window.WEB_API_MANAGER_PAGE;
 
         // Its possible that the Web API removal code will block direct references
         // to the following methods, so grab references to them before the
@@ -42,6 +42,7 @@
         // This is done to make it more difficult for the modified page
         // to detect the modifications / this extension/
         const removeSelfFromPage = () => {
+            return;
             // Delete the WEB_API_MANAGER_PAGE global property.  Technically
             // this never needed to be global, but doing so allows for easier
             // linting of the code, makes things easier to understand (for me
@@ -61,13 +62,13 @@
         // passive mode really just means 'log and allow') every feature.
         // Otherwise, only interpose on the features specified by the
         // user for this domain / match pattern.  The
-        // `window.WEB_API_MANAGER_PAGE.allFeatures` property is only set
+        // `window.WEB_API_MANAGER_PAGE.allMethods` property is only set
         // if the script was injected in passive mode.
         if (shouldLog === localEnums.ShouldLogVal.PASSIVE) {
-            featuresToBlock = window.WEB_API_MANAGER_PAGE.allFeatures;
+            methodsToBlock = window.WEB_API_MANAGER_PAGE.allMethods;
         }
 
-        if (featuresToBlock.length === 0) {
+        if (methodsToBlock.length === 0) {
             removeSelfFromPage();
             return;
         }
@@ -189,7 +190,7 @@
 
         const defaultBlockingProxy = createBlockingProxy();
 
-        const blockFeatureAtKeyPath = keyPath => {
+        const blockMethodAtKeyPath = keyPath => {
             const propertyRefs = keyPathToRefPath(keyPath);
 
             // If we weren't able to turn the key path into an array of references,
@@ -203,11 +204,6 @@
             const lastPropertyName = keyPathSegments[keyPathSegments.length - 1];
             const leafRef = propertyRefs[propertyRefs.length - 1];
             const parentRef = propertyRefs[propertyRefs.length - 2];
-
-            // At least for now, only interpose on methods.
-            if (typeof leafRef !== "function") {
-                return false;
-            }
 
             try {
                 switch (shouldLog) {
@@ -260,9 +256,9 @@
             get: () => defaultBlockingProxy,
         });
 
-        // `featuresToBlock` is now an array of FeaturePath's / strings,
+        // `methodsToBlock` is now an array of FeaturePath's / strings,
         // each describing the keypath of feature in the DOM to block.
-        featuresToBlock.forEach(blockFeatureAtKeyPath);
+        methodsToBlock.forEach(blockMethodAtKeyPath);
 
         // Next, prevent access to frame's contentDocument / contentWindow
         // properties, to prevent the parent frame from pulling unblocked
@@ -295,7 +291,7 @@
      *   log, block page access to features and log those "blocking actions",
      *   or allow the page to access all functionality, and log everything.
      * @param {string} randNonce
-     *   A unique, unguessable identififer, used so that the injected content
+     *   A unique, unguessable identifier, used so that the injected content
      *   script can communicate with the content script, using an unguessable
      *   event name (so that the guest page cannot listen to or spoof
      *   these messages).
@@ -309,15 +305,15 @@
     const generateScriptPayload = (standardIds, shouldLog, randNonce) => {
         // Build an array of the strings, each being the keypath to
         // a feature that should be blocked.
-        const featuresToBlock = standardIds.reduce((collection, standardId) => {
-            const featuresInStandard = standardsLib.featuresForStandardId(standardId);
-            collection = collection.concat(featuresInStandard);
+        const methodsToBlock = standardIds.reduce((collection, standardId) => {
+            const methodsInStandard = standardsLib.methodsForStandardId(standardId);
+            collection = collection.concat(methodsInStandard);
             return collection;
         }, []);
 
         const injectedValues = {
             randNonce,
-            featuresToBlock: featuresToBlock,
+            methodsToBlock,
             shouldLog,
             enums: {
                 ShouldLogVal: enums.ShouldLogVal,
@@ -325,7 +321,7 @@
         };
 
         if (shouldLog === enums.ShouldLogVal.PASSIVE) {
-            injectedValues.allFeatures = standardsLib.allFeatures();
+            injectedValues.allMethods = standardsLib.allMethods();
         }
 
         const proxyBlockingSettings = `

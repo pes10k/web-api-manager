@@ -1,0 +1,19 @@
+{
+  "id": 12,
+  "origId": "DOM",
+  "name": "DOM",
+  "url": "https://dom.spec.whatwg.org/",
+  "catId": "core",
+  "after": [
+    13,
+    18,
+    17,
+    16,
+    15,
+    14,
+    19,
+    20,
+    21
+  ],
+  "date": "2018-01-08"
+}

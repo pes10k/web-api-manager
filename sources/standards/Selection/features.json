@@ -1,0 +1,32 @@
+{
+  "methods": [
+    "Document.prototype.getSelection",
+    "Selection.prototype.",
+    "Selection.prototype.addRange",
+    "Selection.prototype.collapse",
+    "Selection.prototype.collapseToEnd",
+    "Selection.prototype.collapseToStart",
+    "Selection.prototype.containsNode",
+    "Selection.prototype.deleteFromDocument",
+    "Selection.prototype.empty",
+    "Selection.prototype.extend",
+    "Selection.prototype.getRangeAt",
+    "Selection.prototype.removeAllRanges",
+    "Selection.prototype.removeRange",
+    "Selection.prototype.selectAllChildren",
+    "Selection.prototype.setBaseAndExtent",
+    "Selection.prototype.setPosition",
+    "Window.prototype.getSelection"
+  ],
+  "properties": [
+    "GlobalEventHandlers.prototype.onselectionchange",
+    "GlobalEventHandlers.prototype.onselectstart",
+    "Selection.prototype.anchorNode",
+    "Selection.prototype.anchorOffset",
+    "Selection.prototype.focusNode",
+    "Selection.prototype.focusOffset",
+    "Selection.prototype.isCollapsed",
+    "Selection.prototype.rangeCount",
+    "Selection.prototype.type"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "methods": [],
+  "properties": [
+    "DeviceAcceleration.prototype.x",
+    "DeviceAcceleration.prototype.y",
+    "DeviceAcceleration.prototype.z",
+    "DeviceMotionEvent.prototype.acceleration",
+    "DeviceMotionEvent.prototype.accelerationIncludingGravity",
+    "DeviceMotionEvent.prototype.interval",
+    "DeviceMotionEvent.prototype.rotationRate",
+    "DeviceOrientationEvent.prototype.absolute",
+    "DeviceOrientationEvent.prototype.alpha",
+    "DeviceOrientationEvent.prototype.beta",
+    "DeviceOrientationEvent.prototype.gamma",
+    "DeviceRotationRate.prototype.alpha",
+    "DeviceRotationRate.prototype.beta",
+    "DeviceRotationRate.prototype.gamma",
+    "Window.prototype.ondevicemotion",
+    "Window.prototype.ondeviceorientation"
+  ]
+}

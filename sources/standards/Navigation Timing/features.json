@@ -1,0 +1,31 @@
+{
+  "methods": [],
+  "properties": [
+    "Performance.prototype.navigation",
+    "Performance.prototype.timing",
+    "PerformanceNavigation.prototype.redirectCount",
+    "PerformanceNavigation.prototype.type",
+    "PerformanceTiming.prototype.connectEnd",
+    "PerformanceTiming.prototype.connectStart",
+    "PerformanceTiming.prototype.domComplete",
+    "PerformanceTiming.prototype.domContentLoadedEventEnd",
+    "PerformanceTiming.prototype.domContentLoadedEventStart",
+    "PerformanceTiming.prototype.domInteractive",
+    "PerformanceTiming.prototype.domLoading",
+    "PerformanceTiming.prototype.domainLookupEnd",
+    "PerformanceTiming.prototype.domainLookupStart",
+    "PerformanceTiming.prototype.fetchStart",
+    "PerformanceTiming.prototype.loadEventEnd",
+    "PerformanceTiming.prototype.loadEventStart",
+    "PerformanceTiming.prototype.navigationStart",
+    "PerformanceTiming.prototype.redirectEnd",
+    "PerformanceTiming.prototype.redirectStart",
+    "PerformanceTiming.prototype.requestStart",
+    "PerformanceTiming.prototype.responseEnd",
+    "PerformanceTiming.prototype.responseStart",
+    "PerformanceTiming.prototype.secureConnectionStart",
+    "PerformanceTiming.prototype.unloadEventEnd",
+    "PerformanceTiming.prototype.unloadEventStart",
+    "Window.prototype.performance"
+  ]
+}

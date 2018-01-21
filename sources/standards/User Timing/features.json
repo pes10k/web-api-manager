@@ -1,0 +1,9 @@
+{
+  "methods": [
+    "Performance.prototype.clearMarks",
+    "Performance.prototype.clearMeasures",
+    "Performance.prototype.mark",
+    "Performance.prototype.measure"
+  ],
+  "properties": []
+}

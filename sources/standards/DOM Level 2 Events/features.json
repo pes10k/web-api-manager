@@ -1,0 +1,41 @@
+{
+  "methods": [
+    "DocumentEvent.prototype.createEvent",
+    "Event.prototype.initEvent",
+    "Event.prototype.preventDefault",
+    "Event.prototype.stopPropagation",
+    "EventListener.prototype.handleEvent",
+    "EventTarget.prototype.addEventListener",
+    "EventTarget.prototype.dispatchEvent",
+    "EventTarget.prototype.removeEventListener",
+    "MouseEvent.prototype.initMouseEvent",
+    "MutationEvent.prototype.initMutationEvent",
+    "UIEvent.prototype.initUIEvent"
+  ],
+  "properties": [
+    "Event.prototype.bubbles",
+    "Event.prototype.cancelable",
+    "Event.prototype.currentTarget",
+    "Event.prototype.eventPhase",
+    "Event.prototype.target",
+    "Event.prototype.timeStamp",
+    "Event.prototype.type",
+    "MouseEvent.prototype.altKey",
+    "MouseEvent.prototype.button",
+    "MouseEvent.prototype.clientX",
+    "MouseEvent.prototype.clientY",
+    "MouseEvent.prototype.ctrlKey",
+    "MouseEvent.prototype.metaKey",
+    "MouseEvent.prototype.relatedTarget",
+    "MouseEvent.prototype.screenX",
+    "MouseEvent.prototype.screenY",
+    "MouseEvent.prototype.shiftKey",
+    "MutationEvent.prototype.attrChange",
+    "MutationEvent.prototype.attrName",
+    "MutationEvent.prototype.newValue",
+    "MutationEvent.prototype.prevValue",
+    "MutationEvent.prototype.relatedNode",
+    "UIEvent.prototype.detail",
+    "UIEvent.prototype.view"
+  ]
+}

@@ -1,0 +1,122 @@
+// Introduced DOM Level 2:
+interface NodeIterator {
+  readonly attribute Node             root;
+  readonly attribute unsigned long    whatToShow;
+  readonly attribute NodeFilter       filter;
+  readonly attribute boolean          expandEntityReferences;
+  Node               nextNode();
+  Node               previousNode();
+  void               detach();
+};
+
+// Introduced DOM Level 2:
+interface NodeFilter {
+
+  // Constants returned by acceptNode
+  const short               FILTER_ACCEPT                  = 1;
+  const short               FILTER_REJECT                  = 2;
+  const short               FILTER_SKIP                    = 3;
+
+
+  // Constants for whatToShow
+  const unsigned long       SHOW_ALL                       = 0xFFFFFFFF;
+  const unsigned long       SHOW_ELEMENT                   = 0x00000001;
+  const unsigned long       SHOW_ATTRIBUTE                 = 0x00000002;
+  const unsigned long       SHOW_TEXT                      = 0x00000004;
+  const unsigned long       SHOW_CDATA_SECTION             = 0x00000008;
+  const unsigned long       SHOW_ENTITY_REFERENCE          = 0x00000010;
+  const unsigned long       SHOW_ENTITY                    = 0x00000020;
+  const unsigned long       SHOW_PROCESSING_INSTRUCTION    = 0x00000040;
+  const unsigned long       SHOW_COMMENT                   = 0x00000080;
+  const unsigned long       SHOW_DOCUMENT                  = 0x00000100;
+  const unsigned long       SHOW_DOCUMENT_TYPE             = 0x00000200;
+  const unsigned long       SHOW_DOCUMENT_FRAGMENT         = 0x00000400;
+  const unsigned long       SHOW_NOTATION                  = 0x00000800;
+
+  short              acceptNode(Node n);
+};
+
+// Introduced DOM Level 2:
+interface TreeWalker {
+  readonly attribute Node             root;
+  readonly attribute unsigned long    whatToShow;
+  readonly attribute NodeFilter       filter;
+  readonly attribute boolean          expandEntityReferences;
+           attribute Node             currentNode;
+                                      // raises(dom::DOMException) on setting
+
+  Node               parentNode();
+  Node               firstChild();
+  Node               lastChild();
+  Node               previousSibling();
+  Node               nextSibling();
+  Node               previousNode();
+  Node               nextNode();
+};
+
+// Introduced DOM Level 2:
+interface DocumentTraversal {
+  NodeIterator       createNodeIterator(Node root,
+                                        unsigned long whatToShow,
+                                        NodeFilter filter,
+                                        boolean entityReferenceExpansion);
+  TreeWalker         createTreeWalker(Node root,
+                                      unsigned long whatToShow,
+                                      NodeFilter filter,
+                                      boolean entityReferenceExpansion);
+};
+
+// Introduced DOM Level 2:
+interface Range {
+  readonly attribute Node             startContainer;
+                                      // raises(dom::DOMException) on retrieval
+
+  readonly attribute long             startOffset;
+                                      // raises(dom::DOMException) on retrieval
+
+  readonly attribute Node             endContainer;
+                                      // raises(dom::DOMException) on retrieval
+
+  readonly attribute long             endOffset;
+                                      // raises(dom::DOMException) on retrieval
+
+  readonly attribute boolean          collapsed;
+                                      // raises(dom::DOMException) on retrieval
+
+  readonly attribute Node             commonAncestorContainer;
+                                      // raises(dom::DOMException) on retrieval
+
+  void               setStart(Node refNode,
+                              long offset);
+  void               setEnd(Node refNode,
+                            long offset);
+  void               setStartBefore(Node refNode);
+  void               setStartAfter(Node refNode);
+  void               setEndBefore(Node refNode);
+  void               setEndAfter(Node refNode);
+  void               collapse(boolean toStart);
+  void               selectNode(Node refNode);
+  void               selectNodeContents(Node refNode);
+
+  // CompareHow
+  const unsigned short      START_TO_START                 = 0;
+  const unsigned short      START_TO_END                   = 1;
+  const unsigned short      END_TO_END                     = 2;
+  const unsigned short      END_TO_START                   = 3;
+
+  short              compareBoundaryPoints(unsigned short how,
+                                           Range sourceRange);
+  void               deleteContents();
+  DocumentFragment   extractContents();
+  DocumentFragment   cloneContents();
+  void               insertNode(Node newNode);
+  void               surroundContents(Node newParent);
+  Range              cloneRange();
+  DOMString          toString();
+  void               detach();
+};
+
+// Introduced DOM Level 2:
+interface DocumentRange {
+  Range              createRange();
+};

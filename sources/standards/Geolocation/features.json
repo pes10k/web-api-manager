@@ -1,0 +1,21 @@
+{
+  "methods": [
+    "Geolocation.prototype.clearWatch",
+    "Geolocation.prototype.getCurrentPosition",
+    "Geolocation.prototype.watchPosition"
+  ],
+  "properties": [
+    "Coordinates.prototype.accuracy",
+    "Coordinates.prototype.altitude",
+    "Coordinates.prototype.altitudeAccuracy",
+    "Coordinates.prototype.heading",
+    "Coordinates.prototype.latitude",
+    "Coordinates.prototype.longitude",
+    "Coordinates.prototype.speed",
+    "Navigator.prototype.geolocation",
+    "Position.prototype.coords",
+    "Position.prototype.timestamp",
+    "PositionError.prototype.code",
+    "PositionError.prototype.message"
+  ]
+}

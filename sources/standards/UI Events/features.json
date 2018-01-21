@@ -1,0 +1,41 @@
+{
+  "methods": [
+    "KeyboardEvent.prototype.getModifierState",
+    "MouseEvent.prototype.getModifierState"
+  ],
+  "properties": [
+    "CompositionEvent.prototype.data",
+    "FocusEvent.prototype.relatedTarget",
+    "InputEvent.prototype.data",
+    "InputEvent.prototype.isComposing",
+    "KeyboardEvent.prototype.altKey",
+    "KeyboardEvent.prototype.charCode",
+    "KeyboardEvent.prototype.code",
+    "KeyboardEvent.prototype.ctrlKey",
+    "KeyboardEvent.prototype.isComposing",
+    "KeyboardEvent.prototype.key",
+    "KeyboardEvent.prototype.keyCode",
+    "KeyboardEvent.prototype.location",
+    "KeyboardEvent.prototype.metaKey",
+    "KeyboardEvent.prototype.repeat",
+    "KeyboardEvent.prototype.shiftKey",
+    "MouseEvent.prototype.altKey",
+    "MouseEvent.prototype.button",
+    "MouseEvent.prototype.buttons",
+    "MouseEvent.prototype.clientX",
+    "MouseEvent.prototype.clientY",
+    "MouseEvent.prototype.ctrlKey",
+    "MouseEvent.prototype.metaKey",
+    "MouseEvent.prototype.relatedTarget",
+    "MouseEvent.prototype.screenX",
+    "MouseEvent.prototype.screenY",
+    "MouseEvent.prototype.shiftKey",
+    "UIEvent.prototype.detail",
+    "UIEvent.prototype.view",
+    "UIEvent.prototype.which",
+    "WheelEvent.prototype.deltaMode",
+    "WheelEvent.prototype.deltaX",
+    "WheelEvent.prototype.deltaY",
+    "WheelEvent.prototype.deltaZ"
+  ]
+}

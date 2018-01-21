@@ -1,0 +1,13 @@
+{
+  "methods": [
+    "MessagePort.prototype.close",
+    "MessagePort.prototype.postMessage",
+    "MessagePort.prototype.start"
+  ],
+  "properties": [
+    "MessageChannel.prototype.port1",
+    "MessageChannel.prototype.port2",
+    "MessagePort.prototype.onmessage",
+    "MessagePort.prototype.onmessageerror"
+  ]
+}

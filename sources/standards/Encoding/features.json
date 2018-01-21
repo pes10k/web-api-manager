@@ -1,0 +1,12 @@
+{
+  "methods": [
+    "TextDecoder.prototype.decode",
+    "TextEncoder.prototype.encode"
+  ],
+  "properties": [
+    "TextDecoder.prototype.encoding",
+    "TextDecoder.prototype.fatal",
+    "TextDecoder.prototype.ignoreBOM",
+    "TextEncoder.prototype.encoding"
+  ]
+}

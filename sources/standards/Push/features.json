@@ -1,0 +1,28 @@
+{
+  "methods": [
+    "PushManager.prototype.getSubscription",
+    "PushManager.prototype.permissionState",
+    "PushManager.prototype.subscribe",
+    "PushMessageData.prototype.arrayBuffer",
+    "PushMessageData.prototype.blob",
+    "PushMessageData.prototype.json",
+    "PushMessageData.prototype.text",
+    "PushSubscription.prototype.getKey",
+    "PushSubscription.prototype.toJSON",
+    "PushSubscription.prototype.unsubscribe"
+  ],
+  "properties": [
+    "PushEvent.prototype.data",
+    "PushManager.supportedContentEncodings",
+    "PushSubscription.prototype.endpoint",
+    "PushSubscription.prototype.expirationTime",
+    "PushSubscription.prototype.options",
+    "PushSubscriptionChangeEvent.prototype.newSubscription",
+    "PushSubscriptionChangeEvent.prototype.oldSubscription",
+    "PushSubscriptionOptions.prototype.applicationServerKey",
+    "PushSubscriptionOptions.prototype.userVisibleOnly",
+    "ServiceWorkerGlobalScope.prototype.onpush",
+    "ServiceWorkerGlobalScope.prototype.onpushsubscriptionchange",
+    "ServiceWorkerRegistration.prototype.pushManager"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "methods": [
+    "Sensor.prototype.start",
+    "Sensor.prototype.stop"
+  ],
+  "properties": [
+    "Sensor.prototype.activated",
+    "Sensor.prototype.hasReading",
+    "Sensor.prototype.onactivate",
+    "Sensor.prototype.onerror",
+    "Sensor.prototype.onreading",
+    "Sensor.prototype.timestamp",
+    "SensorErrorEvent.prototype.error"
+  ]
+}

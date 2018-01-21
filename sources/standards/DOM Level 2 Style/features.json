@@ -1,0 +1,22 @@
+{
+  "methods": [
+    "MediaList.prototype.appendMedium",
+    "MediaList.prototype.deleteMedium",
+    "MediaList.prototype.item",
+    "StyleSheetList.prototype.item"
+  ],
+  "properties": [
+    "DocumentStyle.prototype.styleSheets",
+    "LinkStyle.prototype.sheet",
+    "MediaList.prototype.length",
+    "MediaList.prototype.mediaText",
+    "StyleSheet.prototype.disabled",
+    "StyleSheet.prototype.href",
+    "StyleSheet.prototype.media",
+    "StyleSheet.prototype.ownerNode",
+    "StyleSheet.prototype.parentStyleSheet",
+    "StyleSheet.prototype.title",
+    "StyleSheet.prototype.type",
+    "StyleSheetList.prototype.length"
+  ]
+}

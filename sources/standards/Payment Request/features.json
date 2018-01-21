@@ -1,0 +1,38 @@
+{
+  "methods": [
+    "PaymentAddress.prototype.toJSON",
+    "PaymentRequest.prototype.abort",
+    "PaymentRequest.prototype.canMakePayment",
+    "PaymentRequest.prototype.show",
+    "PaymentRequestUpdateEvent.prototype.updateWith",
+    "PaymentResponse.prototype.complete",
+    "PaymentResponse.prototype.toJSON"
+  ],
+  "properties": [
+    "PaymentAddress.prototype.addressLine",
+    "PaymentAddress.prototype.city",
+    "PaymentAddress.prototype.country",
+    "PaymentAddress.prototype.dependentLocality",
+    "PaymentAddress.prototype.languageCode",
+    "PaymentAddress.prototype.organization",
+    "PaymentAddress.prototype.phone",
+    "PaymentAddress.prototype.postalCode",
+    "PaymentAddress.prototype.recipient",
+    "PaymentAddress.prototype.region",
+    "PaymentAddress.prototype.sortingCode",
+    "PaymentRequest.prototype.id",
+    "PaymentRequest.prototype.onshippingaddresschange",
+    "PaymentRequest.prototype.onshippingoptionchange",
+    "PaymentRequest.prototype.shippingAddress",
+    "PaymentRequest.prototype.shippingOption",
+    "PaymentRequest.prototype.shippingType",
+    "PaymentResponse.prototype.details",
+    "PaymentResponse.prototype.methodName",
+    "PaymentResponse.prototype.payerEmail",
+    "PaymentResponse.prototype.payerName",
+    "PaymentResponse.prototype.payerPhone",
+    "PaymentResponse.prototype.requestId",
+    "PaymentResponse.prototype.shippingAddress",
+    "PaymentResponse.prototype.shippingOption"
+  ]
+}

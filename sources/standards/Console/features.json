@@ -1,0 +1,22 @@
+{
+  "methods": [
+    "console.assert",
+    "console.clear",
+    "console.count",
+    "console.debug",
+    "console.dir",
+    "console.dirxml",
+    "console.error",
+    "console.group",
+    "console.groupCollapsed",
+    "console.groupEnd",
+    "console.info",
+    "console.log",
+    "console.table",
+    "console.time",
+    "console.timeEnd",
+    "console.trace",
+    "console.warn"
+  ],
+  "properties": []
+}

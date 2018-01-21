@@ -1,0 +1,7 @@
+{
+  "methods": [
+    "Window.prototype.cancelAnimationFrame",
+    "Window.prototype.requestAnimationFrame"
+  ],
+  "properties": []
+}

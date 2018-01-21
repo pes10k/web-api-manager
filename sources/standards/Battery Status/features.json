@@ -1,0 +1,15 @@
+{
+  "methods": [
+    "Navigator.prototype.getBattery"
+  ],
+  "properties": [
+    "BatteryManager.prototype.charging",
+    "BatteryManager.prototype.chargingTime",
+    "BatteryManager.prototype.dischargingTime",
+    "BatteryManager.prototype.level",
+    "BatteryManager.prototype.onchargingchange",
+    "BatteryManager.prototype.onchargingtimechange",
+    "BatteryManager.prototype.ondischargingtimechange",
+    "BatteryManager.prototype.onlevelchange"
+  ]
+}

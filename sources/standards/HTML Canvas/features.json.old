@@ -1,0 +1,40 @@
+{
+  "methods": [
+    "CanvasGradient.prototype.addColorStop",
+    "CanvasPattern.prototype.setTransform",
+    "HTMLCanvasElement.prototype.getContext",
+    "HTMLCanvasElement.prototype.toBlob",
+    "HTMLCanvasElement.prototype.toDataURL",
+    "HTMLCanvasElement.prototype.transferControlToOffscreen",
+    "ImageBitmapRenderingContext.prototype.transferFromImageBitmap",
+    "OffscreenCanvas.prototype.convertToBlob",
+    "OffscreenCanvas.prototype.getContext",
+    "OffscreenCanvas.prototype.transferToImageBitmap",
+    "OffscreenCanvasRenderingContext2D.prototype.commit",
+    "Path2D.prototype.addPath"
+  ],
+  "properties": [
+    "CanvasRenderingContext2D.prototype.canvas",
+    "HTMLCanvasElement.prototype.height",
+    "HTMLCanvasElement.prototype.width",
+    "ImageBitmapRenderingContext.prototype.canvas",
+    "ImageData.prototype.data",
+    "ImageData.prototype.height",
+    "ImageData.prototype.width",
+    "OffscreenCanvas.prototype.height",
+    "OffscreenCanvas.prototype.width",
+    "OffscreenCanvasRenderingContext2D.prototype.canvas",
+    "TextMetrics.prototype.actualBoundingBoxAscent",
+    "TextMetrics.prototype.actualBoundingBoxDescent",
+    "TextMetrics.prototype.actualBoundingBoxLeft",
+    "TextMetrics.prototype.actualBoundingBoxRight",
+    "TextMetrics.prototype.alphabeticBaseline",
+    "TextMetrics.prototype.emHeightAscent",
+    "TextMetrics.prototype.emHeightDescent",
+    "TextMetrics.prototype.fontBoundingBoxAscent",
+    "TextMetrics.prototype.fontBoundingBoxDescent",
+    "TextMetrics.prototype.hangingBaseline",
+    "TextMetrics.prototype.ideographicBaseline",
+    "TextMetrics.prototype.width"
+  ]
+}

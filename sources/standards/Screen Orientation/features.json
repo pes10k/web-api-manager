@@ -1,0 +1,12 @@
+{
+  "methods": [
+    "ScreenOrientation.prototype.lock",
+    "ScreenOrientation.prototype.unlock"
+  ],
+  "properties": [
+    "Screen.prototype.orientation",
+    "ScreenOrientation.prototype.angle",
+    "ScreenOrientation.prototype.onchange",
+    "ScreenOrientation.prototype.type"
+  ]
+}

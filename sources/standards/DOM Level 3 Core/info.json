@@ -1,0 +1,16 @@
+{
+  "id": 19,
+  "origId": "DOM Level 3: Core",
+  "name": "DOM Level 3: Core",
+  "url": "https://www.w3.org/TR/DOM-Level-3-Core/",
+  "catId": "core",
+  "after": [
+    13,
+    18,
+    17,
+    16,
+    15,
+    14
+  ],
+  "date": "2004-04-07"
+}

@@ -1,0 +1,14 @@
+{
+  "methods": [
+    "DocumentOrShadowRoot.prototype.caretPositionFromPoint",
+    "DocumentOrShadowRoot.prototype.elementFromPoint",
+    "DocumentOrShadowRoot.prototype.elementsFromPoint",
+    "DocumentOrShadowRoot.prototype.getSelection"
+  ],
+  "properties": [
+    "DocumentOrShadowRoot.prototype.activeElement",
+    "DocumentOrShadowRoot.prototype.styleSheets",
+    "ShadowRoot.prototype.host",
+    "ShadowRoot.prototype.mode"
+  ]
+}

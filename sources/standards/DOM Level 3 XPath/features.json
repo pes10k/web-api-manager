@@ -1,0 +1,21 @@
+{
+  "methods": [
+    "XPathEvaluator.prototype.createExpression",
+    "XPathEvaluator.prototype.createNSResolver",
+    "XPathEvaluator.prototype.evaluate",
+    "XPathExpression.prototype.evaluate",
+    "XPathNSResolver.prototype.lookupNamespaceURI",
+    "XPathResult.prototype.iterateNext",
+    "XPathResult.prototype.snapshotItem"
+  ],
+  "properties": [
+    "XPathNamespace.prototype.ownerElement",
+    "XPathResult.prototype.booleanValue",
+    "XPathResult.prototype.invalidIteratorState",
+    "XPathResult.prototype.numberValue",
+    "XPathResult.prototype.resultType",
+    "XPathResult.prototype.singleNodeValue",
+    "XPathResult.prototype.snapshotLength",
+    "XPathResult.prototype.stringValue"
+  ]
+}

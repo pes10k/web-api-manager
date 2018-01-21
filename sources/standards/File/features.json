@@ -1,0 +1,33 @@
+{
+  "methods": [
+    "Blob.prototype.slice",
+    "FileList.prototype.item",
+    "FileReader.prototype.abort",
+    "FileReader.prototype.readAsArrayBuffer",
+    "FileReader.prototype.readAsBinaryString",
+    "FileReader.prototype.readAsDataURL",
+    "FileReader.prototype.readAsText",
+    "FileReaderSync.prototype.readAsArrayBuffer",
+    "FileReaderSync.prototype.readAsBinaryString",
+    "FileReaderSync.prototype.readAsDataURL",
+    "FileReaderSync.prototype.readAsText",
+    "URL.createObjectURL",
+    "URL.revokeObjectURL"
+  ],
+  "properties": [
+    "Blob.prototype.size",
+    "Blob.prototype.type",
+    "File.prototype.lastModified",
+    "File.prototype.name",
+    "FileList.prototype.length",
+    "FileReader.prototype.error",
+    "FileReader.prototype.onabort",
+    "FileReader.prototype.onerror",
+    "FileReader.prototype.onload",
+    "FileReader.prototype.onloadend",
+    "FileReader.prototype.onloadstart",
+    "FileReader.prototype.onprogress",
+    "FileReader.prototype.readyState",
+    "FileReader.prototype.result"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "methods": [
+    "FontFace.prototype.load",
+    "FontFaceSet.prototype.add",
+    "FontFaceSet.prototype.check",
+    "FontFaceSet.prototype.clear",
+    "FontFaceSet.prototype.delete",
+    "FontFaceSet.prototype.load"
+  ],
+  "properties": [
+    "FontFace.prototype.family",
+    "FontFace.prototype.featureSettings",
+    "FontFace.prototype.isplay",
+    "FontFace.prototype.loaded",
+    "FontFace.prototype.status",
+    "FontFace.prototype.stretch",
+    "FontFace.prototype.style",
+    "FontFace.prototype.unicodeRange",
+    "FontFace.prototype.variant",
+    "FontFace.prototype.variationSettings",
+    "FontFace.prototype.weight",
+    "FontFaceSet.prototype.onloading",
+    "FontFaceSet.prototype.onloadingdone",
+    "FontFaceSet.prototype.onloadingerror",
+    "FontFaceSet.prototype.ready",
+    "FontFaceSet.prototype.status",
+    "FontFaceSetLoadEvent.prototype.fontfaces",
+    "FontFaceSource.prototype.fonts"
+  ]
+}

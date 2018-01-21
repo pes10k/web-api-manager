@@ -1,0 +1,17 @@
+{
+  "methods": [
+    "DataTransfer.prototype.getFiles",
+    "DataTransfer.prototype.getFilesAndDirectories",
+    "Directory.prototype.getFiles",
+    "Directory.prototype.getFilesAndDirectories",
+    "HTMLInputElement.prototype.chooseDirectory",
+    "HTMLInputElement.prototype.getFiles",
+    "HTMLInputElement.prototype.getFilesAndDirectories"
+  ],
+  "properties": [
+    "Directory.prototype.name",
+    "Directory.prototype.path",
+    "HTMLInputElement.prototype.allowdirs",
+    "HTMLInputElement.prototype.isFilesAndDirectoriesSupported"
+  ]
+}

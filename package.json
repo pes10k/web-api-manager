@@ -37,6 +37,7 @@
         ]
     },
     "devDependencies": {
+        "argparse": "^1.0.9",
         "assert": "^1.4.1",
         "cross-env": "^5.1.1",
         "eslint": "^4.9.0",
@@ -44,11 +45,14 @@
         "gulp": "^3.9.1",
         "mocha": "^4.0.1",
         "pre-commit": "^1.2.2",
+        "request": "^2.83.0",
         "selenium-webdriver": "^3.6.0",
         "sjcl": "^1.0.7",
         "uri-js": "^3.0.2",
         "vue": "^2.5.10",
         "vue-template-compiler": "^2.5.10",
-        "web-ext": "^2.2.2"
+        "web-ext": "^2.2.2",
+        "webidl-scraper": "0.0.4",
+        "webidl2": "^10.0.0"
     }
 }

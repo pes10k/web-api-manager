@@ -1,0 +1,10 @@
+{
+  "methods": [
+    "CanvasCaptureMediaStreamTrack.prototype.requestFrame",
+    "HTMLCanvasElement.prototype.captureStream",
+    "HTMLMediaElement.prototype.captureStream"
+  ],
+  "properties": [
+    "CanvasCaptureMediaStreamTrack.prototype.canvas"
+  ]
+}

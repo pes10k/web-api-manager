@@ -1,0 +1,9 @@
+{
+  "methods": [],
+  "properties": [
+    "EditingBeforeInputEvent.prototype.command",
+    "EditingBeforeInputEvent.prototype.value",
+    "EditingInputEvent.prototype.command",
+    "EditingInputEvent.prototype.value"
+  ]
+}

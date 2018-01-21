@@ -1,0 +1,10 @@
+{
+  "methods": [
+    "Performance.prototype.now",
+    "Performance.prototype.toJSON"
+  ],
+  "properties": [
+    "Performance.prototype.timeOrigin",
+    "WindowOrWorkerGlobalScope.prototype.performance"
+  ]
+}

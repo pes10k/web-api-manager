@@ -1,0 +1,41 @@
+{
+  "methods": [
+    "FormData.prototype.append",
+    "FormData.prototype.delete",
+    "FormData.prototype.get",
+    "FormData.prototype.getAll",
+    "FormData.prototype.has",
+    "FormData.prototype.set",
+    "XMLHttpRequest.prototype.abort",
+    "XMLHttpRequest.prototype.getAllResponseHeaders",
+    "XMLHttpRequest.prototype.getResponseHeader",
+    "XMLHttpRequest.prototype.open",
+    "XMLHttpRequest.prototype.overrideMimeType",
+    "XMLHttpRequest.prototype.send",
+    "XMLHttpRequest.prototype.setRequestHeader"
+  ],
+  "properties": [
+    "ProgressEvent.prototype.lengthComputable",
+    "ProgressEvent.prototype.loaded",
+    "ProgressEvent.prototype.total",
+    "XMLHttpRequest.prototype.onreadystatechange",
+    "XMLHttpRequest.prototype.readyState",
+    "XMLHttpRequest.prototype.response",
+    "XMLHttpRequest.prototype.responseText",
+    "XMLHttpRequest.prototype.responseType",
+    "XMLHttpRequest.prototype.responseURL",
+    "XMLHttpRequest.prototype.responseXML",
+    "XMLHttpRequest.prototype.status",
+    "XMLHttpRequest.prototype.statusText",
+    "XMLHttpRequest.prototype.timeout",
+    "XMLHttpRequest.prototype.upload",
+    "XMLHttpRequest.prototype.withCredentials",
+    "XMLHttpRequestEventTarget.prototype.onabort",
+    "XMLHttpRequestEventTarget.prototype.onerror",
+    "XMLHttpRequestEventTarget.prototype.onload",
+    "XMLHttpRequestEventTarget.prototype.onloadend",
+    "XMLHttpRequestEventTarget.prototype.onloadstart",
+    "XMLHttpRequestEventTarget.prototype.onprogress",
+    "XMLHttpRequestEventTarget.prototype.ontimeout"
+  ]
+}

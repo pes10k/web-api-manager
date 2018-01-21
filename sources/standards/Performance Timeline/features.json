@@ -1,0 +1,20 @@
+{
+  "methods": [
+    "Performance.prototype.getEntries",
+    "Performance.prototype.getEntriesByName",
+    "Performance.prototype.getEntriesByType",
+    "PerformanceEntry.prototype.toJSON",
+    "PerformanceObserver.prototype.disconnect",
+    "PerformanceObserver.prototype.observe",
+    "PerformanceObserver.prototype.takeRecords",
+    "PerformanceObserverEntryList.prototype.getEntries",
+    "PerformanceObserverEntryList.prototype.getEntriesByName",
+    "PerformanceObserverEntryList.prototype.getEntriesByType"
+  ],
+  "properties": [
+    "PerformanceEntry.prototype.duration",
+    "PerformanceEntry.prototype.entryType",
+    "PerformanceEntry.prototype.name",
+    "PerformanceEntry.prototype.startTime"
+  ]
+}
