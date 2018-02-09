@@ -22,7 +22,7 @@
     const guessDataVersion = data => {
         // If no data was provided, then treat it as matching the current
         // schema, since there is no data to migrate.
-        if (Object.values(data).length === 0) {
+        if (!data || Object.values(data).length === 0) {
             return currentVersion;
         }
 

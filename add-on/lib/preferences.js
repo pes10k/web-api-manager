@@ -259,6 +259,8 @@
                 throw "Stored preferences did not match a known format";
             }
 
+            // Default preferences to use, if we weren't able to load
+            // any stored prefernces from disk / sync.
             let blockRulesRaw = [];
             let template = [];
             let shouldLog = enums.ShouldLogVal.NONE;
