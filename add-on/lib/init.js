@@ -15,8 +15,8 @@
 
     /**
      * @enum {ShouldLogVal} string
-     * Enum style value that stores all possible setting for the "should log"
-     * value.
+     * Enum style value that represents all possible setting for the
+     * "should log" value.
      *
      * NONE indicates that no logging should occur, STANDARD that selected
      * features should be blocked and loged, and PASSIVE means that nothing
@@ -26,6 +26,17 @@
         NONE: "0",
         STANDARD: "1",
         PASSIVE: "2",
+    });
+
+    /**
+     * @enum {PrefsTabId} string
+     * Enum style value that represents all possible ids for preferences
+     * tabs.
+     */
+    const PrefsTabId = Object.freeze({
+        BLOCKING_RULES: "blocking-rules",
+        IMPORT_EXPORT: "import-export",
+        ADVANCED_OPTIONS: "advanced-options",
     });
 
     window.WEB_API_MANAGER = {
@@ -42,7 +53,7 @@
             defaultPattern: "(default)",
 
             // Version of schema used when serializing preferences to storage.
-            schemaVersion: 4,
+            schemaVersion: 5,
         },
         enums: {
             utils: {
@@ -73,6 +84,7 @@
                 },
             },
             ShouldLogVal,
+            PrefsTabId,
         },
     };
 

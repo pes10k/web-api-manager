@@ -84,15 +84,48 @@ module.exports.promiseSetBlockingRules = (driver, standardsToBlock) => {
         .then(() => module.exports.pause(100));
 };
 
+module.exports.promiseOpenPrefsTab = (driver, prefsTabId) => {
+    enums.utils.assertValidEnum(enums.PrefsTabId, prefsTabId);
+    driver.setContext(Context.CONTENT);
+
+    const cssSelectorString = `ul.nav.nav-tabs a[href='#${prefsTabId}']`;
+
+    return driver.wait(until.elementLocated(by.css(cssSelectorString)), 1000)
+        .then(elm => elm.click());
+};
+
 module.exports.promiseSetShouldLog = (driver, shouldLog) => {
     enums.utils.assertValidEnum(enums.ShouldLogVal, shouldLog);
     driver.setContext(Context.CONTENT);
 
-    const cssSelectorString = `.logging-settings .radio input[value='${shouldLog}']`;
+    const cssSelectorString = `.logging-settings input[value='${shouldLog}']`;
 
     return module.exports.promiseExtensionConfigPage(driver)
+        .then(() => module.exports.promiseOpenPrefsTab(driver, enums.PrefsTabId.ADVANCED_OPTIONS))
         .then(() => driver.wait(until.elementLocated(by.css(cssSelectorString)), 1000))
         .then(elm => elm.click());
+};
+
+module.exports.promiseSetBlockCrossFrame = (driver, blockCrossFrame) => {
+    driver.setContext(Context.CONTENT);
+
+    const cssSelectorString = `#cross-frame-blocking-checkbox`;
+    let blockCrossFrameCheckbox;
+
+    return module.exports.promiseExtensionConfigPage(driver)
+        .then(() => module.exports.promiseOpenPrefsTab(driver, enums.PrefsTabId.ADVANCED_OPTIONS))
+        .then(() => driver.wait(until.elementLocated(by.css(cssSelectorString)), 1000))
+        .then(checkbox => {
+            blockCrossFrameCheckbox = checkbox;
+            return blockCrossFrameCheckbox.getAttribute("checked");
+        })
+        .then(checkedAttr => {
+            const isChecked = !!checkedAttr;
+            if (checkedAttr === blockCrossFrame) {
+                return Promise.resolve();
+            }
+            return blockCrossFrameCheckbox.click();
+        });
 };
 
 module.exports.promiseOpenLoggingTab = (driver, tabId) => {

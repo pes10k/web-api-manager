@@ -3,7 +3,7 @@
     "use strict";
     const {preferencesLib, constants, messagesLib} = window.WEB_API_MANAGER;
     const {cookieEncodingLib, proxyBlockLib, httpHeadersLib} = window.WEB_API_MANAGER;
-    const {standardsLib, browserLib, enums} = window.WEB_API_MANAGER;
+    const {browserLib, enums} = window.WEB_API_MANAGER;
     const rootObject = browserLib.getRootObject();
 
     preferencesLib.load(loadedPrefs => {
@@ -106,12 +106,14 @@
         const matchingRule = prefs.getRuleForUrl(url);
         const standardIdsToBlock = matchingRule.getStandardIds();
         const shouldLog = prefs.getShouldLog();
+        const blockCrossFrame = prefs.getBlockCrossFrame();
 
         const randBytes = sjcl.random.randomWords(4);
         const randNonce = sjcl.codec.base64.fromBits(randBytes);
         const encodedOptions = cookieEncodingLib.toCookieValue(
             standardIdsToBlock,
             shouldLog,
+            blockCrossFrame,
             randNonce
         );
 
@@ -138,9 +140,10 @@
 
         if (cspDynamicPolicyHeaders.length === 1) {
             const [ignore, scriptHash] = proxyBlockLib.generateScriptPayload(
-                standardsLib.allStandardIds(),
                 standardIdsToBlock,
-                shouldLog
+                shouldLog,
+                blockCrossFrame,
+                randNonce
             );
 
             const newCSPValue = httpHeadersLib.createCSPInstructionWithHashAllowed(

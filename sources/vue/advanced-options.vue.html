@@ -1,0 +1,114 @@
+<div class="advanced-options-container">
+    <div class="logging-settings card mb-4">
+        <strong class="card-header">
+            Logging setting
+        </strong>
+    
+        <div class="card-body">
+            <div class="form-check">
+                <input type="radio"
+                         id="should-log-radio-none"
+                      class="form-check-input"
+                    v-model="dataShouldLog"
+                     :value="enums.ShouldLogVal.NONE"
+                    @change="shouldLogChanged"
+           aria-describedby="should-log-help-none">
+                <label class="form-check-label" for="should-log-radio-none">
+                    No logging
+                </label>
+    
+                <p class="text-muted form-text" id="should-log-help-none">
+                    No information about what features and standards were blocked
+                    is stored.  This is the default option, and what you should
+                    choose for normal use.
+                </p>
+            </div>
+    
+            <div class="form-check">
+                <input type="radio"
+                         id="should-log-radio-standard"
+                      class="form-check-input"
+                    v-model="dataShouldLog"
+                     :value="enums.ShouldLogVal.STANDARD"
+                    @change="shouldLogChanged"
+           aria-describedby="should-log-help-standard">
+                <label class="form-check-label" for="should-log-radio-standard">
+                    Log blocked functionality
+                </label>
+                <p class="text-muted form-text" id="should-log-help-standard">
+                    Information about functionality that web pages want to access,
+                    but the extension prevents pages from accessing, is logged.
+                </p>
+            </div>
+    
+            <div class="form-check">
+                <input type="radio"
+                         id="should-log-radio-passive"
+                      class="form-check-input"
+                    v-model="dataShouldLog"
+                     :value="enums.ShouldLogVal.PASSIVE"
+                    @change="shouldLogChanged"
+           aria-describedby="should-log-help-passive">
+                <label class="form-check-label" for="should-log-radio-passive">
+                    Passive logging
+                </label>
+    
+                <p class="text-muted form-text" id="should-log-help-passive">
+                    No functionality is blocked, but the extension logs all
+                    functionality that pages use.
+                </p>
+            </div>
+    
+            <a id="logging-raw-report-link" href="/pages/report/report-json.html" class="sr-only">
+                View raw logged data
+            </a>
+        </div>
+    </div>
+
+    <div class="compatibility-settings card mb-4">
+        <strong class="card-header">
+            Compatibility Settings
+        </strong>
+
+        <div class="card-body">
+            <div class="form-check">
+                <input type="checkbox"
+                         id="cross-frame-blocking-checkbox"
+                      class="form-check-input"
+                    v-model="dataBlockCrossFrame"
+                    @change="blockCrossFrameChanged"
+           aria-describedby="cross-frame-blocking-help">
+                <label class="form-check-label" for="cross-frame-blocking-checkbox">
+                    Block cross-frame access
+                </label>
+                <div class="form-text text-muted" id="cross-frame-blocking-help">
+                    <p>
+                        There are some cases where a very determined attacker can
+                        work around the protections Web API Manager provides.
+                        Because of bugs in how browsers have implemented the
+                        WebExtensions standard (tracked by bugs in both
+                        <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1424176">Firefox</a> and
+                        <a href="https://bugs.chromium.org/p/chromium/issues/detail?id=793217">Chromium</a>),
+                        attackers can create child-frames, and extract blocked
+                        functionality out of those frames, before extensions can
+                        modify the child frame.
+                    </p>
+
+                    <p>
+                        By default this extension does not block agianst these kinds
+                        of attacks.  The only manner to do so (preventing
+                        parent frames from accessing any content of child frames)
+                        breaks a large number of sites, and in the wild this
+                        kind of attack seems to be rare (to-non-existant).
+                    </p>
+
+                    <p>
+                        Checking this option will guard against this type of
+                        attack, though will break any site that requires direct
+                        interaction with child frames to function.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -25,11 +25,7 @@
                 const standardIdsInCat = standardsLib.standardIdsForCategoryId(categoryId);
                 const blockedStandardIds = this.dataCurrentStandardIds;
 
-                if (standardIdsInCat.length !== blockedStandardIds.length) {
-                    return false;
-                }
-
-                return standardIdsInCat.every(stdId => blockedStandardIds.indexOf(stdId) !== -1);
+                return standardIdsInCat.every(stdId => blockedStandardIds.includes(stdId));
             },
             toggleCategory: function (event, shouldBlock, categoryId) {
                 const state = this.$root.$data;

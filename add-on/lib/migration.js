@@ -135,6 +135,13 @@
         return Object.freeze(migratedData);
     };
 
+    const fourToFive = data => {
+        const migratedData = JSON.parse(JSON.stringify(data));
+        migratedData.webApiManager.schema = 5;
+        migratedData.webApiManager.blockCrossFrame = false;
+        return Object.freeze(migratedData);
+    };
+
     /**
      * Apply any needed migrations to bring the structure of the given
      * stored preferences data to the current version.
@@ -162,6 +169,7 @@
             oneToTwo,
             twoToThree,
             threeToFour,
+            fourToFive,
         ];
 
         let currentMigratedVersion = foundDataVersion;

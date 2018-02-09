@@ -1,19 +1,28 @@
 <section class="container">
     <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" :class="dataActiveTab === 'blocking-rules' ? 'active' : ''">
-            <a href="#blocking-rules" @click="setActiveTab">Blocking Rules</a>
+        <li role="presentation" class="nav-item">
+            <a href="#blocking-rules"
+                :class="[dataActiveTab === 'blocking-rules' ? 'active' : '', 'nav-link']"
+                @click="setActiveTab">Blocking Rules</a>
         </li>
-        <li role="presentation" :class="dataActiveTab === 'import-export' ? 'active' : ''">
-            <a href="#import-export" @click="setActiveTab">Import / Export</a>
+        <li role="presentation" class="nav-item">
+            <a href="#import-export"
+                :class="[dataActiveTab === 'import-export' ? 'active' : '', 'nav-link']"
+                @click="setActiveTab">Import / Export</a>
+        </li>
+        <li role="advanced-options" class="nav-item">
+            <a href="#advanced-options"
+                :class="[dataActiveTab === 'advanced-options' ? 'active' : '', 'nav-link']"
+                @click="setActiveTab">Advanced Options</a>
         </li>
     </ul>
 
-    <div class="tab-content">
+    <div class="tab-content pt-2">
         <div role="tabpanel"
            :class="['tab-pane', dataActiveTab === 'blocking-rules' ? 'active' : '']"
                id="blocking-rules">
             <div class="row">
-                <div class="col-xs-12 col-md-12">
+                <div class="col">
                     <p>
                         Enter <a href="https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Match_patterns">domain matching rules</a>
                         on the right, to create a new blocking rule.  On the
@@ -23,18 +32,16 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-xs-4 col-md-4">
+                <div class="col-3">
                     <blocking-rules
                         :data-patterns="dataPatterns"
                         :data-selected-pattern="dataSelectedPattern"
                         :data-allowing-all-patterns="dataAllowingAllPatterns"
                         :data-blocking-any-patterns="dataBlockingAnyPatterns">
                     </blocking-rules>
-
-                    <logging-settings :data-should-log="dataShouldLog"></logging-settings>
                 </div>
 
-                <div class="col-xs-8 col-md-8">
+                <div class="col-9">
                     <web-api-standards
                         :data-should-log="dataShouldLog"
                         :data-current-standard-ids="dataCurrentStandardIds"
@@ -49,11 +56,24 @@
            :class="['tab-pane', dataActiveTab === 'import-export' ? 'active' : '']"
                id="import-export">
             <div class="row">
-                <div class="col-xs-12 col-md-12">
+                <div class="col12">
                     <import-export
                         :data-patterns="dataPatterns"
                         :data-current-standard-ids="dataCurrentStandardIds">
                     </import-export>
+                </div>
+            </div>
+        </div>
+
+        <div role="tabpanel"
+           :class="['tab-pane', dataActiveTab === 'advanced-options' ? 'active' : '']"
+               id="advanced-options">
+            <div class="row">
+                <div class="col">
+                    <advanced-options
+                        :data-should-log="dataShouldLog"
+                        :data-block-cross-frame="dataBlockCrossFrame">
+                    </advanced-options>
                 </div>
             </div>
         </div>

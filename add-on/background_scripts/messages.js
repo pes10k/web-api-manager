@@ -31,6 +31,12 @@
             }
         }
 
+        if (label === "updatePreferencesBlockCrossFrame") {
+            const {blockCrossFrame} = data;
+            preferences.setBlockCrossFrame(blockCrossFrame);
+            return;
+        }
+
         if (label === "updatePreferencesShouldLog") {
             const {shouldLog} = data;
             preferences.setShouldLog(shouldLog);
@@ -78,6 +84,7 @@
                     rootObject.runtime.sendMessage(["getPreferencesAndFramesResponse", data]);
                 });
             });
+            return;
         }
 
         // Sent from the popup / browser action, that the user wants to view
@@ -144,6 +151,8 @@
             sendResponse(["blockedFeaturesReportResponse", tabReport && tabReport.toJSON()]);
             return;
         }
+
+        throw `Received unexpected message type: ${label}.  Passed data: ${JSON.stringify(data)}`;
     };
 
     const register = preferences => {

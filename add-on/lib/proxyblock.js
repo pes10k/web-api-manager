@@ -24,7 +24,7 @@
         const dispatchEvent = document.dispatchEvent;
         const doc = window.document;
 
-        const {shouldLog, randNonce} = window.WEB_API_MANAGER_PAGE;
+        const {shouldLog, blockCrossFrame, randNonce} = window.WEB_API_MANAGER_PAGE;
 
         // Prevent ambiguity from shadowing the module's enum's property.
         const localEnums = window.WEB_API_MANAGER_PAGE.enums;
@@ -236,48 +236,50 @@
             }
         };
 
-        // Block references to the return value of the `window.open` function,
-        // and the `window.opener` property, to prevent the current frame
-        // from getting access to Web API functions and features that are
-        // blocked in this frame, by reaching into other frames and
-        // pulling them into the current context.
-        //
-        // This is done before (otherwise) instrumenting the DOM to block
-        // the selected standards, so that the window.open function still
-        // functions if the HTML standard is allowed on the page, but the return
-        // value is protected (e.g. if the HTML standard is allowed, allow
-        // windows to be opened with window.open, but still prevent the current
-        // frame from accessing the DOM of other frames).
-        //
-        // @see https://developer.mozilla.org/en-US/docs/Web/API/Window/open
-        // @see https://developer.mozilla.org/en-US/docs/Web/API/Window/opener
-        const origWindowOpen = window.open;
-        window.open = function () {
-            origWindowOpen.apply(this, arguments);
-            return defaultBlockingProxy;
-        };
-        Object.defineProperty(window, "opener", {
-            get: () => defaultBlockingProxy,
-        });
-
         // `featuresToBlock` is now an array of FeaturePath's / strings,
         // each describing the keypath of feature in the DOM to block.
         featuresToBlock.forEach(blockFeatureAtKeyPath);
 
-        // Next, prevent access to frame's contentDocument / contentWindow
-        // properties, to prevent the parent frame from pulling unblocked
-        // references to blocked standards from injected frames.
-        // This will break some sites, but, fingers crossed, its not too much.
-        const frameTypesToModify = [HTMLIFrameElement, HTMLFrameElement];
-        const propertiesToBlock = ["contentDocument", "contentWindow"];
+        if (blockCrossFrame === true) {
+            // Block references to the return value of the `window.open` function,
+            // and the `window.opener` property, to prevent the current frame
+            // from getting access to Web API functions and features that are
+            // blocked in this frame, by reaching into other frames and
+            // pulling them into the current context.
+            //
+            // This is done before (otherwise) instrumenting the DOM to block
+            // the selected standards, so that the window.open function still
+            // functions if the HTML standard is allowed on the page, but the return
+            // value is protected (e.g. if the HTML standard is allowed, allow
+            // windows to be opened with window.open, but still prevent the current
+            // frame from accessing the DOM of other frames).
+            //
+            // @see https://developer.mozilla.org/en-US/docs/Web/API/Window/open
+            // @see https://developer.mozilla.org/en-US/docs/Web/API/Window/opener
+            const origWindowOpen = window.open;
+            window.open = function () {
+                origWindowOpen.apply(this, arguments);
+                return defaultBlockingProxy;
+            };
+            Object.defineProperty(window, "opener", {
+                get: () => defaultBlockingProxy,
+            });
 
-        frameTypesToModify.forEach(frameType => {
-            propertiesToBlock.forEach(propertyName => {
-                Object.defineProperty(frameType.prototype, propertyName, {
-                    get: () => defaultBlockingProxy,
+            // Next, prevent access to frame's contentDocument / contentWindow
+            // properties, to prevent the parent frame from pulling unblocked
+            // references to blocked standards from injected frames.
+            // This will break some sites, but, fingers crossed, its not too much.
+            const frameTypesToModify = [HTMLIFrameElement, HTMLFrameElement];
+            const propertiesToBlock = ["contentDocument", "contentWindow"];
+
+            frameTypesToModify.forEach(frameType => {
+                propertiesToBlock.forEach(propertyName => {
+                    Object.defineProperty(frameType.prototype, propertyName, {
+                        get: () => defaultBlockingProxy,
+                    });
                 });
             });
-        });
+        }
 
         removeSelfFromPage();
     };
@@ -294,6 +296,9 @@
      *   The behavior of the blocking proxy object, whether it should not
      *   log, block page access to features and log those "blocking actions",
      *   or allow the page to access all functionality, and log everything.
+     * @param {boolean} blockCrossFrame
+     *   Whether the parent frame should be able to access the DOM of child
+     *   frames.
      * @param {string} randNonce
      *   A unique, unguessable identififer, used so that the injected content
      *   script can communicate with the content script, using an unguessable
@@ -306,7 +311,7 @@
      *   standardNamesToBlock standards un-reachable, and second, a
      *   base64 encoded sha256 hash of the code.
      */
-    const generateScriptPayload = (standardIds, shouldLog, randNonce) => {
+    const generateScriptPayload = (standardIds, shouldLog, blockCrossFrame, randNonce) => {
         // Build an array of the strings, each being the keypath to
         // a feature that should be blocked.
         const featuresToBlock = standardIds.reduce((collection, standardId) => {
@@ -319,6 +324,7 @@
             randNonce,
             featuresToBlock: featuresToBlock,
             shouldLog,
+            blockCrossFrame,
             enums: {
                 ShouldLogVal: enums.ShouldLogVal,
             },

@@ -50,6 +50,7 @@ describe("Cross frame protections", function () {
                         return driverReference.get(url);
                     })
                     .then(() => utils.promiseSetBlockingRules(driverReference, standardsToBlock))
+                    .then(() => utils.promiseSetBlockCrossFrame(driverReference, true))
                     .then(() => driverReference.get(url))
                     .then(() => driverReference.executeScript(testScript))
                     .then(response => {
@@ -115,6 +116,7 @@ describe("Cross frame protections", function () {
                     driverReference = driver;
                     return utils.promiseSetBlockingRules(driverReference, standardsToBlock);
                 })
+                .then(() => utils.promiseSetBlockCrossFrame(driverReference, true))
                 .then(() => driverReference.get(url))
                 .then(() => driverReference.executeScript(openWindowScript))
                 .then(() => driverReference.executeScript(testWindowNameScript))

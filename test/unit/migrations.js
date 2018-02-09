@@ -89,6 +89,26 @@ const validV4Data = {
     },
 };
 
+const validV5Data = {
+    webApiManager: {
+        schema: 5,
+        shouldLog: enums.ShouldLogVal.NONE,
+        rules: [
+            {
+                p: "www.example.com",
+                s: [1, 2, 3],
+            },
+            {
+                p: "(default)",
+                s: [4, 5, 6],
+            },
+        ],
+        template: [7, 8, 9],
+        blockCrossFrame : true,
+    },
+};
+
+
 describe("Migrations", function () {
     describe("Handling invalid data", function () {
         it("Invalid shaped object", function (done) {
@@ -276,6 +296,12 @@ describe("Migrations", function () {
                 "Both standards for 'cs.uic.edu' should be migrated from v1 to v2"
             );
 
+            assert.equal(
+                false,
+                prefs.getBlockCrossFrame(),
+                "Migration from v1 data should result in not blocking cross frame acceess."
+            );
+
             done();
         });
     });
@@ -302,6 +328,7 @@ describe("Migrations", function () {
                 migratedData.webApiManager.rules.length,
                 "All rules should be migrated"
             );
+
             done();
         });
 
@@ -327,6 +354,12 @@ describe("Migrations", function () {
                 JSON.stringify(validV2Data.webApiManager.rules[0].s),
                 JSON.stringify(exampleRule.getStandardIds()),
                 "Blocked standards for www.example.com rule should be maintained through v2 migration."
+            );
+
+            assert.equal(
+                false,
+                prefs.getBlockCrossFrame(),
+                "Migration from v2 data should result in not blocking cross frame acceess."
             );
 
             done();
@@ -365,20 +398,17 @@ describe("Migrations", function () {
                 "Migration from v3 data should result in an empty template."
             );
 
+            assert.equal(
+                false,
+                prefs.getBlockCrossFrame(),
+                "Migration from v4 data should result in not blocking cross frame acceess."
+            );
+
             done();
         });
     });
 
     describe("Handling v4 data", function () {
-        it("Empty data", function (done) {
-            const testData = {};
-            const [success, migratedData] = migrationLib.applyMigrations(testData);
-
-            assert.equal(success, true, "On valid data, migration should return true.");
-            assert.equal(0, Object.keys(migratedData).length, `On given an empty object, ${{}} should be returned}`);
-            done();
-        });
-
         it("Converting to preferences", function (done) {
             const [ignore, migratedData] = migrationLib.applyMigrations(validV4Data);
             const prefs = preferencesLib.fromJSON(JSON.stringify(migratedData.webApiManager));
@@ -391,14 +421,14 @@ describe("Migrations", function () {
 
             const defaultRule = prefs.getDefaultRule();
             assert.equal(
-                JSON.stringify(validV3Data.webApiManager.rules[1].s),
+                JSON.stringify(validV4Data.webApiManager.rules[1].s),
                 JSON.stringify(defaultRule.getStandardIds()),
                 "Blocked standards for the default rule should be maintained through migration."
             );
 
             const exampleRule = prefs.getRuleForPattern("www.example.com");
             assert.equal(
-                JSON.stringify(validV3Data.webApiManager.rules[0].s),
+                JSON.stringify(validV4Data.webApiManager.rules[0].s),
                 JSON.stringify(exampleRule.getStandardIds()),
                 "Blocked standards for www.example.com rule should be maintained through migration."
             );
@@ -407,7 +437,64 @@ describe("Migrations", function () {
             assert.equal(
                 JSON.stringify(template.sort()),
                 JSON.stringify(validV4Data.webApiManager.template),
-                "Templates should be correctly store through JSON translaiton."
+                "Templates should be correctly stored through JSON translaiton."
+            );
+
+            assert.equal(
+                false,
+                prefs.getBlockCrossFrame(),
+                "Migration from v4 data should result in not blocking cross frame acceess."
+            );
+
+            done();
+        });
+    });
+
+    describe("Handling v5 data", function () {
+        it("Empty data", function (done) {
+            const testData = {};
+            const [success, migratedData] = migrationLib.applyMigrations(testData);
+
+            assert.equal(success, true, "On valid data, migration should return true.");
+            assert.equal(0, Object.keys(migratedData).length, `On given an empty object, ${{}} should be returned}`);
+            done();
+        });
+
+        it("Converting to preferences", function (done) {
+            const [ignore, migratedData] = migrationLib.applyMigrations(validV5Data);
+            const prefs = preferencesLib.fromJSON(JSON.stringify(migratedData.webApiManager));
+
+            assert.equal(
+                enums.ShouldLogVal.NONE,
+                prefs.getShouldLog(),
+                "Should log value should be correctly handled through migration."
+            );
+
+            const defaultRule = prefs.getDefaultRule();
+            assert.equal(
+                JSON.stringify(validV5Data.webApiManager.rules[1].s),
+                JSON.stringify(defaultRule.getStandardIds()),
+                "Blocked standards for the default rule should be maintained through migration."
+            );
+
+            const exampleRule = prefs.getRuleForPattern("www.example.com");
+            assert.equal(
+                JSON.stringify(validV5Data.webApiManager.rules[0].s),
+                JSON.stringify(exampleRule.getStandardIds()),
+                "Blocked standards for www.example.com rule should be maintained through migration."
+            );
+
+            const template = prefs.getTemplate();
+            assert.equal(
+                JSON.stringify(template.sort()),
+                JSON.stringify(validV5Data.webApiManager.template),
+                "Templates should be correctly stored through JSON translaiton."
+            );
+
+            assert.equal(
+                true,
+                prefs.getBlockCrossFrame(),
+                "Migration from v5 data should result in blocking cross frame acceess."
             );
 
             done();

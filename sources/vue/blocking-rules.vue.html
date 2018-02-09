@@ -1,57 +1,67 @@
-<div class="patterns-container well">
-    <div class="patterns-blocking-section">
-        <h3>Blocking rules</h3>
-        <template v-if="dataBlockingAnyPatterns.length">
-            <div class="radio" v-for="pattern in dataBlockingAnyPatterns">
-                <label>
+<div class="patterns-container">
+    <div class="patterns-blocking-section card mb-4">
+        <strong class="card-header">
+            Blocking rules
+        </strong>
+
+        <div class="card-body">
+            <template v-if="dataBlockingAnyPatterns.length">
+                <div class="form-check" v-for="pattern in dataBlockingAnyPatterns">
                     <input type="radio"
+                          class="form-check-input"
                         :value="pattern"
                         v-model="dataSelectedPattern"
                         @change="onRadioChange">
-                    {{ pattern }}
+                    <label class="form-check-label">{{ pattern }}</label>
                     <span class="glyphicon glyphicon-remove"
                         v-if="!isDefault(pattern)"
                 :data-pattern="pattern"
                         @click="onRemoveClick"></span>
-                </label>
+                </div>
+            </template>
+            <p v-else>No rules.</p>
+        </div>
+    </div>
+
+    <div class="patterns-allowing-all-section card mb-4">
+        <strong class="card-header">
+            Permitting rules
+        </strong>
+
+        <div class="card-body">
+            <div class="form-group mb-2">
+                <template v-if="dataAllowingAllPatterns.length">
+                    <div class="form-check"
+                        v-for="pattern in dataAllowingAllPatterns">
+                        <input type="radio"
+                            class="form-check-input"
+                            :value="pattern"
+                            v-model="dataSelectedPattern"
+                            @change="onRadioChange">
+                        <label class="form-check-label">{{ pattern }}</label>
+                        <span class="glyphicon glyphicon-remove"
+                            v-if="!isDefault(pattern)"
+                    :data-pattern="pattern"
+                            @click="onRemoveClick"></span>
+                    </div>
+                </template>
+                <p v-else>No rules.</p>
             </div>
-        </template>
-        <p v-else>No rules.</p>
-    </div>
 
-    <div class="patterns-allowing-all-section">
-        <h3>Permitting rules</h3>
-        <template v-if="dataAllowingAllPatterns.length">
-            <div class="radio"
-                v-for="pattern in dataAllowingAllPatterns">
-                <label>
-                    <input type="radio"
-                        :value="pattern"
-                        v-model="dataSelectedPattern"
-                        @change="onRadioChange">
-                    {{ pattern }}
-                    <span class="glyphicon glyphicon-remove"
-                        v-if="!isDefault(pattern)"
-                :data-pattern="pattern"
-                        @click="onRemoveClick"></span>
-                </label>
-            </div>
-        </template>
-        <p v-else>No rules.</p>
+            <div class="alert alert-danger" role="alert" v-if="errorMessage">
+                    {{ errorMessage }}
+                </div>
+            
+                <div class="form-group" v-bind:class="{ 'has-error': errorMessage }">
+                    <label for="newPattern">Add new pattern:</label>
+                    <input class="form-control"
+                    v-model.trim="newPattern"
+                     placeholder="*.example.org">
+                </div>
+            
+                <button type="submit"
+                       class="btn btn-default btn-block"
+                      @click="newPatternSubmitted">Add Rule</button>
+        </div>
     </div>
-
-    <div class="alert alert-danger" role="alert" v-if="errorMessage">
-        {{ errorMessage }}
-    </div>
-
-    <div class="form-group" v-bind:class="{ 'has-error': errorMessage }">
-        <label for="newPattern">Add new pattern</label>
-        <input class="form-control"
-        v-model.trim="newPattern"
-         placeholder="*.example.org">
-    </div>
-
-    <button type="submit"
-           class="btn btn-default btn-block"
-          @click="newPatternSubmitted">Add Rule</button>
 </div>

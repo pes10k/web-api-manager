@@ -90,7 +90,7 @@ Version 4
 ```
 {
     "webApiManager": {
-        "schema": 3,
+        "schema": 4,
         "rules": [
             {
                 "p": "the match pattern this rule applies to, <string>",
@@ -114,6 +114,39 @@ Version 4
             integer id of another standard, taken from the info.id property,
             etc...
         ]
+    }
+}
+```
+
+Version 5
+---
+```
+    "webApiManager": {
+        "schema": 5,
+        "rules": [
+            {
+                "p": "the match pattern this rule applies to, <string>",
+                "s": [
+                    integer id of a standard, taken from the info.id property,
+                    integer id of another standard, taken from the info.id property,
+                    etc...
+                ]
+            },
+            {
+                "p": ...
+                "s": [
+                    ...
+                ]
+            },
+            ...
+        ],
+        "shouldLog": "0" | "1" | "2" (a ShouldLogVal enum),
+        "template": [
+            integer id of a standard, taken from the info.id property,
+            integer id of another standard, taken from the info.id property,
+            etc...
+        ],
+        "blockCrossFrame": (boolean)
     }
 }
 ```

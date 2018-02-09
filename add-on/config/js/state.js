@@ -49,6 +49,22 @@
     };
 
     /**
+     * Sends a message to the background script, telling that "true" version
+     * of the user's preferences that the user has changed their
+     * "block cross frame"  setting.
+     *
+     * @param {boolean} blockCrossFrame
+     *   Whether the user wants to block cross-frame access.
+     *
+     * @return {undefined}
+     */
+    const updateBackgroundProcessOfBlockCrossFrameChange = blockCrossFrame => {
+        rootObject.runtime.sendMessage(["updatePreferencesBlockCrossFrame", {
+            blockCrossFrame,
+        }]);
+    };
+
+    /**
      * Sends a message to the background script that the user's template value
      * has been updated.
      *
@@ -77,8 +93,8 @@
             .filter(rule => rule.getStandardIds().length !== 0)
             .map(rule => rule.pattern);
         state.dataTemplate = preferences.getTemplate();
+        state.dataBlockCrossFrame = preferences.getBlockCrossFrame();
         state.preferences = preferences;
-
         return state;
     };
 
@@ -92,6 +108,7 @@
         const currentRule = getCurrentRule(state);
         state.dataCurrentStandardIds = currentRule.getStandardIds();
         state.dataShouldLog = state.preferences.getShouldLog();
+        state.dataBlockCrossFrame = state.preferences.getBlockCrossFrame();
         state.dataAllowingAllPatterns = state.preferences.getAllRules()
             .filter(rule => rule.getStandardIds().length === 0)
             .map(rule => rule.pattern);
@@ -167,6 +184,12 @@
         notifyBackgroundProcessOfNewRules("update", state.preferences.getRuleForPattern(pattern));
     };
 
+    const setBlockCrossFrame = (state, blockCrossFrame) => {
+        state.preferences.setBlockCrossFrame(blockCrossFrame);
+        resyncWithPrefs(state);
+        updateBackgroundProcessOfBlockCrossFrameChange(state.preferences.getBlockCrossFrame());
+    };
+
     window.WEB_API_MANAGER.stateLib = {
         init,
         resyncWithPrefs,
@@ -179,5 +202,6 @@
         addPattern,
         setShouldLog,
         setStandardIdsForPattern,
+        setBlockCrossFrame,
     };
 }());

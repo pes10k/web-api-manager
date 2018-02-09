@@ -1,36 +1,41 @@
 <div class="web-api-standards-container">
+
     <h3>Pattern: <code>{{ dataSelectedPattern }}</code></h3>
 
-    <ul class="list-group form-horizontal">
+    <ul class="list-group form-horizontal mb-4">
         <li class="list-group-item">
-            <h4 class="list-group-item-heading">Suggested configurations</h4>
-            <button @click="onLiteClicked" :disabled="isPassiveMode">
-                Use lite settings
-            </button>
-            <button @click="onConservativeClicked" :disabled="isPassiveMode">
-                Use conservative settings
-            </button>
-            <button @click="onAggressiveClicked" :disabled="isPassiveMode">
-                Use aggressive settings
-            </button>
-            <div class="help-block">
+            <h5 class="list-group-item-heading">Suggested configurations</h5>
+            <div class="form-group">
+                <button @click="onLiteClicked" :disabled="isPassiveMode">
+                    Use lite settings
+                </button>
+                <button @click="onConservativeClicked" :disabled="isPassiveMode">
+                    Use conservative settings
+                </button>
+                <button @click="onAggressiveClicked" :disabled="isPassiveMode">
+                    Use aggressive settings
+                </button>
+            </div>
+            <p class="form-text text-muted">
                 <strong>Lite</strong> is designed to have a minimal
                 impact on typical browsing while still providing
                 security and privacy improvements.
                 <strong>Conservative</strong> and <strong>Aggressive</strong>
                 provide extra protections, though will impact the
                 functionality of more sites.
-            </div>
+            </p>
         </li>
         <li class="list-group-item">
-            <h4 class="list-group-item-heading">Custom configurations</h4>
-            <button @click="onSaveTemplateClicked" :disable="isPassiveMode">
-                Save template
-            </button>
-            <button @click="onApplyTemplateClicked" :disable="isPassiveMode">
-                Apply template ({{ dataTemplate.length === 1 ? "1 standard" : dataTemplate.length.toString() + " standards" }})
-            </button>
-            <p class="help-block">
+            <h5 class="list-group-item-heading">Custom configurations</h5>
+            <div class="form-group">
+                <button @click="onSaveTemplateClicked" :disable="isPassiveMode">
+                    Save template
+                </button>
+                <button @click="onApplyTemplateClicked" :disable="isPassiveMode">
+                    Apply template ({{ dataTemplate.length === 1 ? "1 standard" : dataTemplate.length.toString() + " standards" }})
+                </button>
+            </div>
+            <p class="form-text text-muted">
                 The template is a set of standards to block that you
                 easily reapply to other domains.  <strong>Saving</strong> a template
                 will copy the currently selected standards, and <strong>Applying</strong>
@@ -38,52 +43,59 @@
             </p>
         </li>
         <li class="list-group-item">
-            <h4 class="list-group-item-heading">Frequent actions</h4>
-            <button @click="onClearClicked" :disabled="isPassiveMode">
-                Clear settings
-            </button>
-            <button @click="onAllClicked" :disabled="isPassiveMode">
-                Block all
-            </button>
+            <h5 class="list-group-item-heading">Frequent actions</h5>
+            <div class="form-group">
+                <button @click="onClearClicked" :disabled="isPassiveMode">
+                    Clear settings
+                </button>
+                <button @click="onAllClicked" :disabled="isPassiveMode">
+                    Block all
+                </button>
+            </div>
         </li>
     </ul>
 
-    <div class="panel panel-default" v-for="categoryId in sortedCategoryIds">
-        <div class="panel-heading">
+    <div class="card mb-4" v-for="categoryId in sortedCategoryIds">
+        <strong class="card-header">
             {{ getCategoryLib().titleForCategoryId(categoryId) }}
 
             <button v-if="areAllStandardsInCategoryBlocked(categoryId)"
                   @click="toggleCategory($event, false, categoryId)"
                :disabled="isPassiveMode"
-                   class="pull-right toggle-button toggle-button-allow">
+                   class="float-right toggle-button toggle-button-allow">
                 Allow all
             </button>
-            <button @click="toggleCategory($event, true, categoryId)"
-                     class="pull-right toggle-button toggle-button-block"
-                     v-else>
+            <button v-else
+                   @click="toggleCategory($event, true, categoryId)"
+                    class="float-right toggle-button toggle-button-block">
                 Block all
             </button>
-        </div>
+        </strong>
 
-        <ul class="list-group">
+        <ul class="list-group list-group-flush">
             <li class="list-group-item web-api-standards-group"
                 v-for="standardId in sortedStandardIdsInCategory(categoryId)">
+
                 <span v-if="getStandardsLib().urlForStandardId(standardId)"
-                     class="badge">
+                    class="badge badge-pill badge-secondary float-right">
                     <a :href="getStandardsLib().urlForStandardId(standardId)">info</a>
                 </span>
 
-                <input type="checkbox"
-                     :value="standardId"
-                    v-model="dataCurrentStandardIds"
-                  :disabled="isPassiveMode"
-                    @change="onStandardChecked">
-                {{ getStandardsLib().nameForStandardId(standardId) }}
+                <div class="form-check">
+                    <input type="checkbox"
+                          class="form-check-input"
+                         :value="standardId"
+                        v-model="dataCurrentStandardIds"
+                      :disabled="isPassiveMode"
+                        @change="onStandardChecked">
+                    <label class="form-check-label">
+                        {{ getStandardsLib().nameForStandardId(standardId) }}
+                    </label>
+                </div>
+            </li>
+            <li class="list-group-item list-group-item-light">
+                {{ getCategoryLib().descriptionForCategoryId(categoryId) }}
             </li>
         </ul>
-
-        <div class="panel-footer">
-            {{ getCategoryLib().descriptionForCategoryId(categoryId) }}
-        </div>
     </div>
 </div>

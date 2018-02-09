@@ -64,6 +64,12 @@
  * @param {function(): ShouldLogVal} getShouldLog
  *   Returns whether the system is currently configured to log
  *   what standards / features are blocked.
+ * @param {function(): boolean} getBlockCrossFrame
+ *   Gets whether the system should block frames from access the DOM of other
+ *   frames.
+ * @param {function(boolean): undefined} setBlockCrossFrame
+ *   Sets whether the system should block frames from access the DOM of other
+ *   frames.
  * @param {function(): object} toStorage
  *   Returns an encoding of the preferences object that can be saved
  *   using the storage API.

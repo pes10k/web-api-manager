@@ -56,17 +56,21 @@
      * @param {?Array.number} template
      *   An optional array of standard ids that can be used as a template
      *   rule, that can applied to other domains / patterns.
+     * @param {?boolean} blockCrossFrame
+     *   A boolean value, describing whether cross frame access should be
+     *   blocked.  Defaults to false.
      * @param {?boolean} syncWithDb
      *   A boolean value, describing whether the given preferences object
      *   should automatically be kept in sync with the underlying, persistant
-     *   data store.  If no value is provided,
+     *   data store.  If no value is provided, will not sync.
      *
      * @return {Preferences}
      *   An initilized, preferences object.
      */
-    const init = (blockRulesRaw = [], shouldLog, template, syncWithDb) => {
+    const init = (blockRulesRaw = [], shouldLog, template, blockCrossFrame, syncWithDb) => {
         let shouldLogLocal = shouldLog || enums.shouldLog.NONE;
         let templateLocal = template.slice() || [];
+        let blockCrossFrameLocal = blockCrossFrame;
 
         let defaultRule;
         const nonDefaultRules = [];
@@ -171,6 +175,12 @@
             templateLocal = templateStandardIds.slice();
         };
 
+        const getBlockCrossFrame = () => blockCrossFrameLocal;
+
+        const setBlockCrossFrame = blockCrossFrame => {
+            blockCrossFrameLocal = !!blockCrossFrame;
+        };
+
         const toJSON = () => {
             const rulesData = getAllRules().map(rule => rule.toData());
 
@@ -178,6 +188,7 @@
                 rules: rulesData,
                 shouldLog: getShouldLog(),
                 template: getTemplate(),
+                blockCrossFrame: getBlockCrossFrame(),
             });
         };
 
@@ -187,6 +198,7 @@
                 rules: getAllRules().map(rule => rule.toData()),
                 shouldLog: getShouldLog(),
                 template: getTemplate(),
+                blockCrossFrame: getBlockCrossFrame(),
             };
         };
 
@@ -204,12 +216,15 @@
             getShouldLog,
             getTemplate,
             setTemplate,
+            getBlockCrossFrame,
+            setBlockCrossFrame,
             toStorage,
             toJSON,
         };
 
         if (syncWithDb === true) {
-            const modifyingMethods = ["deleteRule", "addRule", "upcertRule", "setShouldLog"];
+            const modifyingMethods = ["deleteRule", "addRule", "upcertRule",
+                "setShouldLog", "setBlockCrossFrame"];
             modifyingMethods.forEach(methodName => {
                 response[methodName] = resync(response[methodName]);
             });
@@ -247,6 +262,7 @@
             let blockRulesRaw = [];
             let template = [];
             let shouldLog = enums.ShouldLogVal.NONE;
+            let blockCrossFrame = false;
 
             if (migratedData &&
                     migratedData[storageKey] &&
@@ -254,9 +270,10 @@
                 blockRulesRaw = migratedData[storageKey].rules;
                 shouldLog = migratedData[storageKey].shouldLog;
                 template = migratedData[storageKey].template;
+                blockCrossFrame = !!migratedData[storageKey].blockCrossFrame;
             }
 
-            instance = init(blockRulesRaw, shouldLog, template, true);
+            instance = init(blockRulesRaw, shouldLog, template, blockCrossFrame, true);
 
             if (callback !== undefined) {
                 callback(instance);
@@ -310,8 +327,8 @@
             throw `Invalid preferences JSON: ${jsonString} does not have an array for a rule template.`;
         }
 
-        const {rules, shouldLog, template} = data;
-        return init(rules, shouldLog, template, false);
+        const {rules, shouldLog, template, blockCrossFrame} = data;
+        return init(rules, shouldLog, template, blockCrossFrame, false);
     };
 
     /**
