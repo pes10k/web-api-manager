@@ -6,13 +6,13 @@
         <li class="list-group-item">
             <h5 class="list-group-item-heading">Suggested configurations</h5>
             <div class="form-group">
-                <button @click="onLiteClicked" :disabled="isPassiveMode">
+                <button @click="onLiteClicked" :disabled="isPassiveMode" class="btn btn-default">
                     Use lite settings
                 </button>
-                <button @click="onConservativeClicked" :disabled="isPassiveMode">
+                <button @click="onConservativeClicked" :disabled="isPassiveMode" class="btn btn-default">
                     Use conservative settings
                 </button>
-                <button @click="onAggressiveClicked" :disabled="isPassiveMode">
+                <button @click="onAggressiveClicked" :disabled="isPassiveMode" class="btn btn-default">
                     Use aggressive settings
                 </button>
             </div>
@@ -28,10 +28,10 @@
         <li class="list-group-item">
             <h5 class="list-group-item-heading">Custom configurations</h5>
             <div class="form-group">
-                <button @click="onSaveTemplateClicked" :disable="isPassiveMode">
+                <button @click="onSaveTemplateClicked" :disable="isPassiveMode" class="btn btn-default">
                     Save template
                 </button>
-                <button @click="onApplyTemplateClicked" :disable="isPassiveMode">
+                <button @click="onApplyTemplateClicked" :disable="isPassiveMode" class="btn btn-default">
                     Apply template ({{ dataTemplate.length === 1 ? "1 standard" : dataTemplate.length.toString() + " standards" }})
                 </button>
             </div>
@@ -45,10 +45,10 @@
         <li class="list-group-item">
             <h5 class="list-group-item-heading">Frequent actions</h5>
             <div class="form-group">
-                <button @click="onClearClicked" :disabled="isPassiveMode">
+                <button @click="onClearClicked" :disabled="isPassiveMode" class="btn btn-default">
                     Clear settings
                 </button>
-                <button @click="onAllClicked" :disabled="isPassiveMode">
+                <button @click="onAllClicked" :disabled="isPassiveMode" class="btn btn-default">
                     Block all
                 </button>
             </div>
@@ -62,12 +62,12 @@
             <button v-if="areAllStandardsInCategoryBlocked(categoryId)"
                   @click="toggleCategory($event, false, categoryId)"
                :disabled="isPassiveMode"
-                   class="float-right toggle-button toggle-button-allow">
+                   class="float-right btn btn-sm btn-default toggle-button toggle-button-allow">
                 Allow all
             </button>
             <button v-else
                    @click="toggleCategory($event, true, categoryId)"
-                    class="float-right toggle-button toggle-button-block">
+                    class="float-right btn btn-sm btn-default toggle-button toggle-button-block">
                 Block all
             </button>
         </strong>

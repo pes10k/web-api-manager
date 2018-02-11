@@ -94,7 +94,7 @@
 
         const actionsTd = doc.createElement("td");
         const toggleButton = doc.createElement("button");
-        toggleButton.className = "btn btn-default btn-xs block-toggle";
+        toggleButton.className = "btn btn-default block-toggle btn-sm";
 
         const isAllowingAll = numAPIsBlocked === 0;
 
