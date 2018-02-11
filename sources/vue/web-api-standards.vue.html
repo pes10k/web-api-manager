@@ -75,12 +75,6 @@
         <ul class="list-group list-group-flush">
             <li class="list-group-item web-api-standards-group"
                 v-for="standardId in sortedStandardIdsInCategory(categoryId)">
-
-                <span v-if="getStandardsLib().urlForStandardId(standardId)"
-                    class="badge badge-pill badge-secondary float-right">
-                    <a :href="getStandardsLib().urlForStandardId(standardId)">info</a>
-                </span>
-
                 <div class="form-check">
                     <input type="checkbox"
                           class="form-check-input"
@@ -91,6 +85,11 @@
                     <label class="form-check-label">
                         {{ getStandardsLib().nameForStandardId(standardId) }}
                     </label>
+                    <a v-if="getStandardsLib().urlForStandardId(standardId)"
+                    class="badge badge-pill badge-secondary float-right"
+                     :href="getStandardsLib().urlForStandardId(standardId)">
+                        info
+                    </a>
                 </div>
             </li>
             <li class="list-group-item list-group-item-light">

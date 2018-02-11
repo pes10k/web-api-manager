@@ -7,19 +7,20 @@
         <div class="card-body">
             <template v-if="dataBlockingAnyPatterns.length">
                 <div class="form-check" v-for="pattern in dataBlockingAnyPatterns">
+                    <a class="badge badge-pill badge-secondary float-right"
+                        href="#"
+                        v-if="!isDefault(pattern)"
+               :data-pattern="pattern"
+                      @click="onRemoveClick">-</a>
                     <input type="radio"
                           class="form-check-input"
                         :value="pattern"
                         v-model="dataSelectedPattern"
                         @change="onRadioChange">
                     <label class="form-check-label">{{ pattern }}</label>
-                    <span class="glyphicon glyphicon-remove"
-                        v-if="!isDefault(pattern)"
-                :data-pattern="pattern"
-                        @click="onRemoveClick"></span>
                 </div>
             </template>
-            <p v-else>No rules.</p>
+            <div v-else class="alert alert-info">No rules.</div>
         </div>
     </div>
 
@@ -33,19 +34,20 @@
                 <template v-if="dataAllowingAllPatterns.length">
                     <div class="form-check"
                         v-for="pattern in dataAllowingAllPatterns">
+                        <a class="badge badge-pill badge-secondary float-right"
+                            href="#"
+                            v-if="!isDefault(pattern)"
+                    :data-pattern="pattern"
+                            @click="onRemoveClick">-</a>
                         <input type="radio"
                             class="form-check-input"
                             :value="pattern"
                             v-model="dataSelectedPattern"
                             @change="onRadioChange">
                         <label class="form-check-label">{{ pattern }}</label>
-                        <span class="glyphicon glyphicon-remove"
-                            v-if="!isDefault(pattern)"
-                    :data-pattern="pattern"
-                            @click="onRemoveClick"></span>
                     </div>
                 </template>
-                <p v-else>No rules.</p>
+                <div v-else class="alert alert-info">No rules.</div>
             </div>
 
             <div class="alert alert-danger" role="alert" v-if="errorMessage">
