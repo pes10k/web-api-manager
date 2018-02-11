@@ -53,7 +53,7 @@
             defaultPattern: "(default)",
 
             // Version of schema used when serializing preferences to storage.
-            schemaVersion: 5,
+            schemaVersion: 6,
         },
         enums: {
             utils: {

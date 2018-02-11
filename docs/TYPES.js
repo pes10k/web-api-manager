@@ -102,6 +102,12 @@
  *   Returns a new array of the standard ids being blocked by this rule.
  * @property {function(Array.number): undefined} setStandardIds
  *   Sets the standard ids that should be blocked by this rule.
+ * @property {function(): Array.FeaturePath} getBlockedFeatures
+ *   Returns an array of strings describing paths to features in the DOM
+ *   to block.  The returned array will be sorted in string order.
+ * @property {function(Array.FeaturePath): undefined} setBlockedFeatures
+ *   Sets an array of paths to features in the DOM that should be blocked
+ *   for domains that match this blocking rule.
  */
 
 /**

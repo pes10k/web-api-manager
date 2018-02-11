@@ -115,8 +115,8 @@
     };
 
     /**
-     * Creates a new object, with the settings store in the give v-3 preferences
-     * data, but in the v-4 format.
+     * Creates a new object, with the settings stored in the extensions version
+     * 3 preferences, but updated to support the version 4 schema.
      *
      * In practice, this really just creates an empty array at
      * webApiManager.template.
@@ -135,10 +135,49 @@
         return Object.freeze(migratedData);
     };
 
+    /**
+     * Creates a new object, with the settings stored in the extensions version
+     * 4 preferences, but updated to support the version 5 schema.
+     *
+     * The only change this function makes is to add a blockCrossFrame
+     * property, defaulting to `false`.
+     *
+     * @param {object} data
+     *   Persistent data loaded from the storage API in the extension.
+     *
+     * @return {object}
+     *   A new read only object, describing the same preferences, but in the
+     *   schema 5 format.
+     */
     const fourToFive = data => {
         const migratedData = JSON.parse(JSON.stringify(data));
         migratedData.webApiManager.schema = 5;
         migratedData.webApiManager.blockCrossFrame = false;
+        return Object.freeze(migratedData);
+    };
+
+    /**
+     * Creates a new object, with the settings stored in the extensions version
+     * 5 preferences, but updated to support the version 6 schema.
+     *
+     * This function will add an empty "custom features" array too all the
+     * blocking rules stored in the saved preferences data.
+     *
+     * @param {object} data
+     *   Persistent data loaded from the storage API in the extension.
+     *
+     * @return {object}
+     *   A new read only object, describing the same preferences, but in the
+     *   schema 6 format.
+     */
+    const fiveToSix = data => {
+        const migratedData = JSON.parse(JSON.stringify(data));
+        migratedData.webApiManager.schema = 6;
+        const rules = migratedData.webApiManager.rules;
+        migratedData.webApiManager.rules = rules.map(aRule => {
+            aRule.f = [];
+            return aRule;
+        });
         return Object.freeze(migratedData);
     };
 
@@ -170,6 +209,7 @@
             twoToThree,
             threeToFour,
             fourToFive,
+            fiveToSix,
         ];
 
         let currentMigratedVersion = foundDataVersion;

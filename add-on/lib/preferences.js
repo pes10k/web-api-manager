@@ -59,6 +59,9 @@
      * @param {?boolean} blockCrossFrame
      *   A boolean value, describing whether cross frame access should be
      *   blocked.  Defaults to false.
+     * @param {?Array.string} blockedFeatures
+     *   An array of strings representing key paths to features in the DOM
+     *   that should be blocked.
      * @param {?boolean} syncWithDb
      *   A boolean value, describing whether the given preferences object
      *   should automatically be kept in sync with the underlying, persistant
@@ -67,10 +70,11 @@
      * @return {Preferences}
      *   An initilized, preferences object.
      */
-    const init = (blockRulesRaw = [], shouldLog, template, blockCrossFrame, syncWithDb) => {
+    const init = (blockRulesRaw = [], shouldLog, template, blockCrossFrame, blockedFeatures, syncWithDb) => {
         let shouldLogLocal = shouldLog || enums.shouldLog.NONE;
         let templateLocal = template.slice() || [];
-        let blockCrossFrameLocal = blockCrossFrame;
+        let blockCrossFrameLocal = !!blockCrossFrame;
+        let blockedFeaturesLocal = blockedFeatures || [];
 
         let defaultRule;
         const nonDefaultRules = [];
@@ -265,6 +269,7 @@
             let template = [];
             let shouldLog = enums.ShouldLogVal.NONE;
             let blockCrossFrame = false;
+            let blockedFeatures = [];
 
             if (migratedData &&
                     migratedData[storageKey] &&
@@ -273,9 +278,11 @@
                 shouldLog = migratedData[storageKey].shouldLog;
                 template = migratedData[storageKey].template;
                 blockCrossFrame = !!migratedData[storageKey].blockCrossFrame;
+                blockedFeatures = migratedData[storageKey].blockedFeatures;
             }
 
-            instance = init(blockRulesRaw, shouldLog, template, blockCrossFrame, true);
+            instance = init(blockRulesRaw, shouldLog, template, blockCrossFrame,
+                            blockedFeatures, true);
 
             if (callback !== undefined) {
                 callback(instance);
@@ -329,8 +336,8 @@
             throw `Invalid preferences JSON: ${jsonString} does not have an array for a rule template.`;
         }
 
-        const {rules, shouldLog, template, blockCrossFrame} = data;
-        return init(rules, shouldLog, template, blockCrossFrame, false);
+        const {rules, shouldLog, template, blockCrossFrame, featureExceptions, blockedFeatures} = data;
+        return init(rules, shouldLog, template, blockCrossFrame, blockedFeatures, false);
     };
 
     /**

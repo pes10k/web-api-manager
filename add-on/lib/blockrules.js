@@ -128,23 +128,20 @@
      *
      * @param {MatchPattern} matchPattern
      *   A string describing which domains this rule should apply to.
-     * @param {Array.number} standardIds
+     * @param {?Array.number} standardIds
      *   An array of integers, each describing a standard that should be
      *   blocked.
+     * @param {?Array.FeaturePath} blockedFeatures
+     *   An array of strings, describing features that should be blocked
+     *   in this rule, even if their containing standard is allowed.
      *
      * @return {BlockRule}
      *   A block rule object, configured to block the given standards on
      *   domains matching the match pattern.
      */
-    const init = (matchPattern, standardIds) => {
+    const init = (matchPattern, standardIds, blockedFeatures) => {
         let localStandardIds = standardIds.slice() || [];
-
-        const toData = () => {
-            return Object.assign({}, {
-                p: matchPattern,
-                s: localStandardIds.sort((a, b) => (a - b)),
-            });
-        };
+        let localBlockedFeatures = blockedFeatures.slice() || [];
 
         const toJSON = () => {
             return JSON.stringify(toData());
@@ -154,13 +151,29 @@
             localStandardIds = newStandardIds;
         };
 
-        const getStandardIds = () => localStandardIds.slice();
+        const getStandardIds = () => localStandardIds.sort((a, b) => (a - b));
+
+        const setBlockedFeatures = blockedFeatures => {
+            localBlockedFeatures = blockedFeatures;
+        };
+
+        const getBlockedFeatures = () => localBlockedFeatures.sort();
+
+        const toData = () => {
+            return Object.assign({}, {
+                p: matchPattern,
+                s: getStandardIds(),
+                f: getBlockedFeatures(),
+            });
+        };
 
         return Object.freeze({
             toData,
             toJSON,
             setStandardIds,
             getStandardIds,
+            setBlockedFeatures,
+            getBlockedFeatures,
             pattern: matchPattern,
             isMatchingHost: testPatternWithHost.bind(undefined, matchPattern),
             isMatchingUrl: testPatternWithUrl.bind(undefined, matchPattern),
@@ -182,16 +195,23 @@
      *   `BlockRule.toData`.
      */
     const fromData = object => {
-        if (object.p === undefined || object.s === undefined) {
-            throw `'Data is not a valid BlockRule: expected to find "p" and "s" properties`;
+        if (object.p === undefined ||
+                object.s === undefined ||
+                object.f === undefined) {
+            throw `'Data is not a valid BlockRule: expected to find "p", "s" and "f" properties.`;
         }
 
         if (Array.isArray(object.s) === false ||
                 object.s.every(value => typeof value === "number") === false) {
-            throw `Data is not a valid BlockRule: the "s" property should be an array of standardIds`;
+            throw `Data is not a valid BlockRule: the "s" property should be an array of standard ids.`;
         }
 
-        return init(object.p, object.s);
+        if (Array.isArray(object.f) === false ||
+                object.every(value => typeof value === "string") === false) {
+            throw `Data is not a valid BlockRule: the "f" property should contain an array of strings, describing features to block.`;
+        }
+
+        return init(object.p, object.s, object.f);
     };
 
     /**
