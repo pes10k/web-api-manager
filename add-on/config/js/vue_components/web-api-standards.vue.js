@@ -6,7 +6,8 @@
     const Vue = window.Vue;
 
     Vue.component("web-api-standards", {
-        props: ["dataCurrentStandardIds", "dataSelectedPattern", "dataShouldLog", "dataTemplate"],
+        props: ["dataCurrentStandardIds", "dataSelectedPattern",
+                "dataShouldLog", "dataTemplate", "dataCurrentCustomBlockedFeatures"],
         render: window.WEB_API_MANAGER.vueComponents["web-api-standards"].render,
         staticRenderFns: window.WEB_API_MANAGER.vueComponents["web-api-standards"].staticRenderFns,
         computed: {
@@ -82,6 +83,11 @@
             onApplyTemplateClicked: function () {
                 const state = this.$root.$data;
                 stateLib.setCurrentStandardIds(state, state.preferences.getTemplate());
+            },
+            onCustomBlockedFeaturesChange: function  () {
+                const state = this.$root.$data;
+                const customBlockedFeatures = this.dataCurrentCustomBlockedFeatures;
+                stateLib.setCustomBlockedFeatures(state, state.preferences.get());
             },
         },
     });

@@ -140,8 +140,8 @@
      *   domains matching the match pattern.
      */
     const init = (matchPattern, standardIds, blockedFeatures) => {
-        let localStandardIds = standardIds.slice() || [];
-        let localBlockedFeatures = blockedFeatures.slice() || [];
+        let localStandardIds = standardIds ? standardIds.slice() : [];
+        let localBlockedFeatures = blockedFeatures ? blockedFeatures.slice() : [];
 
         const toJSON = () => {
             return JSON.stringify(toData());
@@ -153,17 +153,17 @@
 
         const getStandardIds = () => localStandardIds.sort((a, b) => (a - b));
 
-        const setBlockedFeatures = blockedFeatures => {
+        const setCustomBlockedFeatures = blockedFeatures => {
             localBlockedFeatures = blockedFeatures;
         };
 
-        const getBlockedFeatures = () => localBlockedFeatures.sort();
+        const getCustomBlockedFeatures = () => localBlockedFeatures.sort();
 
         const toData = () => {
             return Object.assign({}, {
                 p: matchPattern,
                 s: getStandardIds(),
-                f: getBlockedFeatures(),
+                f: getCustomBlockedFeatures(),
             });
         };
 
@@ -172,8 +172,8 @@
             toJSON,
             setStandardIds,
             getStandardIds,
-            setBlockedFeatures,
-            getBlockedFeatures,
+            setCustomBlockedFeatures,
+            getCustomBlockedFeatures,
             pattern: matchPattern,
             isMatchingHost: testPatternWithHost.bind(undefined, matchPattern),
             isMatchingUrl: testPatternWithUrl.bind(undefined, matchPattern),
@@ -207,7 +207,7 @@
         }
 
         if (Array.isArray(object.f) === false ||
-                object.every(value => typeof value === "string") === false) {
+                object.f.every(value => typeof value === "string") === false) {
             throw `Data is not a valid BlockRule: the "f" property should contain an array of strings, describing features to block.`;
         }
 

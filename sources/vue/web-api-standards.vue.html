@@ -98,10 +98,47 @@
         </ul>
     </div>
 
-    <div class="card mb-4" id="custom-blocked-features">
+    <div class="card mb-4" id="custom-blocked-features-container">
         <strong class="card-header">
             Custom blocked features
         </strong>
 
+        <div class="card-body">
+            <div class="form-group">
+                <label for="custom-blocked-features">
+                    Custom blocked features
+                </label>
+                <textarea
+                    class="form-control"
+                       id="custom-blocked-features"
+                     rows="3"
+                  v-model="dataCurrentCustomBlockedFeatures"
+                  @change="onCustomBlockedFeaturesChange"></textarea>
+                <div class="form-text text-muted">
+                    <p>
+                        For advanced users, you can enter additional features
+                        that should be blocked for domains matching this rule here.
+                        This can be used to block subsets of features from a larger
+                        standard, without blocking <em>every</em> feature from the
+                        standard.
+                    </p>
+                    <p>
+                        Enter each path, on per line.  For example, to block
+                        the ability of sites to take fine grained timestamps
+                        using the <code>now</code> method in the
+                        <a href="https://www.w3.org/TR/hr-time/">High Resolution
+                        Time Level 2</a> standard, but without blocking the
+                        rest of the standard, you could enter
+                        <code>Performance.prototype.now</code>.
+                    </p>
+
+                    <p>
+                        As a warning, this is an <strong>advanced feature</strong>,
+                        and the values entered here are not validated or checked
+                        for correctness.  Make sure you know what you're doing 🤣.
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

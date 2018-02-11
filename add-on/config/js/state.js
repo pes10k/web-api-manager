@@ -82,10 +82,12 @@
 
     const init = preferences => {
         const state = Object.create(null);
+        const defaultRule = preferences.getDefaultRule();
         state.dataSelectedPattern = defaultPattern;
-        state.dataCurrentStandardIds = preferences.getDefaultRule().getStandardIds();
+        state.dataCurrentStandardIds = defaultRule.getStandardIds();
         state.dataPatterns = preferences.getAllRules().map(rule => rule.pattern).sort();
         state.dataShouldLog = preferences.getShouldLog();
+        state.dataCurrentCustomBlockedFeatures = defaultRule.getCustomBlockedFeatures();
         state.dataAllowingAllPatterns = preferences.getAllRules()
             .filter(rule => rule.getStandardIds().length === 0)
             .map(rule => rule.pattern);
@@ -108,6 +110,7 @@
         const currentRule = getCurrentRule(state);
         state.dataCurrentStandardIds = currentRule.getStandardIds();
         state.dataShouldLog = state.preferences.getShouldLog();
+        state.dataCurrentCustomBlockedFeatures = currentRule.getCustomBlockedFeatures();
         state.dataBlockCrossFrame = state.preferences.getBlockCrossFrame();
         state.dataAllowingAllPatterns = state.preferences.getAllRules()
             .filter(rule => rule.getStandardIds().length === 0)
@@ -190,6 +193,16 @@
         updateBackgroundProcessOfBlockCrossFrameChange(state.preferences.getBlockCrossFrame());
     };
 
+    const setCustomBlockedFeatures = (state, customBlockedFeatures) => {
+        const blockedFeaturePaths = customBlockedFeatures
+            .trim()
+            .split("\n")
+            .map(elm => elm.trim());
+        state.preferences.setCustomBlockedFeatures(blockedFeaturePaths);
+        resyncWithPrefs(state);
+        notifyBackgroundProcessOfNewRules("update", state.preferences.getRuleForPattern(pattern));
+    };
+
     window.WEB_API_MANAGER.stateLib = {
         init,
         resyncWithPrefs,
@@ -203,5 +216,6 @@
         setShouldLog,
         setStandardIdsForPattern,
         setBlockCrossFrame,
+        setCustomBlockedFeatures,
     };
 }());

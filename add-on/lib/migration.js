@@ -178,6 +178,7 @@
             aRule.f = [];
             return aRule;
         });
+        console.log(migratedData);
         return Object.freeze(migratedData);
     };
 
