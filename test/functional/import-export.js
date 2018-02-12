@@ -11,9 +11,9 @@ const svgId = 63;
 const ambientLightSensorId = 2;
 const webGLId = 73;
 
-const emptyRuleSet = `[{"p":"(default)","s":[]}]`;
-const blockingSVGandBeacon = `[{"p":"(default)","s":[${beaconId},${svgId}]}]`;
-const newDomainImport = `[{"p":"*.example.com","s":[${ambientLightSensorId},${webGLId}]}]`;
+const emptyRuleSet = `[{"p":"(default)","s":[],"f":[]}]`;
+const blockingSVGandBeacon = `[{"p":"(default)","s":[${beaconId},${svgId}],"f":[]}]`;
+const newDomainImport = `[{"p":"*.example.com","s":[${ambientLightSensorId},${webGLId}],"f":[]}]`;
 
 const promiseOpenImportExportTab = function (driver) {
     return utils.promiseExtensionConfigPage(driver)

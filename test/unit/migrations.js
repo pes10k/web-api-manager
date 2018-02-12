@@ -108,6 +108,27 @@ const validV5Data = {
     },
 };
 
+const validV6Data = {
+    webApiManager: {
+        schema: 6,
+        shouldLog: enums.ShouldLogVal.NONE,
+        rules: [
+            {
+                p: "www.example.com",
+                s: [1, 2, 3],
+                f: ["Performance.prototype.now"],
+            },
+            {
+                p: "(default)",
+                s: [4, 5, 6],
+                f: ["HTMLCanvasElement.prototype.toBlob"],
+            },
+        ],
+        template: [7, 8, 9],
+        blockCrossFrame : true,
+    },
+};
+
 
 describe("Migrations", function () {
     describe("Handling invalid data", function () {
@@ -286,14 +307,20 @@ describe("Migrations", function () {
             assert.equal(
                 JSON.stringify([31, 55, 70]),
                 JSON.stringify(defaultRule.getStandardIds()),
-                "All three standards for (default) should be migrated from v1 to v2"
+                "All three standards for (default) should be migrated from v1"
             );
 
             const csUicRule = prefs.getRuleForPattern("cs.uic.edu");
             assert.equal(
                 JSON.stringify([2, 63]),
                 JSON.stringify(csUicRule.getStandardIds()),
-                "Both standards for 'cs.uic.edu' should be migrated from v1 to v2"
+                "Both standards for 'cs.uic.edu' should be migrated from v1"
+            );
+
+            assert.equal(
+                JSON.stringify([]),
+                JSON.stringify(csUicRule.getCustomBlockedFeatures()),
+                "By default, migrated rules should have no custom blocked features"
             );
 
             assert.equal(
@@ -357,6 +384,12 @@ describe("Migrations", function () {
             );
 
             assert.equal(
+                JSON.stringify([]),
+                JSON.stringify(exampleRule.getCustomBlockedFeatures()),
+                "By default, migrated rules should have no custom blocked features"
+            );
+
+            assert.equal(
                 false,
                 prefs.getBlockCrossFrame(),
                 "Migration from v2 data should result in not blocking cross frame acceess."
@@ -389,6 +422,12 @@ describe("Migrations", function () {
                 JSON.stringify(validV3Data.webApiManager.rules[0].s),
                 JSON.stringify(exampleRule.getStandardIds()),
                 "Blocked standards for www.example.com rule should be maintained through migration."
+            );
+
+            assert.equal(
+                JSON.stringify([]),
+                JSON.stringify(exampleRule.getCustomBlockedFeatures()),
+                "By default, migrated rules should have no custom blocked features"
             );
 
             const template = prefs.getTemplate();
@@ -433,6 +472,12 @@ describe("Migrations", function () {
                 "Blocked standards for www.example.com rule should be maintained through migration."
             );
 
+            assert.equal(
+                JSON.stringify([]),
+                JSON.stringify(exampleRule.getCustomBlockedFeatures()),
+                "By default, migrated rules should have no custom blocked features"
+            );
+
             const template = prefs.getTemplate();
             assert.equal(
                 JSON.stringify(template.sort()),
@@ -451,15 +496,6 @@ describe("Migrations", function () {
     });
 
     describe("Handling v5 data", function () {
-        it("Empty data", function (done) {
-            const testData = {};
-            const [success, migratedData] = migrationLib.applyMigrations(testData);
-
-            assert.equal(success, true, "On valid data, migration should return true.");
-            assert.equal(0, Object.keys(migratedData).length, `On given an empty object, ${{}} should be returned}`);
-            done();
-        });
-
         it("Converting to preferences", function (done) {
             const [ignore, migratedData] = migrationLib.applyMigrations(validV5Data);
             const prefs = preferencesLib.fromJSON(JSON.stringify(migratedData.webApiManager));
@@ -477,11 +513,23 @@ describe("Migrations", function () {
                 "Blocked standards for the default rule should be maintained through migration."
             );
 
+            assert.equal(
+                JSON.stringify([]),
+                JSON.stringify(defaultRule.getCustomBlockedFeatures()),
+                "By default, migrated rules should have no custom blocked features"
+            );
+
             const exampleRule = prefs.getRuleForPattern("www.example.com");
             assert.equal(
                 JSON.stringify(validV5Data.webApiManager.rules[0].s),
                 JSON.stringify(exampleRule.getStandardIds()),
                 "Blocked standards for www.example.com rule should be maintained through migration."
+            );
+
+            assert.equal(
+                JSON.stringify([]),
+                JSON.stringify(exampleRule.getCustomBlockedFeatures()),
+                "By default, migrated rules should have no custom blocked features"
             );
 
             const template = prefs.getTemplate();
@@ -495,6 +543,69 @@ describe("Migrations", function () {
                 true,
                 prefs.getBlockCrossFrame(),
                 "Migration from v5 data should result in blocking cross frame acceess."
+            );
+
+            done();
+        });
+    });
+
+    describe("Handling v6 data", function () {
+        it("Empty data", function (done) {
+            const testData = {};
+            const [success, migratedData] = migrationLib.applyMigrations(testData);
+
+            assert.equal(success, true, "On valid data, migration should return true.");
+            assert.equal(0, Object.keys(migratedData).length, `On given an empty object, ${{}} should be returned}`);
+            done();
+        });
+
+        it("Converting to preferences", function (done) {
+            const [ignore, migratedData] = migrationLib.applyMigrations(validV6Data);
+            const prefs = preferencesLib.fromJSON(JSON.stringify(migratedData.webApiManager));
+
+            assert.equal(
+                enums.ShouldLogVal.NONE,
+                prefs.getShouldLog(),
+                "Should log value should be correctly handled through migration."
+            );
+
+            const defaultRule = prefs.getDefaultRule();
+            assert.equal(
+                JSON.stringify(validV6Data.webApiManager.rules[1].s),
+                JSON.stringify(defaultRule.getStandardIds()),
+                "Blocked standards for the default rule should be maintained through migration."
+            );
+
+            assert.equal(
+                JSON.stringify(["HTMLCanvasElement.prototype.toBlob"]),
+                JSON.stringify(defaultRule.getCustomBlockedFeatures()),
+                "Ensure that custom blocked features are migrated correctly."
+            );
+
+            const exampleRule = prefs.getRuleForPattern("www.example.com");
+            assert.equal(
+                JSON.stringify(validV6Data.webApiManager.rules[0].s),
+                JSON.stringify(exampleRule.getStandardIds()),
+                "Blocked standards for www.example.com rule should be maintained through migration."
+            );
+
+            assert.equal(
+                JSON.stringify(["Performance.prototype.now"]),
+                JSON.stringify(exampleRule.getCustomBlockedFeatures()),
+                "Ensure that custom blocked features are migrated correctly."
+            );
+
+            const template = prefs.getTemplate();
+            assert.equal(
+                JSON.stringify(template.sort()),
+                JSON.stringify(validV6Data.webApiManager.template),
+                "Templates should be correctly stored through JSON translaiton."
+            );
+
+            assert.equal(
+                true,
+                prefs.getBlockCrossFrame(),
+                "Migration from v6 data should result in blocking cross frame acceess."
             );
 
             done();

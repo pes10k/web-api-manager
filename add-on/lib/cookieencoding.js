@@ -1,7 +1,6 @@
 (function () {
     "use strict";
     const {packingLib, standardsLib} = window.WEB_API_MANAGER;
-    const {atob, btoa} = window;
     const allStandardIds = standardsLib.allStandardIds();
 
     /**
@@ -35,7 +34,7 @@
         cookieValueParts.push(packedValues);
         cookieValueParts.push(blockingSettings.shouldLog);
         cookieValueParts.push(blockingSettings.blockCrossFrame ? "1": "0");
-        cookieValueParts.push(btoa(JSON.stringify(blockingSettings.customBlockedFeatures)));
+        cookieValueParts.push(window.btoa(JSON.stringify(blockingSettings.customBlockedFeatures)));
         cookieValueParts.push(blockingSettings.randNonce);
 
         const packedCookieValue = cookieValueParts.join("@");
@@ -66,7 +65,7 @@
         const standardIdsToBlock = unpackedValues;
         const blockCrossFrame = blockCrossFrameRaw === "1";
 
-        const customBlockedFeatures = JSON.parse(atob(encodedCustomFeatures));
+        const customBlockedFeatures = JSON.parse(window.atob(encodedCustomFeatures));
 
         return {
             standardIdsToBlock,
