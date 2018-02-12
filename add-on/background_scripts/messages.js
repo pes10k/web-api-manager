@@ -26,7 +26,11 @@
                 return;
             }
             if (operation === "update") {
-                preferences.upcertRule(rule.pattern, rule.getStandardIds());
+                preferences.upcertRuleStandardIds(rule.pattern, rule.getStandardIds());
+                preferences.upcertRuleCustomBlockedFeatures(
+                    rule.pattern,
+                    rule.getCustomBlockedFeatures()
+                );
                 return;
             }
         }
@@ -111,7 +115,7 @@
                 const defaultStdIds = preferences.getDefaultRule().getStandardIds();
                 numBlockedStandardsForHost = defaultStdIds.length;
             } else if (action === "allow") {
-                preferences.upcertRule(hostName, []);
+                preferences.upcertRuleStandardIds(hostName, []);
                 numBlockedStandardsForHost = 0;
             }
 

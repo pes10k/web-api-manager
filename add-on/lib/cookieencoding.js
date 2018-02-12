@@ -1,6 +1,7 @@
 (function () {
     "use strict";
     const {packingLib, standardsLib} = window.WEB_API_MANAGER;
+    const {atob, btoa} = window;
     const allStandardIds = standardsLib.allStandardIds();
 
     /**
@@ -16,34 +17,26 @@
      * The returned cookie value will be in the following format:
      *   "<base64 string encoding a bitstring>"@"<nonce>".replace("=", "-")
      *
-     * @param {array} standardIdsToBlock
-     *   An array of strings, each a standard that should be blocked.
-     * @param {ShouldLogVal} shouldLog
-     *   Whether whether and how logging should be enabled.
-     * @param {boolean} shouldBlockCrossFrame
-     *   Boolean description of whether to block parent frames from accesing
-     *   the DOMs of child frames.
-     * @param {string} randNonce
-     *   A unique, unguessable identifier, used so that the injected content
-     *   script can communicate with the content script, using an unguessable
-     *   event name (so that the guest page cannot listen to or spoof
-     *   these messages).
+     * @param {ProxyBlockSettings} blockingSettings
+     *   Instructions on what and how the blocking script should modify the
+     *   executing page.
      *
      * @return {string}
      *   A cookie safe string encoding the above values.
      */
-    const toCookieValue = (standardIdsToBlock, shouldLog, shouldBlockCrossFrame, randNonce) => {
+    const toCookieValue = blockingSettings => {
         const cookieValueParts = [];
 
         const packedValues = packingLib.pack(
             allStandardIds,
-            standardIdsToBlock
+            blockingSettings.standardIdsToBlock
         );
 
         cookieValueParts.push(packedValues);
-        cookieValueParts.push(shouldLog);
-        cookieValueParts.push(shouldBlockCrossFrame ? "1": "0");
-        cookieValueParts.push(randNonce);
+        cookieValueParts.push(blockingSettings.shouldLog);
+        cookieValueParts.push(blockingSettings.blockCrossFrame ? "1": "0");
+        cookieValueParts.push(btoa(JSON.stringify(blockingSettings.customBlockedFeatures)));
+        cookieValueParts.push(blockingSettings.randNonce);
 
         const packedCookieValue = cookieValueParts.join("@");
 
@@ -53,7 +46,7 @@
     };
 
     /**
-     * Takes a encoded string (created from the `   ` function
+     * Takes a encoded string (created from the `toCookieValue` function
      * in this module) and returns to values, one an array of
      * standard names, and two, a boolean flag of whether the logging option
      * is enabled.
@@ -61,21 +54,27 @@
      * @param {string} data
      *   A string created from `toCookieValue`
      *
-     * @return {[array, ShouldLogVal, boolean, string]}
-     *   An array of length three. The first value in the returned array is
-     *   an array of strings of standard ids (representing standards to
-     *   block). The second value is a ShouldLogVal string, describing the
-     *   logging settings. The third value is a whether to block cross
-     *   frame DOM access, and the fourth value is a random nonce.
+     * @return {ProxyBlockSettings}
+     *   Instructions on what and how the blocking script should modify the
+     *   executing page.
      */
     const fromCookieValue = data => {
         const cookieParts = data.replace(/-/g, "=").split("@");
-        const [packedValues, shouldLog, blockCrossFrame, randNonce] = cookieParts;
+        const [packedValues, shouldLog, blockCrossFrameRaw, encodedCustomFeatures,
+            randNonce] = cookieParts;
         const unpackedValues = packingLib.unpack(allStandardIds, packedValues);
         const standardIdsToBlock = unpackedValues;
-        const blockCrossFrameBool = blockCrossFrame === "1";
+        const blockCrossFrame = blockCrossFrameRaw === "1";
 
-        return [standardIdsToBlock, shouldLog, blockCrossFrameBool, randNonce];
+        const customBlockedFeatures = JSON.parse(atob(encodedCustomFeatures));
+
+        return {
+            standardIdsToBlock,
+            shouldLog,
+            blockCrossFrame,
+            customBlockedFeatures,
+            randNonce,
+        };
     };
 
     window.WEB_API_MANAGER.cookieEncodingLib = {

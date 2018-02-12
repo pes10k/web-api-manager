@@ -2,7 +2,6 @@
  * Definitions of interfaces used throughout the system.
  */
 
-
 /**
  * @enum {string} ShouldLogVal
  * Enum style value that stores all possible setting for the "should log"
@@ -11,6 +10,29 @@
  * NONE indicates that no logging should occur, STANDARD that selected
  * features should be blocked and loged, and PASSIVE means that nothing
  * should be blocked, but everything should be logged.
+ */
+
+/**
+ * Represents an instruction, being pushed from the background process into
+ * a content script, to instruct the content script on what features to block
+ * (and other related runtime settings).
+ *
+ * @typedef {object} ProxyBlockSettings
+ * @param {Array.number} standardIdsToBlock
+ *   An array of strings, each a standard that should be blocked.
+ * @param {ShouldLogVal} shouldLog
+ *   Whether whether and how logging should be enabled.
+ * @param {boolean} blockCrossFrame
+ *   Boolean description of whether to block parent frames from accesing
+ *   the DOMs of child frames.
+ * @param {Array.FeaturePath} customBlockedFeatures
+ *   An array of strings, describing features that should be blocked
+ *   in the DOM.
+ * @param {string} randNonce
+ *   A unique, unguessable identifier, used so that the injected content
+ *   script can communicate with the content script, using an unguessable
+ *   event name (so that the guest page cannot listen to or spoof
+ *   these messages).
  */
 
 /**
@@ -50,8 +72,12 @@
  * @param {function(MatchPattern): boolean} deleteRule
  *   Attempts to delete a blocking rule for the system, by looking to see
  *   if there is a BlockRule that matches the given pattern match.
- * @param {function(MatchPattern, Array.number): boolean} upcertRule
+ * @param {function(MatchPattern, Array.number): boolean} upcertRuleStandardIds
  *   Either updates the set of standards blocked for a given match
+ *   pattern, or creates a new blocking rule.  Returns a boolean description
+ *   of whether a new BlockRule object was created.
+ * @param {function(MatchPattern, Array.FeaturePath): boolean} upcertRuleCustomBlockedFeatures
+ *   Either updates the set of custom blocking rules for a given match
  *   pattern, or creates a new blocking rule.  Returns a boolean description
  *   of whether a new BlockRule object was created.
  * @param {function(Array.number): undefined} setTemplate

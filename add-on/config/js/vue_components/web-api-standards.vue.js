@@ -7,9 +7,14 @@
 
     Vue.component("web-api-standards", {
         props: ["dataCurrentStandardIds", "dataSelectedPattern",
-                "dataShouldLog", "dataTemplate", "dataCurrentCustomBlockedFeatures"],
+            "dataShouldLog", "dataTemplate", "dataCurrentCustomBlockedFeatures"],
         render: window.WEB_API_MANAGER.vueComponents["web-api-standards"].render,
         staticRenderFns: window.WEB_API_MANAGER.vueComponents["web-api-standards"].staticRenderFns,
+        data: function () {
+            return {
+                customConfigurationsHidden: true,
+            };
+        },
         computed: {
             sortedCategoryIds: () => {
                 const categoryIds = categoriesLib.allCategoryIds();
@@ -86,8 +91,12 @@
             },
             onCustomBlockedFeaturesChange: function  () {
                 const state = this.$root.$data;
-                const customBlockedFeatures = this.dataCurrentCustomBlockedFeatures;
-                stateLib.setCustomBlockedFeatures(state, state.preferences.get());
+                const customBlockedFeaturesText = String(this.dataCurrentCustomBlockedFeatures);
+                const blockedFeaturePaths = customBlockedFeaturesText
+                    .trim()
+                    .split("\n")
+                    .map(elm => elm.trim());
+                stateLib.setCustomBlockedFeatures(state, blockedFeaturePaths);
             },
         },
     });

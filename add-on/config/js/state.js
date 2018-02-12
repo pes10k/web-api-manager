@@ -21,7 +21,7 @@
      *
      * @return {undefined}
      */
-    const notifyBackgroundProcessOfNewRules = (operation, rule) => {
+    const notifyBackgroundProcessOfRuleChange = (operation, rule) => {
         if (validUpdateOperations.has(operation) === false) {
             throw `Invalid background operation specified: '${operation}'`;
         }
@@ -110,7 +110,7 @@
         const currentRule = getCurrentRule(state);
         state.dataCurrentStandardIds = currentRule.getStandardIds();
         state.dataShouldLog = state.preferences.getShouldLog();
-        state.dataCurrentCustomBlockedFeatures = currentRule.getCustomBlockedFeatures();
+        state.dataCurrentCustomBlockedFeatures = currentRule.getCustomBlockedFeatures().join("\n");
         state.dataBlockCrossFrame = state.preferences.getBlockCrossFrame();
         state.dataAllowingAllPatterns = state.preferences.getAllRules()
             .filter(rule => rule.getStandardIds().length === 0)
@@ -146,10 +146,13 @@
     };
 
     const setCurrentStandardIds = (state, standardIds) => {
-        state.preferences.upcertRule(state.dataSelectedPattern, arrayStrsToNums(standardIds));
+        state.preferences.upcertRuleStandardIds(
+            state.dataSelectedPattern,
+            arrayStrsToNums(standardIds)
+        );
         resyncWithPrefs(state);
         // Notify background process to keep preferences in sync.
-        notifyBackgroundProcessOfNewRules("update", getCurrentRule(state));
+        notifyBackgroundProcessOfRuleChange("update", getCurrentRule(state));
     };
 
     const deletePattern = (state, pattern) => {
@@ -162,15 +165,15 @@
         state.preferences.deleteRule(pattern);
         // Notify background process to keep preferences in sync
         resyncWithPrefs(state);
-        notifyBackgroundProcessOfNewRules("delete", ruleToDelete);
+        notifyBackgroundProcessOfRuleChange("delete", ruleToDelete);
     };
 
-    const addPattern = (state, pattern, standardIds = []) => {
+    const addPattern = (state, pattern) => {
         state.dataSelectedPattern = pattern;
-        state.preferences.upcertRule(pattern, arrayStrsToNums(standardIds));
+        state.preferences.addRule(pattern);
         // Notify background process to keep preferences in sync
         resyncWithPrefs(state);
-        notifyBackgroundProcessOfNewRules("add", getCurrentRule(state));
+        notifyBackgroundProcessOfRuleChange("add", getCurrentRule(state));
     };
 
     const setShouldLog = (state, shouldLog) => {
@@ -181,10 +184,10 @@
     };
 
     const setStandardIdsForPattern = (state, pattern, standardIds) => {
-        state.preferences.upcertRule(pattern, arrayStrsToNums(standardIds));
+        state.preferences.upcertRuleStandardIds(pattern, arrayStrsToNums(standardIds));
         resyncWithPrefs(state);
         // Notify background process to keep preferences in sync
-        notifyBackgroundProcessOfNewRules("update", state.preferences.getRuleForPattern(pattern));
+        notifyBackgroundProcessOfRuleChange("update", state.preferences.getRuleForPattern(pattern));
     };
 
     const setBlockCrossFrame = (state, blockCrossFrame) => {
@@ -194,13 +197,12 @@
     };
 
     const setCustomBlockedFeatures = (state, customBlockedFeatures) => {
-        const blockedFeaturePaths = customBlockedFeatures
-            .trim()
-            .split("\n")
-            .map(elm => elm.trim());
-        state.preferences.setCustomBlockedFeatures(blockedFeaturePaths);
+        state.preferences.upcertRuleCustomBlockedFeatures(
+            state.dataSelectedPattern,
+            customBlockedFeatures
+        );
         resyncWithPrefs(state);
-        notifyBackgroundProcessOfNewRules("update", state.preferences.getRuleForPattern(pattern));
+        notifyBackgroundProcessOfRuleChange("update", getCurrentRule(state));
     };
 
     window.WEB_API_MANAGER.stateLib = {

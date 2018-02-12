@@ -12,7 +12,7 @@
     const storageKey = "webApiManager";
 
     /**
-     *  Singleton, disk-sync'ed representation of the users preferences.
+     * Singleton, disk-sync'ed representation of the users preferences.
      * @param {?Preferences}
      */
     let instance;
@@ -59,9 +59,6 @@
      * @param {?boolean} blockCrossFrame
      *   A boolean value, describing whether cross frame access should be
      *   blocked.  Defaults to false.
-     * @param {?Array.string} blockedFeatures
-     *   An array of strings representing key paths to features in the DOM
-     *   that should be blocked.
      * @param {?boolean} syncWithDb
      *   A boolean value, describing whether the given preferences object
      *   should automatically be kept in sync with the underlying, persistant
@@ -70,11 +67,10 @@
      * @return {Preferences}
      *   An initilized, preferences object.
      */
-    const init = (blockRulesRaw = [], shouldLog, template, blockCrossFrame, blockedFeatures, syncWithDb) => {
+    const init = (blockRulesRaw = [], shouldLog, template, blockCrossFrame, syncWithDb) => {
         let shouldLogLocal = shouldLog || enums.shouldLog.NONE;
         let templateLocal = template.slice() || [];
         let blockCrossFrameLocal = !!blockCrossFrame;
-        let blockedFeaturesLocal = blockedFeatures || [];
 
         let defaultRule;
         const nonDefaultRules = [];
@@ -146,7 +142,7 @@
             return true;
         };
 
-        const upcertRule = (pattern, standardIds) => {
+        const upcertRuleStandardIds = (pattern, standardIds) => {
             if (pattern === defaultPattern) {
                 defaultRule.setStandardIds(standardIds);
                 return false;
@@ -155,10 +151,28 @@
             const isNewRule = patternsToRulesMap[pattern] === undefined;
 
             if (isNewRule) {
-                addRule(blockRulesLib.init(pattern, standardIds));
+                addRule(blockRulesLib.init(pattern, standardIds, []));
             } else {
                 const existingRule = patternsToRulesMap[pattern];
                 existingRule.setStandardIds(standardIds);
+            }
+
+            return isNewRule;
+        };
+
+        const upcertRuleCustomBlockedFeatures = (pattern, customBlockedFeatures) => {
+            if (pattern === defaultPattern) {
+                defaultRule.setCustomBlockedFeatures(customBlockedFeatures);
+                return false;
+            }
+
+            const isNewRule = patternsToRulesMap[pattern] === undefined;
+
+            if (isNewRule) {
+                addRule(blockRulesLib.init(pattern, [], customBlockedFeatures));
+            } else {
+                const existingRule = patternsToRulesMap[pattern];
+                existingRule.setCustomBlockedFeatures(customBlockedFeatures);
             }
 
             return isNewRule;
@@ -215,7 +229,8 @@
             getRuleForHost,
             deleteRule,
             addRule,
-            upcertRule,
+            upcertRuleStandardIds,
+            upcertRuleCustomBlockedFeatures,
             setShouldLog,
             getShouldLog,
             getTemplate,
@@ -227,7 +242,8 @@
         };
 
         if (syncWithDb === true) {
-            const modifyingMethods = ["deleteRule", "addRule", "upcertRule",
+            const modifyingMethods = ["deleteRule", "addRule",
+                "upcertRuleStandardIds", "upcertRuleCustomBlockedFeatures",
                 "setShouldLog", "setBlockCrossFrame"];
             modifyingMethods.forEach(methodName => {
                 response[methodName] = resync(response[methodName]);
@@ -269,7 +285,6 @@
             let template = [];
             let shouldLog = enums.ShouldLogVal.NONE;
             let blockCrossFrame = false;
-            let blockedFeatures = [];
 
             if (migratedData &&
                     migratedData[storageKey] &&
@@ -278,11 +293,9 @@
                 shouldLog = migratedData[storageKey].shouldLog;
                 template = migratedData[storageKey].template;
                 blockCrossFrame = !!migratedData[storageKey].blockCrossFrame;
-                blockedFeatures = migratedData[storageKey].blockedFeatures;
             }
 
-            instance = init(blockRulesRaw, shouldLog, template, blockCrossFrame,
-                            blockedFeatures, true);
+            instance = init(blockRulesRaw, shouldLog, template, blockCrossFrame, true);
 
             if (callback !== undefined) {
                 callback(instance);
@@ -336,8 +349,8 @@
             throw `Invalid preferences JSON: ${jsonString} does not have an array for a rule template.`;
         }
 
-        const {rules, shouldLog, template, blockCrossFrame, featureExceptions, blockedFeatures} = data;
-        return init(rules, shouldLog, template, blockCrossFrame, blockedFeatures, false);
+        const {rules, shouldLog, template, blockCrossFrame} = data;
+        return init(rules, shouldLog, template, blockCrossFrame, false);
     };
 
     /**

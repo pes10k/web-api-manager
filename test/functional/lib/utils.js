@@ -106,7 +106,7 @@ module.exports.promiseSetShouldLog = (driver, shouldLog) => {
         .then(elm => elm.click());
 };
 
-module.exports.promiseSetBlockCrossFrame = (driver, blockCrossFrame) => {
+module.exports.promiseSetBlockCrossFrame = (driver, shouldBlockCrossFrame) => {
     driver.setContext(Context.CONTENT);
 
     const cssSelectorString = `#cross-frame-blocking-checkbox`;
@@ -121,7 +121,7 @@ module.exports.promiseSetBlockCrossFrame = (driver, blockCrossFrame) => {
         })
         .then(checkedAttr => {
             const isChecked = !!checkedAttr;
-            if (checkedAttr === blockCrossFrame) {
+            if (isChecked === shouldBlockCrossFrame) {
                 return Promise.resolve();
             }
             return blockCrossFrameCheckbox.click();

@@ -47,26 +47,20 @@
         return;
     }
 
-    const decodedCookieValues = cookieEncodingLib.fromCookieValue(domainPref);
-    const [standardIdsToBlock, shouldLog, blockCrossFrame, randNonce] = decodedCookieValues;
+    const blockingSettings = cookieEncodingLib.fromCookieValue(domainPref);
 
     // If there are no standards to block on this domain, then don't
     // insert any script into the page *unless* we're in passive
     // logging mode, in which case we want to log everything despite logging
     // settings.
-    if (standardIdsToBlock.length === 0 &&
-            shouldLog !== enums.ShouldLogVal.PASSIVE) {
+    if (blockingSettings.standardIdsToBlock.length === 0 &&
+            blockingSettings.shouldLog !== enums.ShouldLogVal.PASSIVE) {
         return;
     }
 
-    const [scriptToInject, ignore] = proxyBlockLib.generateScriptPayload(
-        standardIdsToBlock,
-        shouldLog,
-        blockCrossFrame,
-        randNonce
-    );
+    const [scriptToInject, ignore] = proxyBlockLib.generateScriptPayload(blockingSettings);
 
-    const eventName = "__wamEvent" + randNonce;
+    const eventName = "__wamEvent" + blockingSettings.randNonce;
     doc.addEventListener(eventName, event => {
         browserLib.getRootObject().runtime.sendMessage(["blockedFeature", event.detail]);
     });
