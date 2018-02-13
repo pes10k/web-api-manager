@@ -1,6 +1,6 @@
 {
     "name": "web-api-manager",
-    "version": "0.9.24",
+    "version": "0.9.25",
     "description": "Tools to generate Web API managing browser extensions for Firefox and Chrome.",
     "author": "Peter Snyder <psnyde2@uic.edu> (https://www.cs.uic.edu/~psnyder/)",
     "license": "GPL-3.0",
