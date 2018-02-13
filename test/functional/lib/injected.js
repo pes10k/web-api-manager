@@ -52,24 +52,6 @@ module.exports.temporaryAddOnInstallScript = (function () {
     };
 }());
 
-module.exports.setStandardsAsBlockedScript = (function () {
-    const funcToInject = function () {
-        const doc = window.document;
-        const standardIdsToBlock = "###REPLACE###";
-
-        standardIdsToBlock.forEach(aStandardId => {
-            const input = doc.querySelector(`.web-api-standards-group input[value='${aStandardId}']`);
-            input.click();
-        });
-    };
-
-    const funcSource = stripFuncFromSource(funcToInject.toString());
-
-    return standardsToBlock => {
-        return funcSource.replace(`"###REPLACE###"`, JSON.stringify(standardsToBlock));
-    };
-}());
-
 module.exports.testSVGTestScript = (function () {
     const funcToInject = function () {
         const callback = arguments[arguments.length - 1];

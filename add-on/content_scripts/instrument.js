@@ -54,6 +54,7 @@
     // logging mode, in which case we want to log everything despite logging
     // settings.
     if (blockingSettings.standardIdsToBlock.length === 0 &&
+            blockingSettings.customBlockedFeatures.length === 0 &&
             blockingSettings.shouldLog !== enums.ShouldLogVal.PASSIVE) {
         return;
     }

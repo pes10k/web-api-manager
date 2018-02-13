@@ -95,16 +95,16 @@ describe("Logging", function () {
         it("Blocking nothing", function (done) {
             this.timeout = () => 10000;
             const [server, url] = testServer.start();
-
             const testUrl = url;
             const httpServer = server;
-
             let driverRef;
+
             utils.promiseGetDriver()
                 .then(driver => {
                     driverRef = driver;
-                    return utils.promiseSetBlockingRules(driver, stdIdsToBlock);
+                    return utils.promiseExtensionConfigPage(driverRef);
                 })
+                .then(() => utils.promiseSetBlockedStandards(driverRef, stdIdsToBlock))
                 .then(() => utils.promiseSetShouldLog(driverRef, enums.ShouldLogVal.STANDARD))
                 .then(() => driverRef.get(testUrl))
                 .then(() => utils.promiseGetBlockReport(driverRef))
@@ -144,8 +144,9 @@ describe("Logging", function () {
                 utils.promiseGetDriver()
                     .then(driver => {
                         driverRef = driver;
-                        return utils.promiseSetBlockingRules(driver, stdIdsToBlock);
+                        return utils.promiseExtensionConfigPage(driverRef);
                     })
+                    .then(() => utils.promiseSetBlockedStandards(driverRef, stdIdsToBlock))
                     .then(() => utils.promiseSetShouldLog(driverRef, enums.ShouldLogVal.STANDARD))
                     .then(() => driverRef.get(testUrl))
                     .then(() => driverRef.executeAsyncScript(svgTestScript))
@@ -170,21 +171,19 @@ describe("Logging", function () {
 
             it("Blocking Crypto in a frame, and SVG in the parent document", function (done) {
                 this.timeout = () => 10000;
-
                 const [server, url] = testServer.startWithFile("embedded-frames.html");
-
                 const testUrl = url;
                 const httpServer = server;
                 const webCryptoStandardId = 71;
-
                 const svgAndCryptoStandardIds = stdIdsToBlock.concat([webCryptoStandardId]);
-
                 let driverRef;
+
                 utils.promiseGetDriver()
                     .then(driver => {
                         driverRef = driver;
-                        return utils.promiseSetBlockingRules(driver, svgAndCryptoStandardIds);
+                        return utils.promiseExtensionConfigPage(driverRef);
                     })
+                    .then(() => utils.promiseSetBlockedStandards(driverRef, svgAndCryptoStandardIds))
                     .then(() => utils.promiseSetShouldLog(driverRef, enums.ShouldLogVal.STANDARD))
                     .then(() => driverRef.get(testUrl))
                     .then(() => driverRef.executeAsyncScript(svgTestScript))
@@ -236,8 +235,9 @@ describe("Logging", function () {
                 utils.promiseGetDriver()
                     .then(driver => {
                         driverRef = driver;
-                        return utils.promiseSetShouldLog(driverRef, enums.ShouldLogVal.STANDARD);
+                        return utils.promiseExtensionConfigPage(driverRef);
                     })
+                    .then(() => utils.promiseSetShouldLog(driverRef, enums.ShouldLogVal.STANDARD))
                     .then(() => driverRef.get(testUrl))
                     .then(() => utils.promiseGetBlockReport(driverRef))
                     .then(blockReport => {
@@ -286,8 +286,9 @@ describe("Logging", function () {
             utils.promiseGetDriver()
                 .then(driver => {
                     driverRef = driver;
-                    return utils.promiseSetShouldLog(driverRef, enums.ShouldLogVal.PASSIVE);
+                    return utils.promiseExtensionConfigPage(driverRef);
                 })
+                .then(() => utils.promiseSetShouldLog(driverRef, enums.ShouldLogVal.PASSIVE))
                 .then(() => driverRef.get(testUrl))
                 // First check to see if the document looks the way we expect
                 // it to (ie the script was able to run as expected).  We

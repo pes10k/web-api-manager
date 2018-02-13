@@ -1,18 +1,34 @@
 <div class="web-api-standards-container">
 
     <h3>Pattern: <code>{{ dataSelectedPattern }}</code></h3>
+    <p>
+        Blocking <code>{{ numFeaturesBlocked }}</code> {{ numFeaturesBlocked === 1 ? "feature" : "features" }}
+        and <code>{{ numStandardsBlocked }}</code> {{ numStandardsBlocked === 1 ? "standard" : "standards" }}.
+    </p>
 
     <ul class="list-group form-horizontal mb-4">
         <li class="list-group-item">
             <h5 class="list-group-item-heading">Suggested configurations</h5>
             <div class="form-group">
-                <button @click="onLiteClicked" :disabled="isPassiveMode" class="btn btn-default">
+                <button
+                    @click="onLiteClicked"
+                    :disabled="isPassiveMode"
+                    class="btn btn-default"
+                    id="suggested-configurations-apply-lite">
                     Use lite settings
                 </button>
-                <button @click="onConservativeClicked" :disabled="isPassiveMode" class="btn btn-default">
+                <button
+                    @click="onConservativeClicked"
+                    :disabled="isPassiveMode"
+                    class="btn btn-default"
+                    id="suggested-configurations-apply-conservative">
                     Use conservative settings
                 </button>
-                <button @click="onAggressiveClicked" :disabled="isPassiveMode" class="btn btn-default">
+                <button
+                    @click="onAggressiveClicked"
+                    :disabled="isPassiveMode"
+                    class="btn btn-default"
+                    id="suggested-configurations-apply-aggressive">
                     Use aggressive settings
                 </button>
             </div>
@@ -28,18 +44,28 @@
         <li class="list-group-item">
             <h5 class="list-group-item-heading">Frequent actions</h5>
             <div class="form-group">
-                <button @click="onClearClicked" :disabled="isPassiveMode" class="btn btn-default">
+                <button
+                    @click="onClearClicked"
+                    :disabled="isPassiveMode"
+                    class="btn btn-default"
+                    id="frequent-actions-clear-settings">
                     Clear settings
                 </button>
-                <button @click="onAllClicked" :disabled="isPassiveMode" class="btn btn-default">
+                <button
+                    @click="onAllClicked"
+                    :disabled="isPassiveMode"
+                    class="btn btn-default"
+                    id="frequent-actions-block-all">
                     Block all
                 </button>
             </div>
         </li>
     </ul>
 
-    <div class="card mb-4">
-        <a class="card-header" href="#" @click.stop.prevent="customConfigurationsHidden = !customConfigurationsHidden">
+    <div class="card mb-4" id="custom-config-container">
+        <a class="card-header"
+            href="#"
+            @click.prevent="customConfigurationsHidden = !customConfigurationsHidden">
             <strong>Custom configurations</strong>
             <span class="badge badge-pill badge-secondary float-right">
                 <template v-if="customConfigurationsHidden">
@@ -51,24 +77,38 @@
             </span>
         </a>
 
-        <ul class="list-group list-group-flush collapse" v-if="!customConfigurationsHidden">
+        <ul class="list-group list-group-flush"
+            id="custom-config-body"
+            v-if="!customConfigurationsHidden">
             <li class="list-group-item">
                 <h5 class="list-group-item-heading">
                     Templates
                 </h5>
                 <div class="form-group">
-                    <button @click="onSaveTemplateClicked" :disable="isPassiveMode" class="btn btn-default">
+                    <button
+                        @click="onSaveTemplateClicked"
+                        :disable="isPassiveMode"
+                        class="btn btn-default"
+                        id="templates-save">
                         Save template
                     </button>
-                    <button @click="onApplyTemplateClicked" :disable="isPassiveMode" class="btn btn-default">
-                        Apply template ({{ dataTemplate.length === 1 ? "1 standard" : dataTemplate.length.toString() + " standards" }})
+                    <button
+                        @click="onApplyTemplateClicked"
+                        :disable="isPassiveMode"
+                        class="btn btn-default"
+                        id="templates-apply">
+                        Apply template (
+                            {{ dataTemplateStandards.length === 1 ? "1 standard" : dataTemplateStandards.length.toString() + " standards" }} and
+                            {{ dataTemplateCustomBlockedFeatures.length === 1 ? "1 feature" : dataTemplateCustomBlockedFeatures.length.toString() + " features" }})
                     </button>
                 </div>
                 <p class="form-text text-muted">
-                    The template is a set of standards to block that you
-                    easily reapply to other domains.  <strong>Saving</strong> a template
-                    will copy the currently selected standards, and <strong>Applying</strong>
-                    the template will set those standards to be blocked.
+                    The template is a set of standards and features to block
+                    that you easily reapply to other domains.
+                    <strong>Saving</strong> a template will copy the currently
+                    selected standards and features, and
+                    <strong>Applying</strong> the template will set those
+                    standards and features to be blocked for the current rule.
                 </p>
             </li>
             <li class="list-group-item">
@@ -137,7 +177,7 @@
                 v-for="standardId in sortedStandardIdsInCategory(categoryId)">
                 <div class="form-check">
                     <input type="checkbox"
-                          class="form-check-input"
+                          class="form-check-input standard-id-checkbox"
                          :value="standardId"
                         v-model="dataCurrentStandardIds"
                       :disabled="isPassiveMode"

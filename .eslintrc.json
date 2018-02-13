@@ -16,7 +16,6 @@
         "indent": ["error", 4, {"SwitchCase": 1}],
         "eol-last": "error",
         "quotes": ["error", "double", {"allowTemplateLiterals": true}],
-        "comma-dangle": ["error", "only-multiline"],
         "function-paren-newline": ["error"],
         "max-len": ["error", {
             "ignoreStrings": true,

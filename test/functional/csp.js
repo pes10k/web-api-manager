@@ -25,22 +25,23 @@ describe("Content-Security-Protocol Issues", function () {
 
             const svgTestScript = injected.testSVGTestScript();
             const standardsToBlock = utils.constants.svgBlockRule;
-            let driverReference;
+            let driverRef;
 
             utils.promiseGetDriver()
-                .then(function (driver) {
-                    driverReference = driver;
-                    return utils.promiseSetBlockingRules(driver, standardsToBlock);
+                .then(driver => {
+                    driverRef = driver;
+                    return utils.promiseExtensionConfigPage(driverRef);
                 })
-                .then(() => driverReference.get(testUrl))
-                .then(() => driverReference.executeAsyncScript(svgTestScript))
-                .then(function () {
-                    driverReference.quit();
+                .then(() => utils.promiseSetBlockedStandards(driverRef, standardsToBlock))
+                .then(() => driverRef.get(testUrl))
+                .then(() => driverRef.executeAsyncScript(svgTestScript))
+                .then(() => {
+                    driverRef.quit();
                     testServer.stop(server);
                     done();
                 })
-                .catch(function (e) {
-                    driverReference.quit();
+                .catch(e => {
+                    driverRef.quit();
                     testServer.stop(server);
                     done(e);
                 });

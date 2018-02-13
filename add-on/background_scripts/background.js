@@ -130,7 +130,7 @@
         // If there are no standards to block on this domain, and we're not
         // in "passive" logging mode, then there is no need to modify the CSP
         // headers, since no script will be injected into the page.
-        if (standardIdsToBlock.length === 0 &&
+        if (matchingRule.isBlockingAnyFeatures() === false &&
                 shouldLog !== enums.ShouldLogVal.PASSIVE) {
             return;
         }

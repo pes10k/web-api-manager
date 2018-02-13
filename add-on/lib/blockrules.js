@@ -4,6 +4,8 @@
 (function () {
     "use strict";
 
+    const {standardsLib} = window.WEB_API_MANAGER;
+
     // From https://www.npmjs.com/package/escape-string-regexp
     const matchOperatorsRe = /[|\\{}()[\]^$+*?.]/g;
 
@@ -159,6 +161,20 @@
 
         const getCustomBlockedFeatures = () => localBlockedFeatures.sort();
 
+        const getAllBlockedFeatures = () => {
+            const allBlockedFeatures = localStandardIds
+                .reduce((collection, stdId) => {
+                    return collection.concat(standardsLib.featuresForStandardId(stdId));
+                }, [])
+                .concat(localBlockedFeatures);
+
+            return Array.from(new Set(allBlockedFeatures)).sort();
+        };
+
+        const isBlockingAnyFeatures = () => {
+            return localStandardIds.length > 0 || localBlockedFeatures.length > 0;
+        };
+
         const toData = () => {
             return Object.assign({}, {
                 p: matchPattern,
@@ -174,6 +190,8 @@
             getStandardIds,
             setCustomBlockedFeatures,
             getCustomBlockedFeatures,
+            getAllBlockedFeatures,
+            isBlockingAnyFeatures,
             pattern: matchPattern,
             isMatchingHost: testPatternWithHost.bind(undefined, matchPattern),
             isMatchingUrl: testPatternWithUrl.bind(undefined, matchPattern),

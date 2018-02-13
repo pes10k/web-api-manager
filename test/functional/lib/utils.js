@@ -75,20 +75,36 @@ module.exports.promiseExtensionConfigPage = driver => {
         .then(extensionId => driver.get(`moz-extension://${extensionId}/config/index.html`));
 };
 
-module.exports.promiseSetBlockingRules = (driver, standardsToBlock) => {
-    const setStandardsScript = injectedScripts.setStandardsAsBlockedScript(standardsToBlock);
-    driver.setContext(Context.CONTENT);
+module.exports.promiseOpenCustomConfigContainer = driver => {
+    return driver.wait(until.elementLocated(by.css("#custom-config-container textarea")), 1000)
+        .catch(() => driver.wait(until.elementLocated(by.css("#custom-config-container .card-header")), 1000))
+        .then(header => header.click());
+};
 
-    return module.exports.promiseExtensionConfigPage(driver)
-        .then(() => driver.executeScript(setStandardsScript))
-        .then(() => module.exports.pause(100));
+module.exports.promiseSetBlockedFeatures = (driver, featuresToBlock) => {
+    return module.exports.promiseOpenCustomConfigContainer(driver)
+        .then(() => driver.wait(until.elementLocated(by.css("#custom-config-container textarea")), 1000))
+        .then(textarea => textarea.sendKeys(featuresToBlock.join("\n")))
+        .then(() => driver.wait(until.elementLocated(by.css("#custom-config-container p")), 1000))
+        .then(pElm => pElm.click());
+};
+
+module.exports.promiseGetBlockedFeatures = driver => {
+    return module.exports.promiseOpenCustomConfigContainer(driver)
+        .then(() => driver.wait(until.elementLocated(by.css("#custom-config-container textarea")), 1000))
+        .then(textarea => textarea.getAttribute("value"))
+        .then(textareaValue => {
+            return textareaValue
+                .split("\n")
+                .map(str => str.trim())
+                .filter(str => str.length > 0);
+        });
 };
 
 module.exports.promiseOpenPrefsTab = (driver, prefsTabId) => {
+    const cssSelectorString = `ul.nav.nav-tabs a[href='#${prefsTabId}']`;
     enums.utils.assertValidEnum(enums.PrefsTabId, prefsTabId);
     driver.setContext(Context.CONTENT);
-
-    const cssSelectorString = `ul.nav.nav-tabs a[href='#${prefsTabId}']`;
 
     return driver.wait(until.elementLocated(by.css(cssSelectorString)), 1000)
         .then(elm => elm.click());
@@ -171,6 +187,19 @@ module.exports.promiseOpenNewTab = (driver, url) => {
         .then(() => Promise.resolve({prior: initialHandle, new: openedHandle}));
 };
 
+module.exports.promiseCreateBlockRule = (driver, pattern) => {
+    return driver.wait(until.elementLocated(by.css(".patterns-new-section input")), 1000)
+        .then(input => input.sendKeys(pattern))
+        .then(() => driver.wait(until.elementLocated(by.css(".patterns-new-section button")), 1000))
+        .then(submitButton => submitButton.click());
+};
+
+module.exports.promiseSelectBlockRule = (driver, pattern) => {
+    const query = `.patterns-container input[value='${pattern}']`;
+    return driver.wait(until.elementLocated(by.css(query)), 1000)
+        .then(radio => radio.click());
+};
+
 module.exports.promiseGetBlockReport = driver => {
     let initialHandle;
     let blockReport;
@@ -192,6 +221,36 @@ module.exports.promiseGetBlockReport = driver => {
         })
         .then(() => driver.switchTo().window(initialHandle))
         .then(() => Promise.resolve(reportsLib.init(blockReport)));
+};
+
+module.exports.promiseTemplateApply = driver => {
+    return driver.wait(until.elementLocated(by.id("templates-apply")), 1000)
+        .then(button => button.click());
+};
+
+module.exports.promiseTemplateSave = driver => {
+    return driver.wait(until.elementLocated(by.id("templates-save")), 1000)
+        .then(button => button.click());
+};
+
+module.exports.promiseSetBlockedStandards = (driver, standardsToBlock) => {
+    driver.setContext(Context.CONTENT);
+    const stdIdToPromise = standardsToBlock.map(stdId => {
+        const query = `.web-api-standards-group input[value='${stdId}']`;
+        return driver.wait(until.elementLocated(by.css(query)), 500)
+            .then(stdCheck => stdCheck.click());
+    });
+    return Promise.all(stdIdToPromise);
+};
+
+module.exports.promiseGetBlockedStandards = driver => {
+    return driver.wait(until.elementsLocated(by.css("input.standard-id-checkbox:checked")), 1000)
+        .then(checkboxes => {
+            const checkboxPromises = checkboxes.map(checkbox => checkbox.getAttribute("value"));
+            return Promise.all(checkboxPromises);
+        })
+        .then(checkboxValues => checkboxValues.map(strValue => +strValue))
+        .catch(() => Promise.resolve([]));
 };
 
 module.exports.promiseGetDriver = () => {

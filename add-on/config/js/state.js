@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    const {constants, browserLib} = window.WEB_API_MANAGER;
+    const {constants, browserLib, blockRulesLib} = window.WEB_API_MANAGER;
     const rootObject = browserLib.getRootObject();
     const defaultPattern = constants.defaultPattern;
 
@@ -87,14 +87,19 @@
         state.dataCurrentStandardIds = defaultRule.getStandardIds();
         state.dataPatterns = preferences.getAllRules().map(rule => rule.pattern).sort();
         state.dataShouldLog = preferences.getShouldLog();
-        state.dataCurrentCustomBlockedFeatures = defaultRule.getCustomBlockedFeatures();
+        state.dataCurrentCustomBlockedFeatures = defaultRule.getCustomBlockedFeatures().join("\n");
+
         state.dataAllowingAllPatterns = preferences.getAllRules()
-            .filter(rule => rule.getStandardIds().length === 0)
+            .filter(rule => rule.isBlockingAnyFeatures() === false)
             .map(rule => rule.pattern);
         state.dataBlockingAnyPatterns = preferences.getAllRules()
-            .filter(rule => rule.getStandardIds().length !== 0)
+            .filter(rule => rule.isBlockingAnyFeatures() === true)
             .map(rule => rule.pattern);
-        state.dataTemplate = preferences.getTemplate();
+
+        const templateRule = preferences.getTemplateRule();
+        state.dataTemplateStandards = templateRule.getStandardIds();
+        state.dataTemplateCustomBlockedFeatures = templateRule.getCustomBlockedFeatures();
+
         state.dataBlockCrossFrame = preferences.getBlockCrossFrame();
         state.preferences = preferences;
         return state;
@@ -105,7 +110,10 @@
     };
 
     const resyncWithPrefs = state => {
-        state.dataTemplate = state.preferences.getTemplate();
+        const templateRule = state.preferences.getTemplateRule();
+        state.dataTemplateStandards = templateRule.getStandardIds();
+        state.dataTemplateCustomBlockedFeatures = templateRule.getCustomBlockedFeatures();
+
         state.dataPatterns = state.preferences.getAllRules().map(rule => rule.pattern).sort();
         const currentRule = getCurrentRule(state);
         state.dataCurrentStandardIds = currentRule.getStandardIds();
@@ -113,10 +121,10 @@
         state.dataCurrentCustomBlockedFeatures = currentRule.getCustomBlockedFeatures().join("\n");
         state.dataBlockCrossFrame = state.preferences.getBlockCrossFrame();
         state.dataAllowingAllPatterns = state.preferences.getAllRules()
-            .filter(rule => rule.getStandardIds().length === 0)
+            .filter(rule => rule.isBlockingAnyFeatures() === false)
             .map(rule => rule.pattern);
         state.dataBlockingAnyPatterns = state.preferences.getAllRules()
-            .filter(rule => rule.getStandardIds().length !== 0)
+            .filter(rule => rule.isBlockingAnyFeatures() === true)
             .map(rule => rule.pattern);
     };
 
@@ -139,10 +147,13 @@
             .sort();
     };
 
-    const setTemplate = (state, standardIds) => {
-        state.preferences.setTemplate(standardIds);
+    const setTemplateData = (state, standardIds, customBlockedFeatures) => {
+        const templateRule = state.preferences.getTemplateRule();
+        templateRule.setStandardIds(standardIds);
+        templateRule.setCustomBlockedFeatures(customBlockedFeatures);
+        state.preferences.setTemplateRule(templateRule);
         resyncWithPrefs(state);
-        notifyBackgroundProcessOfTemplateChange(standardIds);
+        notifyBackgroundProcessOfTemplateChange(templateRule);
     };
 
     const setCurrentStandardIds = (state, standardIds) => {
@@ -170,7 +181,7 @@
 
     const addPattern = (state, pattern) => {
         state.dataSelectedPattern = pattern;
-        state.preferences.addRule(pattern);
+        state.preferences.addRule(blockRulesLib.init(pattern));
         // Notify background process to keep preferences in sync
         resyncWithPrefs(state);
         notifyBackgroundProcessOfRuleChange("add", getCurrentRule(state));
@@ -211,7 +222,7 @@
         setSelectedPattern,
         patternsBlockingNoStandards,
         patternsBlockingStandards,
-        setTemplate,
+        setTemplateData,
         setCurrentStandardIds,
         deletePattern,
         addPattern,

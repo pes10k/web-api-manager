@@ -161,7 +161,9 @@
      * 5 preferences, but updated to support the version 6 schema.
      *
      * This function will add an empty "custom features" array too all the
-     * blocking rules stored in the saved preferences data.
+     * blocking rules stored in the saved preferences data, and change the
+     * template to contain both features and standards (to make it complete
+     * feature blocking rule).
      *
      * @param {object} data
      *   Persistent data loaded from the storage API in the extension.
@@ -178,6 +180,11 @@
             aRule.f = [];
             return aRule;
         });
+        const priorTemplate = migratedData.webApiManager.template;
+        migratedData.webApiManager.template = {
+            s: priorTemplate,
+            f: [],
+        };
         return Object.freeze(migratedData);
     };
 

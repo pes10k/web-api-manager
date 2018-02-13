@@ -177,11 +177,15 @@ Version 6
             ...
         ],
         "shouldLog": "0" | "1" | "2" (a ShouldLogVal enum),
-        "template": [
-            integer id of a standard, taken from the info.id property,
-            integer id of another standard, taken from the info.id property,
-            etc...
-        ],
+        "template": {
+            "s": [
+                integer id of a standard, taken from the info.id property,
+                integer id of another standard, taken from the info.id property,
+                etc...
+            ],
+            "f": array of key paths (strings) of features that should be
+                 blocked for standards that match this rule.
+        },
         "blockCrossFrame": (boolean)
     }
 }
