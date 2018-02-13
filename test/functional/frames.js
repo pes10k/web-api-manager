@@ -19,22 +19,22 @@ describe("Cross frame protections", function () {
             // will throw, since its being called without a context.
             it("Can access w/o blocking", function (done) {
                 const [server, url] = testServer.startWithFile("basic-iframe.html");
-                let driverReference;
+                let driverRef;
 
                 utils.promiseGetDriver()
-                    .then(function (driver) {
-                        driverReference = driver;
-                        return driverReference.get(url);
+                    .then(driver => {
+                        driverRef = driver;
+                        return driverRef.get(url);
                     })
-                    .then(() => driverReference.executeScript(testScript))
+                    .then(() => driverRef.executeScript(testScript))
                     .then(response => {
                         assert.equal(response, false, "When not blocking, SVGGraphicsElement.prototype.getBBox and SVGTransformList.prototype.createSVGTransformFromMatrix should reference different functions.");
-                        driverReference.quit();
+                        driverRef.quit();
                         testServer.stop(server);
                         done();
                     })
                     .catch(e => {
-                        driverReference.quit();
+                        driverRef.quit();
                         testServer.stop(server);
                         done(e);
                     });
@@ -42,25 +42,25 @@ describe("Cross frame protections", function () {
 
             it("Can not access when blocking", function (done) {
                 const [server, url] = testServer.startWithFile("basic-iframe.html");
-                let driverReference;
+                let driverRef;
 
                 utils.promiseGetDriver()
                     .then(driver => {
-                        driverReference = driver;
-                        return driverReference.get(url);
+                        driverRef = driver;
+                        return utils.promiseExtensionConfigPage(driverRef);
                     })
-                    .then(() => utils.promiseSetBlockingRules(driverReference, standardsToBlock))
-                    .then(() => utils.promiseSetBlockCrossFrame(driverReference, true))
-                    .then(() => driverReference.get(url))
-                    .then(() => driverReference.executeScript(testScript))
+                    .then(() => utils.promiseSetBlockedStandards(driverRef, standardsToBlock))
+                    .then(() => utils.promiseSetBlockCrossFrame(driverRef, true))
+                    .then(() => driverRef.get(url))
+                    .then(() => driverRef.executeScript(testScript))
                     .then(response => {
                         assert.equal(response, true, "When blocking, SVGGraphicsElement.prototype.getBBox and SVGTransformList.prototype.createSVGTransformFromMatrix should reference the same proxy object.");
-                        driverReference.quit();
+                        driverRef.quit();
                         testServer.stop(server);
                         done();
                     })
                     .catch(e => {
-                        driverReference.quit();
+                        driverRef.quit();
                         testServer.stop(server);
                         done(e);
                     });
@@ -80,27 +80,27 @@ describe("Cross frame protections", function () {
         it("Can access child DOM w/o blocking", function (done) {
             this.timeout = () => 20000;
             const [server, url] = testServer.start();
-            let driverReference;
+            let driverRef;
 
             utils.promiseGetDriver()
                 .then(function (driver) {
-                    driverReference = driver;
-                    return driverReference.get(url);
+                    driverRef = driver;
+                    return driverRef.get(url);
                 })
-                .then(() => driverReference.executeScript(openWindowScript))
-                .then(() => driverReference.executeScript(testWindowNameScript))
+                .then(() => driverRef.executeScript(openWindowScript))
+                .then(() => driverRef.executeScript(testWindowNameScript))
                 .then(isChildWindowTitleCorrect => {
                     assert.equal(
                         isChildWindowTitleCorrect,
                         2,
                         "When no standards are blocked, pages should be able to access the DOM of opened windows."
                     );
-                    driverReference.quit();
+                    driverRef.quit();
                     testServer.stop(server);
                     done();
                 })
                 .catch(function (e) {
-                    driverReference.quit();
+                    driverRef.quit();
                     testServer.stop(server);
                     done(e);
                 });
@@ -109,29 +109,30 @@ describe("Cross frame protections", function () {
         it("Cannot access child DOM with blocking", function (done) {
             this.timeout = () => 10000;
             const [server, url] = testServer.start();
-            let driverReference;
+            let driverRef;
 
             utils.promiseGetDriver()
                 .then(function (driver) {
-                    driverReference = driver;
-                    return utils.promiseSetBlockingRules(driverReference, standardsToBlock);
+                    driverRef = driver;
+                    return utils.promiseExtensionConfigPage(driverRef);
                 })
-                .then(() => utils.promiseSetBlockCrossFrame(driverReference, true))
-                .then(() => driverReference.get(url))
-                .then(() => driverReference.executeScript(openWindowScript))
-                .then(() => driverReference.executeScript(testWindowNameScript))
+                .then(() => utils.promiseSetBlockedStandards(driverRef, standardsToBlock))
+                .then(() => utils.promiseSetBlockCrossFrame(driverRef, true))
+                .then(() => driverRef.get(url))
+                .then(() => driverRef.executeScript(openWindowScript))
+                .then(() => driverRef.executeScript(testWindowNameScript))
                 .then(isChildWindowTitleCorrect => {
                     assert.equal(
                         isChildWindowTitleCorrect,
                         null,
                         "When any standard is block, pages should not be able to access the DOM of opened windows."
                     );
-                    driverReference.quit();
+                    driverRef.quit();
                     testServer.stop(server);
                     done();
                 })
                 .catch(function (e) {
-                    driverReference.quit();
+                    driverRef.quit();
                     testServer.stop(server);
                     done(e);
                 });

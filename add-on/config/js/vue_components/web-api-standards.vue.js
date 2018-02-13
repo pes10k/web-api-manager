@@ -6,9 +6,16 @@
     const Vue = window.Vue;
 
     Vue.component("web-api-standards", {
-        props: ["dataCurrentStandardIds", "dataSelectedPattern", "dataShouldLog", "dataTemplate"],
+        props: ["dataCurrentStandardIds", "dataSelectedPattern",
+            "dataShouldLog", "dataTemplate", "dataCurrentCustomBlockedFeatures",
+            "dataTemplateStandards", "dataTemplateCustomBlockedFeatures"],
         render: window.WEB_API_MANAGER.vueComponents["web-api-standards"].render,
         staticRenderFns: window.WEB_API_MANAGER.vueComponents["web-api-standards"].staticRenderFns,
+        data: function () {
+            return {
+                customConfigurationsHidden: true,
+            };
+        },
         computed: {
             sortedCategoryIds: () => {
                 const categoryIds = categoriesLib.allCategoryIds();
@@ -16,6 +23,22 @@
             },
             isPassiveMode: function () {
                 return this.dataShouldLog === enums.ShouldLogVal.PASSIVE;
+            },
+            numFeaturesBlocked: function () {
+                const prefs = this.$root.$data.preferences;
+                const currentRule = prefs.getRuleForPattern(this.dataSelectedPattern);
+
+                const featuresInBlockedStds = this.dataCurrentStandardIds
+                    .reduce((collection, stdId) => {
+                        return collection.concat(standardsLib.featuresForStandardId(stdId));
+                    }, []);
+                const customBlockedFeatures = currentRule.getCustomBlockedFeatures();
+                const combinedBlockedFeatures = featuresInBlockedStds.concat(customBlockedFeatures);
+
+                return (new Set(combinedBlockedFeatures)).size;
+            },
+            numStandardsBlocked: function () {
+                return this.dataCurrentStandardIds.length;
             },
         },
         methods: {
@@ -77,11 +100,36 @@
             },
             onSaveTemplateClicked: function () {
                 const state = this.$root.$data;
-                stateLib.setTemplate(state, state.dataCurrentStandardIds);
+
+                const customBlockedFeaturesText = String(this.dataCurrentCustomBlockedFeatures);
+                const trimmedText = customBlockedFeaturesText.trim();
+                const blockedFeaturePaths = (trimmedText === "")
+                    ? []
+                    : trimmedText.split("\n").map(elm => elm.trim());
+
+                stateLib.setTemplateData(
+                    state,
+                    state.dataCurrentStandardIds,
+                    blockedFeaturePaths
+                );
             },
             onApplyTemplateClicked: function () {
                 const state = this.$root.$data;
-                stateLib.setCurrentStandardIds(state, state.preferences.getTemplate());
+                const templateRule = state.preferences.getTemplateRule();
+                stateLib.setCurrentStandardIds(state, templateRule.getStandardIds());
+                stateLib.setCustomBlockedFeatures(state, templateRule.getCustomBlockedFeatures());
+            },
+            onCustomBlockedFeaturesChange: function  () {
+                const state = this.$root.$data;
+                const customBlockedFeaturesText = String(this.dataCurrentCustomBlockedFeatures);
+                const trimmedText = customBlockedFeaturesText.trim();
+                const blockedFeaturePaths = (trimmedText === "")
+                    ? []
+                    : trimmedText.split("\n").map(elm => elm.trim());
+                stateLib.setCustomBlockedFeatures(state, blockedFeaturePaths);
+            },
+            toggleCustomConfigurations: function () {
+                this.customConfigurationsHidden = !this.customConfigurationsHidden;
             },
         },
     });

@@ -11,7 +11,18 @@
      * @return {Array.number}
      *   An array of standard ids.
      */
-    const allStandardIds = () => Object.keys(standardsDefinitions).map(strId => +strId);
+    const allStandardIds = (function () {
+        let allStandardIdsCache;
+
+        return () => {
+            if (allStandardIdsCache !== undefined) {
+                return allStandardIdsCache;
+            }
+
+            allStandardIdsCache = Object.keys(standardsDefinitions).map(strId => +strId);
+            return allStandardIdsCache;
+        };
+    }());
 
     // Build a mapping of features to standard names, given the initial
     // mapping of standards to features.
@@ -196,14 +207,26 @@
      *
      * @return {Array.FeaturePath}
      *   An array of FeaturePath objects (strings), each describing the
-     *   key path to a feature in the DOM.
+     *   key path to a feature in the DOM.  The returned array is sorted in
+     *   string order.
      */
-    const allFeatures = () => {
-        return Object.values(standardsDefinitions)
-            .reduce((collection, standard) => {
-                return collection.concat(standard.features);
-            }, []);
-    };
+    const allFeatures = (function () {
+        let featuresCache;
+
+        return () => {
+            if (featuresCache !== undefined) {
+                return featuresCache;
+            }
+
+            featuresCache = Object.values(standardsDefinitions)
+                .reduce((collection, standard) => {
+                    return collection.concat(standard.features);
+                }, [])
+                .sort();
+
+            return featuresCache;
+        };
+    }());
 
     window.WEB_API_MANAGER.standardsLib = {
         allStandardIds,

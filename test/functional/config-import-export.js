@@ -11,9 +11,9 @@ const svgId = 63;
 const ambientLightSensorId = 2;
 const webGLId = 73;
 
-const emptyRuleSet = `[{"p":"(default)","s":[]}]`;
-const blockingSVGandBeacon = `[{"p":"(default)","s":[${beaconId},${svgId}]}]`;
-const newDomainImport = `[{"p":"*.example.com","s":[${ambientLightSensorId},${webGLId}]}]`;
+const emptyRuleSet = `[{"p":"(default)","s":[],"f":[]}]`;
+const blockingSVGandBeacon = `[{"p":"(default)","s":[${beaconId},${svgId}],"f":[]}]`;
+const newDomainImport = `[{"p":"*.example.com","s":[${ambientLightSensorId},${webGLId}],"f":[]}]`;
 
 const promiseOpenImportExportTab = function (driver) {
     return utils.promiseExtensionConfigPage(driver)
@@ -21,7 +21,7 @@ const promiseOpenImportExportTab = function (driver) {
         .then(element => element.click());
 };
 
-describe("Import / Export", function () {
+describe("Config panel: Import / Export", function () {
     this.timeout = () => 20000;
 
     describe("Exporting", function () {
@@ -31,8 +31,9 @@ describe("Import / Export", function () {
             utils.promiseGetDriver()
                 .then(function (driver) {
                     driverRef = driver;
-                    return promiseOpenImportExportTab(driverRef);
+                    return utils.promiseExtensionConfigPage(driverRef);
                 })
+                .then(() => promiseOpenImportExportTab(driverRef))
                 .then(() => driverRef.findElement(by.css(".export-section select option:nth-child(1)")).click())
                 .then(() => driverRef.findElement(by.css(".export-section textarea")).getAttribute("value"))
                 .then(exportValue => {
@@ -49,12 +50,14 @@ describe("Import / Export", function () {
         it("Exporting SVG and Beacon blocking rules", function (done) {
             let driverRef;
 
+            const svgAndBeconIds = utils.constants.svgBlockRule.concat([beaconId]);
+
             utils.promiseGetDriver()
-                .then(function (driver) {
+                .then(driver => {
                     driverRef = driver;
-                    const svgAndBeconIds = utils.constants.svgBlockRule.concat([beaconId]);
-                    return utils.promiseSetBlockingRules(driverRef, svgAndBeconIds);
+                    return utils.promiseExtensionConfigPage(driverRef);
                 })
+                .then(() => utils.promiseSetBlockedStandards(driverRef, svgAndBeconIds))
                 .then(() => promiseOpenImportExportTab(driverRef))
                 .then(() => driverRef.findElement(by.css(".export-section select option:nth-child(1)")).click())
                 .then(() => driverRef.findElement(by.css(".export-section textarea")).getAttribute("value"))
@@ -78,8 +81,9 @@ describe("Import / Export", function () {
             utils.promiseGetDriver()
                 .then(driver => {
                     driverRef = driver;
-                    return promiseOpenImportExportTab(driverRef);
+                    return utils.promiseExtensionConfigPage(driverRef);
                 })
+                .then(() => promiseOpenImportExportTab(driverRef))
                 .then(() => driverRef.findElement(by.css(".import-section textarea")).sendKeys(blockingSVGandBeacon))
                 .then(() => driverRef.findElement(by.css(".import-section input[type='checkbox']")).click())
                 .then(() => driverRef.findElement(by.css(".import-section button")).click())
@@ -110,10 +114,11 @@ describe("Import / Export", function () {
             let checkedCheckboxes;
 
             utils.promiseGetDriver()
-                .then(function (driver) {
+                .then(driver => {
                     driverRef = driver;
-                    return promiseOpenImportExportTab(driverRef);
+                    return utils.promiseExtensionConfigPage(driverRef);
                 })
+                .then(() => promiseOpenImportExportTab(driverRef))
                 .then(() => driverRef.findElement(by.css(".import-section textarea")).sendKeys(newDomainImport))
                 .then(() => driverRef.findElement(by.css(".import-section button")).click())
                 .then(() => utils.pause(500))

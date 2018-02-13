@@ -2,7 +2,6 @@
  * Definitions of interfaces used throughout the system.
  */
 
-
 /**
  * @enum {string} ShouldLogVal
  * Enum style value that stores all possible setting for the "should log"
@@ -11,6 +10,29 @@
  * NONE indicates that no logging should occur, STANDARD that selected
  * features should be blocked and loged, and PASSIVE means that nothing
  * should be blocked, but everything should be logged.
+ */
+
+/**
+ * Represents an instruction, being pushed from the background process into
+ * a content script, to instruct the content script on what features to block
+ * (and other related runtime settings).
+ *
+ * @typedef {object} ProxyBlockSettings
+ * @property {Array.number} standardIdsToBlock
+ *   An array of strings, each a standard that should be blocked.
+ * @property {ShouldLogVal} shouldLog
+ *   Whether whether and how logging should be enabled.
+ * @property {boolean} blockCrossFrame
+ *   Boolean description of whether to block parent frames from accesing
+ *   the DOMs of child frames.
+ * @property {Array.FeaturePath} customBlockedFeatures
+ *   An array of strings, describing features that should be blocked
+ *   in the DOM.
+ * @property {string} randNonce
+ *   A unique, unguessable identifier, used so that the injected content
+ *   script can communicate with the content script, using an unguessable
+ *   event name (so that the guest page cannot listen to or spoof
+ *   these messages).
  */
 
 /**
@@ -28,52 +50,59 @@
  * for each domain-matching rule, whether logging is enabled, etc.
  *
  * @typedef {object} Preferences
- * @param {function(): Array.BlockRule} getAllRules
+ * @property {function(): Array.BlockRule} getAllRules
  *   Returns an array of all the blocking rules configured in the system.
- * @param {function(): BlockRule} getDefaultRule
+ * @property {function(): BlockRule} getDefaultRule
  *   Returns the block rule object that should be used if no other
  *   blocking rules match a given url.
- * @param {function(): Array.BlockRule} getNonDefaultRules
+ * @property {function(): Array.BlockRule} getNonDefaultRules
  *   Returns an array all user-set block rules in the system (e.g. every
  *   block rule that is not a default rule).
- * @param {function(string): BlockRule} getRuleForUrl
+ * @property {function(string): BlockRule} getRuleForUrl
  *   Return the blocking rule that should be used for the given URL.
- * @param {function(string): BlockRule} getRuleForHost
+ * @property {function(string): BlockRule} getRuleForHost
  *   Return the blocking rule that should be used for the given host.
- * @param {function{MatchPattern}: ?BlockRule} getRuleForPattern
+ * @property {function{MatchPattern}: ?BlockRule} getRuleForPattern
  *   Returns the blocking rule that describes what to block on the given
  *   pattern, or undefined if no such rule exists.
- * @param {function{BlockRule}: boolean} addRule
+ * @property {function{BlockRule}: boolean} addRule
  *   Adds a blocking rule to the set of rules the user has set to block.
  *   This will not overwrite any rules, and returns false if there is
  *   already a rule in place for this pattern.  Otherwise returns true.
- * @param {function(MatchPattern): boolean} deleteRule
+ * @property {function(MatchPattern): boolean} deleteRule
  *   Attempts to delete a blocking rule for the system, by looking to see
  *   if there is a BlockRule that matches the given pattern match.
- * @param {function(MatchPattern, Array.number): boolean} upcertRule
+ * @property {function(MatchPattern, Array.number): boolean} upcertRuleStandardIds
  *   Either updates the set of standards blocked for a given match
  *   pattern, or creates a new blocking rule.  Returns a boolean description
  *   of whether a new BlockRule object was created.
- * @param {function(Array.number): undefined} setTemplate
- *   Sets the standard ids that should be blocked in the user's template rule.
- * @param {function(): Array.number} getTemplate
+ * @property {function(MatchPattern, Array.FeaturePath): boolean} upcertRuleCustomBlockedFeatures
+ *   Either updates the set of custom blocking rules for a given match
+ *   pattern, or creates a new blocking rule.  Returns a boolean description
+ *   of whether a new BlockRule object was created.
+ * @property {function(BlockRule): undefined} setTemplateRule
+ *   Sets a blocking rule that can have its blocked standards and blocked
+ *   features applied to other domain rules.
+ * @property {function(): BlockRule} getTemplateRule
+ *   Returns a blocking rule that can be applied to other matching rules.
+ * @property {function(): Array.number} getTemplate
  *   Gets the standards that should be used for a reusable blocking template.
- * @param {function(ShouldLogVal): undefined} setShouldLog
+ * @property {function(ShouldLogVal): undefined} setShouldLog
  *   Sets whether the system should log what functionality was blocked.  Throws
  *   if the given value is not a valid ShouldLogVal value.
- * @param {function(): ShouldLogVal} getShouldLog
+ * @property {function(): ShouldLogVal} getShouldLog
  *   Returns whether the system is currently configured to log
  *   what standards / features are blocked.
- * @param {function(): boolean} getBlockCrossFrame
+ * @property {function(): boolean} getBlockCrossFrame
  *   Gets whether the system should block frames from access the DOM of other
  *   frames.
- * @param {function(boolean): undefined} setBlockCrossFrame
+ * @property {function(boolean): undefined} setBlockCrossFrame
  *   Sets whether the system should block frames from access the DOM of other
  *   frames.
- * @param {function(): object} toStorage
+ * @property {function(): object} toStorage
  *   Returns an encoding of the preferences object that can be saved
  *   using the storage API.
- * @param {function(): string} toJSON
+ * @property {function(): string} toJSON
  *   Returns a serialized version of the current state of user preferences,
  *   encoded as a JSON string. Used when sending user preferences to
  *   contexts across process boundaries or to other contexts where they
@@ -102,6 +131,19 @@
  *   Returns a new array of the standard ids being blocked by this rule.
  * @property {function(Array.number): undefined} setStandardIds
  *   Sets the standard ids that should be blocked by this rule.
+ * @property {function(): Array.FeaturePath} getCustomBlockedFeatures
+ *   Returns an array of strings describing paths to features in the DOM
+ *   to block.  The returned array will be sorted in string order.
+ * @property {function(Array.FeaturePath): undefined} setCustomBlockedFeatures
+ *   Sets an array of paths to features in the DOM that should be blocked
+ *   for domains that match this blocking rule.
+ * @property {function(): Array.FeaturePath} getAllBlockedFeatures
+ *   Returns an array of all the features that are blocked in this rule,
+ *   either from a standard that is blocked, or set as a custom blocked
+ * feature, in alphabetical order.
+ * @property {function(): boolean} isBlockingAnyFeatures
+ *   Returns true if this rule is blocking any features, either b/c of blocking
+ *   a standard, or because of a custom blocking rule.
  */
 
 /**

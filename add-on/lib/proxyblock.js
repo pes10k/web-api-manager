@@ -30,6 +30,7 @@
         const localEnums = window.WEB_API_MANAGER_PAGE.enums;
 
         let {featuresToBlock} = window.WEB_API_MANAGER_PAGE;
+        const {customBlockedFeatures} = window.WEB_API_MANAGER_PAGE;
 
         // Its possible that the Web API removal code will block direct references
         // to the following methods, so grab references to them before the
@@ -67,7 +68,7 @@
             featuresToBlock = window.WEB_API_MANAGER_PAGE.allFeatures;
         }
 
-        if (featuresToBlock.length === 0) {
+        if (featuresToBlock.length === 0 && customBlockedFeatures.length === 0) {
             removeSelfFromPage();
             return;
         }
@@ -239,6 +240,7 @@
         // `featuresToBlock` is now an array of FeaturePath's / strings,
         // each describing the keypath of feature in the DOM to block.
         featuresToBlock.forEach(blockFeatureAtKeyPath);
+        customBlockedFeatures.forEach(blockFeatureAtKeyPath);
 
         if (blockCrossFrame === true) {
             // Block references to the return value of the `window.open` function,
@@ -290,20 +292,9 @@
      * but with the window.WEB_API_MANAGER_PAGE object set up
      * correctly to block the desired functions.
      *
-     * @param {Array.string} standardIds
-     *   An array of strings, each being a standard id that should be blocked.
-     * @param {ShouldLogVal} shouldLog
-     *   The behavior of the blocking proxy object, whether it should not
-     *   log, block page access to features and log those "blocking actions",
-     *   or allow the page to access all functionality, and log everything.
-     * @param {boolean} blockCrossFrame
-     *   Whether the parent frame should be able to access the DOM of child
-     *   frames.
-     * @param {string} randNonce
-     *   A unique, unguessable identififer, used so that the injected content
-     *   script can communicate with the content script, using an unguessable
-     *   event name (so that the guest page cannot listen to or spoof
-     *   these messages).
+     * @param {ProxyBlockSettings} blockingSettings
+     *   Instructions on what and how the blocking script should modify the
+     *   executing page.
      *
      * @return {[string, string]}
      *   Returns an array containing two values.  First, JavaScript code
@@ -311,26 +302,28 @@
      *   standardNamesToBlock standards un-reachable, and second, a
      *   base64 encoded sha256 hash of the code.
      */
-    const generateScriptPayload = (standardIds, shouldLog, blockCrossFrame, randNonce) => {
+    const generateScriptPayload = blockingSettings => {
         // Build an array of the strings, each being the keypath to
         // a feature that should be blocked.
-        const featuresToBlock = standardIds.reduce((collection, standardId) => {
-            const featuresInStandard = standardsLib.featuresForStandardId(standardId);
-            collection = collection.concat(featuresInStandard);
-            return collection;
-        }, []);
+        const featuresToBlock = blockingSettings.standardIdsToBlock
+            .reduce((collection, standardId) => {
+                const featuresInStandard = standardsLib.featuresForStandardId(standardId);
+                collection = collection.concat(featuresInStandard);
+                return collection;
+            }, []);
 
         const injectedValues = {
-            randNonce,
+            randNonce: blockingSettings.randNonce,
             featuresToBlock: featuresToBlock,
-            shouldLog,
-            blockCrossFrame,
+            shouldLog: blockingSettings.shouldLog,
+            blockCrossFrame: blockingSettings.blockCrossFrame,
+            customBlockedFeatures: blockingSettings.customBlockedFeatures,
             enums: {
                 ShouldLogVal: enums.ShouldLogVal,
             },
         };
 
-        if (shouldLog === enums.ShouldLogVal.PASSIVE) {
+        if (blockingSettings.shouldLog === enums.ShouldLogVal.PASSIVE) {
             injectedValues.allFeatures = standardsLib.allFeatures();
         }
 

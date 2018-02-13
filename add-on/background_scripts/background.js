@@ -105,17 +105,21 @@
         const url = details.url;
         const matchingRule = prefs.getRuleForUrl(url);
         const standardIdsToBlock = matchingRule.getStandardIds();
+        const customBlockedFeatures = matchingRule.getCustomBlockedFeatures();
         const shouldLog = prefs.getShouldLog();
         const blockCrossFrame = prefs.getBlockCrossFrame();
 
         const randBytes = sjcl.random.randomWords(4);
         const randNonce = sjcl.codec.base64.fromBits(randBytes);
-        const encodedOptions = cookieEncodingLib.toCookieValue(
+        const proxyBlockSettings = {
             standardIdsToBlock,
             shouldLog,
             blockCrossFrame,
-            randNonce
-        );
+            customBlockedFeatures,
+            randNonce,
+        };
+
+        const encodedOptions = cookieEncodingLib.toCookieValue(proxyBlockSettings);
 
         rootObject.cookies.set({
             url,
@@ -126,7 +130,7 @@
         // If there are no standards to block on this domain, and we're not
         // in "passive" logging mode, then there is no need to modify the CSP
         // headers, since no script will be injected into the page.
-        if (standardIdsToBlock.length === 0 &&
+        if (matchingRule.isBlockingAnyFeatures() === false &&
                 shouldLog !== enums.ShouldLogVal.PASSIVE) {
             return;
         }
@@ -139,12 +143,7 @@
             .filter(httpHeadersLib.isHeaderCSPScriptSrcWithOutUnsafeInline);
 
         if (cspDynamicPolicyHeaders.length === 1) {
-            const [ignore, scriptHash] = proxyBlockLib.generateScriptPayload(
-                standardIdsToBlock,
-                shouldLog,
-                blockCrossFrame,
-                randNonce
-            );
+            const [ignore, scriptHash] = proxyBlockLib.generateScriptPayload(proxyBlockSettings);
 
             const newCSPValue = httpHeadersLib.createCSPInstructionWithHashAllowed(
                 cspDynamicPolicyHeaders[0].value,

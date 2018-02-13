@@ -68,7 +68,7 @@ describe("Logging into popular sites", function () {
             utils.promiseGetDriver()
                 .then(function (driver) {
                     driverReference = driver;
-                    return utils.promiseSetBlockingRules(driver, standardsToBlock);
+                    return utils.promiseSetBlockedStandards(driver, standardsToBlock);
                 })
                 .then(() => driverReference.get("https://github.com/login"))
                 .then(function () {

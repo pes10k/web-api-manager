@@ -99,7 +99,7 @@ describe("Preferences management", function () {
             assert.equal(areArraysEqual(standardIdsForDefaultRuleStart, []), true, "By default, standard rule should block no standards.");
 
             const updateStandardIds = [1, 2, 3];
-            prefs.upcertRule(preDefaultRule.pattern, updateStandardIds);
+            prefs.upcertRuleStandardIds(preDefaultRule.pattern, updateStandardIds);
             const postDefaultRule = prefs.getDefaultRule();
             const postStandardIds = postDefaultRule.getStandardIds();
             assert.equal(areArraysEqual(postStandardIds, updateStandardIds), true, "After upcert, the default rule should reflect new standards.");
@@ -122,7 +122,7 @@ describe("Preferences management", function () {
         it("Encoding to and from JSON", function (done) {
             const prefs = preferencesLib.initNew();
             const testDefaultStdIds = [1, 2, 3];
-            prefs.upcertRule(constants.defaultPattern, testDefaultStdIds);
+            prefs.upcertRuleStandardIds(constants.defaultPattern, testDefaultStdIds);
 
             const testNewPattern = "www.example.com";
             const testNewRuleStdIds = [4, 5, 6];

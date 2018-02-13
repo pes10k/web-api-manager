@@ -150,3 +150,43 @@ Version 5
     }
 }
 ```
+
+Version 6
+---
+```
+    "webApiManager": {
+        "schema": 5,
+        "rules": [
+            {
+                "p": "the match pattern this rule applies to, <string>",
+                "s": [
+                    integer id of a standard, taken from the info.id property,
+                    integer id of another standard, taken from the info.id property,
+                    etc...
+                ],
+                "f": array of key paths (strings) of features that should be
+                     blocked for standards that match this rule.
+            },
+            {
+                "p": ...
+                "s": [
+                    ...
+                ],
+                "f": [...],
+            },
+            ...
+        ],
+        "shouldLog": "0" | "1" | "2" (a ShouldLogVal enum),
+        "template": {
+            "s": [
+                integer id of a standard, taken from the info.id property,
+                integer id of another standard, taken from the info.id property,
+                etc...
+            ],
+            "f": array of key paths (strings) of features that should be
+                 blocked for standards that match this rule.
+        },
+        "blockCrossFrame": (boolean)
+    }
+}
+```

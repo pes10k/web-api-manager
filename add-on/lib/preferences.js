@@ -11,8 +11,15 @@
     const rootObject = browserLib.getRootObject();
     const storageKey = "webApiManager";
 
+    // Structure for a default, empty template rule.  Used in places where
+    // we need to fill in a default for a missing or ommitted template argument.
+    const emptyTemplate = {
+        s: [],
+        f: [],
+    };
+
     /**
-     *  Singleton, disk-sync'ed representation of the users preferences.
+     * Singleton, disk-sync'ed representation of the users preferences.
      * @param {?Preferences}
      */
     let instance;
@@ -53,9 +60,9 @@
      *   Either a valid ShouldLog enum value, describing how logging should
      *   be performed, or undefined, in which case shouldLog.NONE is used,
      *   indicating no logging should be performed.
-     * @param {?Array.number} template
-     *   An optional array of standard ids that can be used as a template
-     *   rule, that can applied to other domains / patterns.
+     * @param {?object} templateData
+     *   An optional object specifying the standards and features that should
+     *   be used for a template rule.
      * @param {?boolean} blockCrossFrame
      *   A boolean value, describing whether cross frame access should be
      *   blocked.  Defaults to false.
@@ -67,10 +74,10 @@
      * @return {Preferences}
      *   An initilized, preferences object.
      */
-    const init = (blockRulesRaw = [], shouldLog, template, blockCrossFrame, syncWithDb) => {
-        let shouldLogLocal = shouldLog || enums.shouldLog.NONE;
-        let templateLocal = template.slice() || [];
-        let blockCrossFrameLocal = blockCrossFrame;
+    const init = (blockRulesRaw = [], shouldLog, templateData, blockCrossFrame, syncWithDb) => {
+        let shouldLogLocal = shouldLog || enums.ShouldLogVal.NONE;
+        const templateDataLocal = JSON.parse(JSON.stringify(templateData)) || {s: [], f: []};
+        let blockCrossFrameLocal = !!blockCrossFrame;
 
         let defaultRule;
         const nonDefaultRules = [];
@@ -142,7 +149,7 @@
             return true;
         };
 
-        const upcertRule = (pattern, standardIds) => {
+        const upcertRuleStandardIds = (pattern, standardIds) => {
             if (pattern === defaultPattern) {
                 defaultRule.setStandardIds(standardIds);
                 return false;
@@ -151,10 +158,28 @@
             const isNewRule = patternsToRulesMap[pattern] === undefined;
 
             if (isNewRule) {
-                addRule(blockRulesLib.init(pattern, standardIds));
+                addRule(blockRulesLib.init(pattern, standardIds, []));
             } else {
                 const existingRule = patternsToRulesMap[pattern];
                 existingRule.setStandardIds(standardIds);
+            }
+
+            return isNewRule;
+        };
+
+        const upcertRuleCustomBlockedFeatures = (pattern, customBlockedFeatures) => {
+            if (pattern === defaultPattern) {
+                defaultRule.setCustomBlockedFeatures(customBlockedFeatures);
+                return false;
+            }
+
+            const isNewRule = patternsToRulesMap[pattern] === undefined;
+
+            if (isNewRule) {
+                addRule(blockRulesLib.init(pattern, [], customBlockedFeatures));
+            } else {
+                const existingRule = patternsToRulesMap[pattern];
+                existingRule.setCustomBlockedFeatures(customBlockedFeatures);
             }
 
             return isNewRule;
@@ -167,12 +192,13 @@
 
         const getShouldLog = () => shouldLogLocal;
 
-        const getTemplate = () => {
-            return templateLocal.slice();
+        const getTemplateRule = () => {
+            return blockRulesLib.init(undefined, templateDataLocal.s, templateDataLocal.f);
         };
 
-        const setTemplate = templateStandardIds => {
-            templateLocal = templateStandardIds.slice();
+        const setTemplateRule = blockRule => {
+            templateDataLocal.s = blockRule.getStandardIds();
+            templateDataLocal.f = blockRule.getCustomBlockedFeatures();
         };
 
         const getBlockCrossFrame = () => blockCrossFrameLocal;
@@ -187,7 +213,7 @@
             return JSON.stringify({
                 rules: rulesData,
                 shouldLog: getShouldLog(),
-                template: getTemplate(),
+                template: templateDataLocal,
                 blockCrossFrame: getBlockCrossFrame(),
             });
         };
@@ -197,7 +223,7 @@
                 schema: constants.schemaVersion,
                 rules: getAllRules().map(rule => rule.toData()),
                 shouldLog: getShouldLog(),
-                template: getTemplate(),
+                template: templateDataLocal,
                 blockCrossFrame: getBlockCrossFrame(),
             };
         };
@@ -211,11 +237,12 @@
             getRuleForHost,
             deleteRule,
             addRule,
-            upcertRule,
+            upcertRuleStandardIds,
+            upcertRuleCustomBlockedFeatures,
             setShouldLog,
             getShouldLog,
-            getTemplate,
-            setTemplate,
+            getTemplateRule,
+            setTemplateRule,
             getBlockCrossFrame,
             setBlockCrossFrame,
             toStorage,
@@ -223,8 +250,9 @@
         };
 
         if (syncWithDb === true) {
-            const modifyingMethods = ["deleteRule", "addRule", "upcertRule",
-                "setShouldLog", "setBlockCrossFrame"];
+            const modifyingMethods = ["deleteRule", "addRule",
+                "upcertRuleStandardIds", "upcertRuleCustomBlockedFeatures",
+                "setShouldLog", "setBlockCrossFrame", "setTemplateRule"];
             modifyingMethods.forEach(methodName => {
                 response[methodName] = resync(response[methodName]);
             });
@@ -262,7 +290,7 @@
             // Default preferences to use, if we weren't able to load
             // any stored prefernces from disk / sync.
             let blockRulesRaw = [];
-            let template = [];
+            let template = emptyTemplate;
             let shouldLog = enums.ShouldLogVal.NONE;
             let blockCrossFrame = false;
 
@@ -325,8 +353,16 @@
 
         enums.utils.assertValidEnum(enums.ShouldLogVal, data.shouldLog);
 
-        if (Array.isArray(data.template) === false) {
-            throw `Invalid preferences JSON: ${jsonString} does not have an array for a rule template.`;
+        if (data.template === undefined || Array.isArray(data.template) === true)  {
+            throw `Invalid preferences JSON: ${jsonString} must have an object in the "template" key.`;
+        }
+
+        if (Array.isArray(data.template.s) === false) {
+            throw `Invalid preferences JSON: ${jsonString} does not have an array for the standards in the template.`;
+        }
+
+        if (Array.isArray(data.template.f) === false) {
+            throw `Invalid preferences JSON: ${jsonString} does not have an array for the features in the template.`;
         }
 
         const {rules, shouldLog, template, blockCrossFrame} = data;
@@ -341,7 +377,7 @@
      *   An empty preferences object.
      */
     const initNew = () => {
-        return init([], enums.ShouldLogVal.NONE, []);
+        return init([], enums.ShouldLogVal.NONE, emptyTemplate, false, false);
     };
 
     window.WEB_API_MANAGER.preferencesLib = {
