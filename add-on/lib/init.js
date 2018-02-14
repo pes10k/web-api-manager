@@ -52,6 +52,10 @@
             // more specific matching domain rule sets.
             defaultPattern: "(default)",
 
+            // Magic value, used to indicate that a given rule is not an
+            // active blocking rule, but is the user-set template rule.
+            templatePattern: "(template)",
+
             // Version of schema used when serializing preferences to storage.
             schemaVersion: 6,
         },

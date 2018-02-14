@@ -84,6 +84,13 @@
                 <h5 class="list-group-item-heading">
                     Templates
                 </h5>
+
+                <p id="template-description">
+                    The current template blocks
+                    <code>{{ numFeaturesInTemplate }}</code> {{ numFeaturesInTemplate === 1 ? "feature" : "features" }}
+                    and <code>{{ numStandardsInTemplate }}</code> {{ numStandardsInTemplate === 1 ? "standard" : "standards" }}.
+                </p>
+
                 <div class="form-group">
                     <button
                         @click="onSaveTemplateClicked"
@@ -97,8 +104,7 @@
                         :disable="isPassiveMode"
                         class="btn btn-default"
                         id="templates-apply">
-                        Apply template ({{ dataTemplateStandards.length === 1 ? "1 standard" : dataTemplateStandards.length.toString() + " standards" }} and
-                            {{ dataTemplateCustomBlockedFeatures.length === 1 ? "1 feature" : dataTemplateCustomBlockedFeatures.length.toString() + " features" }})
+                        Apply template
                     </button>
                 </div>
                 <p class="form-text text-muted">

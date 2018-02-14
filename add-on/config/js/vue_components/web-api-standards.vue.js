@@ -2,7 +2,7 @@
     "use strict";
 
     const standardsDefaults = window.WEB_API_MANAGER.defaults;
-    const {standardsLib, categoriesLib, stateLib, enums} = window.WEB_API_MANAGER;
+    const {standardsLib, categoriesLib, stateLib, blockRulesLib, enums} = window.WEB_API_MANAGER;
     const Vue = window.Vue;
 
     Vue.component("web-api-standards", {
@@ -39,6 +39,17 @@
             },
             numStandardsBlocked: function () {
                 return this.dataCurrentStandardIds.length;
+            },
+            numFeaturesInTemplate: function () {
+                const newBlockRule = blockRulesLib.init(
+                    undefined,
+                    this.dataTemplateStandards,
+                    this.dataTemplateCustomBlockedFeatures
+                );
+                return newBlockRule.getAllBlockedFeatures().length;
+            },
+            numStandardsInTemplate: function () {
+                return this.dataTemplateStandards.length;
             },
         },
         methods: {

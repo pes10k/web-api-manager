@@ -5,6 +5,7 @@
  */
 "use strict";
 
+const assert = require("assert");
 const utils = require("./lib/utils");
 const webdriver = require("selenium-webdriver");
 const by = webdriver.By;
@@ -143,6 +144,105 @@ describe("Config panel: Blocking rules", function () {
                     return driverRef.wait(until.elementLocated(by.css(query)), 1000);
                 })
                 .then(() => {
+                    driverRef.quit();
+                    done();
+                })
+                .catch(e => {
+                    driverRef.quit();
+                    done(e);
+                });
+        });
+    });
+
+    describe("Template panel", function () {
+        this.timeout = () => 20000;
+
+        const promiseGetCurrentTemplateDescription = driver => {
+            return utils.promiseOpenCustomConfigContainer(driver)
+                .then(() => driver.wait(until.elementLocated(by.id("template-description")), 1000))
+                .then(pElm => pElm.getAttribute("innerText"));
+        };
+
+        it("Template description is correct when saving a template", function (done) {
+            let driverRef;
+            utils.promiseGetDriver()
+                .then(driver => {
+                    driverRef = driver;
+                    return utils.promiseExtensionConfigPage(driver);
+                })
+                .then(() => promiseGetCurrentTemplateDescription(driverRef))
+                .then(templateDesc => {
+                    assert.equal(
+                        templateDesc,
+                        "The current template blocks 0 features and 0 standards.",
+                        "Initially no features or standards should be in the template rule."
+                    );
+                    return utils.promiseSetBlockedStandards(driverRef, [1, 2, 3]);
+                })
+                .then(() => utils.promiseTemplateSave(driverRef))
+                .then(() => promiseGetCurrentTemplateDescription(driverRef))
+                .then(templateDesc => {
+                    assert.equal(
+                        templateDesc,
+                        "The current template blocks 16 features and 3 standards.",
+                        "Template description should indicate three new blocked standards."
+                    );
+                    return utils.promiseSetBlockedFeatures(driverRef, [
+                        "Performance.prototype.now",
+                        "HTMLEmbedElement.prototype.getSVGDocument",
+                    ]);
+                })
+                .then(() => utils.promiseTemplateSave(driverRef))
+                .then(() => promiseGetCurrentTemplateDescription(driverRef))
+                .then(templateDesc => {
+                    assert.equal(
+                        templateDesc,
+                        "The current template blocks 18 features and 3 standards.",
+                        "Template description should indiciate two blocked features."
+                    );
+                    driverRef.quit();
+                    done();
+                })
+                .catch(e => {
+                    driverRef.quit();
+                    done(e);
+                });
+        });
+
+        it("Template display should be correct after refreshing page (issue #77)", function (done) {
+            let driverRef;
+            utils.promiseGetDriver()
+                .then(driver => {
+                    driverRef = driver;
+                    return utils.promiseExtensionConfigPage(driverRef);
+                })
+                .then(() => promiseGetCurrentTemplateDescription(driverRef))
+                .then(templateDesc => {
+                    assert.equal(
+                        templateDesc,
+                        "The current template blocks 0 features and 0 standards.",
+                        "Initially no features or standards should be in the template rule."
+                    );
+                    return utils.promiseSetBlockedStandards(driverRef, [1, 2, 3]);
+                })
+                .then(() => utils.promiseTemplateSave(driverRef))
+                .then(() => promiseGetCurrentTemplateDescription(driverRef))
+                .then(templateDesc => {
+                    assert.equal(
+                        templateDesc,
+                        "The current template blocks 16 features and 3 standards.",
+                        "Template description should indicate three new blocked standards."
+                    );
+                    // Force page reload.
+                    return utils.promiseExtensionConfigPage(driverRef);
+                })
+                .then(() => promiseGetCurrentTemplateDescription(driverRef))
+                .then(templateDesc => {
+                    assert.equal(
+                        templateDesc,
+                        "The current template blocks 16 features and 3 standards.",
+                        "Template description should indicate three new blocked standards."
+                    );
                     driverRef.quit();
                     done();
                 })

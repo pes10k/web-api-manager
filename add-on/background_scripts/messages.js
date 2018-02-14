@@ -51,8 +51,9 @@
         // user's "template" (easily re-apply-able set of standards to block)
         // has changed.
         if (label === "updatePreferencesTemplate") {
-            const {template} = data;
-            preferences.setTemplate(template);
+            const {templateRuleJSON} = data;
+            const templateRule = blockRulesLib.fromJSON(templateRuleJSON);
+            preferences.setTemplateRule(templateRule);
             return;
         }
 

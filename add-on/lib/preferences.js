@@ -7,7 +7,7 @@
 (function () {
     "use strict";
     const {constants, enums, browserLib, blockRulesLib, migrationLib} = window.WEB_API_MANAGER;
-    const defaultPattern = constants.defaultPattern;
+    const {defaultPattern, templatePattern} = constants;
     const rootObject = browserLib.getRootObject();
     const storageKey = "webApiManager";
 
@@ -76,7 +76,13 @@
      */
     const init = (blockRulesRaw = [], shouldLog, templateData, blockCrossFrame, syncWithDb) => {
         let shouldLogLocal = shouldLog || enums.ShouldLogVal.NONE;
-        const templateDataLocal = JSON.parse(JSON.stringify(templateData)) || {s: [], f: []};
+        const defaultTemplateValue = {
+            p: templatePattern,
+            s: [],
+            f: [],
+        };
+
+        const templateDataLocal = JSON.parse(JSON.stringify(templateData)) || defaultTemplateValue;
         let blockCrossFrameLocal = !!blockCrossFrame;
 
         let defaultRule;
@@ -193,7 +199,7 @@
         const getShouldLog = () => shouldLogLocal;
 
         const getTemplateRule = () => {
-            return blockRulesLib.init(undefined, templateDataLocal.s, templateDataLocal.f);
+            return blockRulesLib.init(templatePattern, templateDataLocal.s, templateDataLocal.f);
         };
 
         const setTemplateRule = blockRule => {

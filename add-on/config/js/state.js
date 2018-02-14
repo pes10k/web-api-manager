@@ -68,15 +68,14 @@
      * Sends a message to the background script that the user's template value
      * has been updated.
      *
-     * @param {Array.number} template
-     *   An array of standard ids that are the users new template of standards
-     *   to block.
+     * @param {BlockRule} templateRule
+     *   A blocking rule, depicting the template rule stored in preferences.
      *
      * @return {undefined}
      */
-    const notifyBackgroundProcessOfTemplateChange = template => {
+    const notifyBackgroundProcessOfTemplateChange = templateRule => {
         rootObject.runtime.sendMessage(["updatePreferencesTemplate", {
-            template,
+            templateRuleJSON: templateRule.toJSON(),
         }]);
     };
 

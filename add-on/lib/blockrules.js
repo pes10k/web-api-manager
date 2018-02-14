@@ -145,10 +145,6 @@
         let localStandardIds = standardIds ? standardIds.slice() : [];
         let localBlockedFeatures = blockedFeatures ? blockedFeatures.slice() : [];
 
-        const toJSON = () => {
-            return JSON.stringify(toData());
-        };
-
         const setStandardIds = newStandardIds => {
             localStandardIds = newStandardIds;
         };
@@ -181,6 +177,10 @@
                 s: getStandardIds(),
                 f: getCustomBlockedFeatures(),
             });
+        };
+
+        const toJSON = () => {
+            return JSON.stringify(toData());
         };
 
         return Object.freeze({
