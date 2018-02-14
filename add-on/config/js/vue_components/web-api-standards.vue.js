@@ -2,7 +2,8 @@
     "use strict";
 
     const standardsDefaults = window.WEB_API_MANAGER.defaults;
-    const {standardsLib, categoriesLib, stateLib, blockRulesLib, enums} = window.WEB_API_MANAGER;
+    const {standardsLib, categoriesLib, stateLib} = window.WEB_API_MANAGER;
+    const {enums, constants, blockRulesLib} = window.WEB_API_MANAGER;
     const Vue = window.Vue;
 
     Vue.component("web-api-standards", {
@@ -13,7 +14,10 @@
         staticRenderFns: window.WEB_API_MANAGER.vueComponents["web-api-standards"].staticRenderFns,
         data: function () {
             return {
-                customConfigurationsHidden: true,
+                isCustomConfigurationsHidden: true,
+                isEditingRulePattern: false,
+                defaultPattern: constants.defaultPattern,
+                dataEditError: "",
             };
         },
         computed: {
@@ -141,6 +145,40 @@
             },
             toggleCustomConfigurations: function () {
                 this.customConfigurationsHidden = !this.customConfigurationsHidden;
+            },
+            newPatternChanged: function (event)  {
+                const currentValue = event.target.value.trim();
+                // If the pattern in the input field hasn't changed, or is equal
+                // to the pattern for the currently selected rule, then
+                // its a NOOP, so no error to display.
+                if (currentValue === this.dataSelectedPattern) {
+                    this.dataEditError = "";
+                    return;
+                }
+
+                // Also check to make sure that the field isn't empty, since
+                // having an empty match pattern wouldn't make any kind of
+                // sense for matching against URLs.
+                if (currentValue === "") {
+                    this.dataEditError = "The match pattern cannot be empty.";
+                    return;
+                }
+
+                const prefs = this.$root.$data.preferences;
+                const ruleForCurrentPattern = prefs.getRuleForPattern(currentValue);
+
+                // If there is a rule in the user's preferences for the pattern
+                // in the edit field, and that rule isn't for the currnetly
+                // selected pattern (as checked above), then send an error,
+                // since it means the user would be changing the pattern
+                // for the current rule to match a rule that already exists.
+                if (ruleForCurrentPattern !== undefined)  {
+                    this.dataEditError = `There is already a rule for '${currentValue}'`;
+                    return;
+                }
+
+                // Otherwise, things look good, and there is no error to display.
+                this.dataEditError = "";
             },
         },
     });

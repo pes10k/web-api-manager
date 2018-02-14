@@ -1,6 +1,47 @@
 <div class="web-api-standards-container">
 
-    <h3>Pattern: <code>{{ dataSelectedPattern }}</code></h3>
+    <h3 v-if="isEditingRulePattern === false">
+        Pattern:
+        <code class="mr-2">{{ dataSelectedPattern }}</code>
+        <button
+            v-if="dataSelectedPattern !== defaultPattern"
+            class="btn btn-warning"
+            @click="isEditingRulePattern = true">
+            Edit
+        </button>
+    </h3>
+    <div v-else>
+        <div class="form-inline mb-2">
+            <div class="form-group">
+                <label
+                    for="rule-pattern"
+                    class="mr-2">
+                    Pattern:
+                </label>
+                <input id="rule-pattern"
+                    class="form-control mr-2"
+                    :value="dataSelectedPattern"
+                    @keyup.stop.prevent="newPatternChanged">
+                <button
+                    class="btn btn-primary mr-2"
+                    :disabled="String(dataEditError) === '' ? '' : 'disabled'">
+                    Save
+                </button>
+                <button
+                    class="btn btn-secondary mr-2"
+                    @click.prevent="isEditingRulePattern = false; dataEditError = '';">
+                    Cancel
+                </button>
+            </div>
+        </div>
+        <div
+            v-if="dataEditError !== ''"
+            role="alert"
+            class="alert alert-danger">
+            {{ dataEditError }}
+        </div>
+    </div>
+
     <p>
         Blocking <code>{{ numFeaturesBlocked }}</code> {{ numFeaturesBlocked === 1 ? "feature" : "features" }}
         and <code>{{ numStandardsBlocked }}</code> {{ numStandardsBlocked === 1 ? "standard" : "standards" }}.
@@ -65,10 +106,10 @@
     <div class="card mb-4" id="custom-config-container">
         <a class="card-header"
             href="#"
-            @click.prevent="customConfigurationsHidden = !customConfigurationsHidden">
+            @click.prevent="isCustomConfigurationsHidden = !isCustomConfigurationsHidden">
             <strong>Custom configurations</strong>
             <span class="badge badge-pill badge-secondary float-right">
-                <template v-if="customConfigurationsHidden">
+                <template v-if="isCustomConfigurationsHidden">
                     +
                 </template>
                 <template v-else>
@@ -79,7 +120,7 @@
 
         <ul class="list-group list-group-flush"
             id="custom-config-body"
-            v-if="!customConfigurationsHidden">
+            v-if="!isCustomConfigurationsHidden">
             <li class="list-group-item">
                 <h5 class="list-group-item-heading">
                     Templates
