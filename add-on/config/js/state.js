@@ -25,7 +25,6 @@
         if (validUpdateOperations.has(operation) === false) {
             throw `Invalid background operation specified: '${operation}'`;
         }
-
         rootObject.runtime.sendMessage(["updatePreferenceRules", {
             operation,
             ruleJSON: rule.toJSON(),
@@ -79,21 +78,41 @@
         }]);
     };
 
+    /**
+     * Sends a message to the background script that the user has changed
+     * the pattern that an existing rule reffers to.
+     *
+     * @param {MatchPattern} currentPattern
+     *   The match pattern to be replaced (i.e. the match pattern for the rule
+     *   that is having it's match pattern updated).
+     * @param {MatchPattern} newPattern
+     *   The new pattern that should replace the current pattern, in the
+     *   rule with the `currentPattern` pattern.
+     *
+     * @return {undefined}
+     */
+    const updateBackgroundProcessOfPatternChange = (currentPattern, newPattern) => {
+        rootObject.runtime.sendMessage(["updatePreferencesReplacePattern", {
+            currentPattern,
+            newPattern,
+        }]);
+    };
+
     const init = preferences => {
         const state = Object.create(null);
         const defaultRule = preferences.getDefaultRule();
         state.dataSelectedPattern = defaultPattern;
         state.dataCurrentStandardIds = defaultRule.getStandardIds();
-        state.dataPatterns = preferences.getAllRules().map(rule => rule.pattern).sort();
+        state.dataPatterns = preferences.getAllRules().map(rule => rule.getPattern()).sort();
         state.dataShouldLog = preferences.getShouldLog();
         state.dataCurrentCustomBlockedFeatures = defaultRule.getCustomBlockedFeatures().join("\n");
 
         state.dataAllowingAllPatterns = preferences.getAllRules()
             .filter(rule => rule.isBlockingAnyFeatures() === false)
-            .map(rule => rule.pattern);
+            .map(rule => rule.getPattern());
         state.dataBlockingAnyPatterns = preferences.getAllRules()
             .filter(rule => rule.isBlockingAnyFeatures() === true)
-            .map(rule => rule.pattern);
+            .map(rule => rule.getPattern());
 
         const templateRule = preferences.getTemplateRule();
         state.dataTemplateStandards = templateRule.getStandardIds();
@@ -113,7 +132,7 @@
         state.dataTemplateStandards = templateRule.getStandardIds();
         state.dataTemplateCustomBlockedFeatures = templateRule.getCustomBlockedFeatures();
 
-        state.dataPatterns = state.preferences.getAllRules().map(rule => rule.pattern).sort();
+        state.dataPatterns = state.preferences.getAllRules().map(rule => rule.getPattern()).sort();
         const currentRule = getCurrentRule(state);
         state.dataCurrentStandardIds = currentRule.getStandardIds();
         state.dataShouldLog = state.preferences.getShouldLog();
@@ -121,10 +140,10 @@
         state.dataBlockCrossFrame = state.preferences.getBlockCrossFrame();
         state.dataAllowingAllPatterns = state.preferences.getAllRules()
             .filter(rule => rule.isBlockingAnyFeatures() === false)
-            .map(rule => rule.pattern);
+            .map(rule => rule.getPattern());
         state.dataBlockingAnyPatterns = state.preferences.getAllRules()
             .filter(rule => rule.isBlockingAnyFeatures() === true)
-            .map(rule => rule.pattern);
+            .map(rule => rule.getPattern());
     };
 
     const setSelectedPattern = (state, newPattern) => {
@@ -135,14 +154,14 @@
     const patternsBlockingNoStandards = state => {
         return state.preferences.getAllRules()
             .filter(rule => rule.getStandardIds().length === 0)
-            .map(rule => rule.pattern)
+            .map(rule => rule.getPattern())
             .sort();
     };
 
     const patternsBlockingStandards = state => {
         return state.preferences.getAllRules()
             .filter(rule => rule.getStandardIds().length > 0)
-            .map(rule => rule.pattern)
+            .map(rule => rule.getPattern())
             .sort();
     };
 
@@ -172,7 +191,7 @@
             state.dataSelectedPattern = constants.defaultPattern;
         }
         const ruleToDelete = state.preferences.getRuleForPattern(pattern);
-        state.preferences.deleteRule(pattern);
+        state.preferences.deleteRuleForPattern(pattern);
         // Notify background process to keep preferences in sync
         resyncWithPrefs(state);
         notifyBackgroundProcessOfRuleChange("delete", ruleToDelete);
@@ -215,6 +234,23 @@
         notifyBackgroundProcessOfRuleChange("update", getCurrentRule(state));
     };
 
+    const changePatternForRule = (state, newPattern, replacedPattern) => {
+        const prefs =  state.preferences;
+
+        const replacedRule = prefs.getRuleForPattern(replacedPattern);
+        if (replacedRule === undefined) {
+            throw `Attempting to replace rule with pattern '${replacedPattern}' with '${newPattern}', but could not find existing rule.`;
+        }
+
+        prefs.deleteRuleForPattern(replacedPattern);
+        replacedRule.setPattern(newPattern);
+        prefs.addRule(replacedRule);
+
+        state.dataSelectedPattern = newPattern;
+        resyncWithPrefs(state);
+        updateBackgroundProcessOfPatternChange(replacedPattern, newPattern);
+    };
+
     window.WEB_API_MANAGER.stateLib = {
         init,
         resyncWithPrefs,
@@ -229,5 +265,6 @@
         setStandardIdsForPattern,
         setBlockCrossFrame,
         setCustomBlockedFeatures,
+        changePatternForRule,
     };
 }());

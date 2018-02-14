@@ -4,7 +4,7 @@
 (function () {
     "use strict";
 
-    const {standardsLib} = window.WEB_API_MANAGER;
+    const {standardsLib, constants} = window.WEB_API_MANAGER;
 
     // From https://www.npmjs.com/package/escape-string-regexp
     const matchOperatorsRe = /[|\\{}()[\]^$+*?.]/g;
@@ -142,6 +142,7 @@
      *   domains matching the match pattern.
      */
     const init = (matchPattern, standardIds, blockedFeatures) => {
+        let localMatchPattern = matchPattern;
         let localStandardIds = standardIds ? standardIds.slice() : [];
         let localBlockedFeatures = blockedFeatures ? blockedFeatures.slice() : [];
 
@@ -171,17 +172,21 @@
             return localStandardIds.length > 0 || localBlockedFeatures.length > 0;
         };
 
+        const getPattern = () => localMatchPattern;
+
+        const setPattern = newMatchPattern => {
+            localMatchPattern = newMatchPattern;
+        };
+
         const toData = () => {
             return Object.assign({}, {
-                p: matchPattern,
+                p: localMatchPattern,
                 s: getStandardIds(),
                 f: getCustomBlockedFeatures(),
             });
         };
 
-        const toJSON = () => {
-            return JSON.stringify(toData());
-        };
+        const toJSON = () => JSON.stringify(toData());
 
         return Object.freeze({
             toData,
@@ -192,9 +197,10 @@
             getCustomBlockedFeatures,
             getAllBlockedFeatures,
             isBlockingAnyFeatures,
-            pattern: matchPattern,
-            isMatchingHost: testPatternWithHost.bind(undefined, matchPattern),
-            isMatchingUrl: testPatternWithUrl.bind(undefined, matchPattern),
+            getPattern,
+            setPattern,
+            isMatchingHost: testPatternWithHost.bind(undefined, localMatchPattern),
+            isMatchingUrl: testPatternWithUrl.bind(undefined, localMatchPattern),
         });
     };
 
@@ -250,9 +256,59 @@
         return fromData(data);
     };
 
+    /**
+     * Checks to see if the proposed match pattern looks like a valid one.
+     *
+     * This function performs some basic validation checks against the
+     * proposed match pattern.  It is more intended to help honest-but-falable
+     * users, and not to protect against malicious inputs.
+     *
+     * This method currently checks the following:
+     *   - That the match pattern is not empty, or a string only containing
+     *     white space.
+     *   - That the match pattern does not match any of the special values
+     *     used internally to indicate some special cases (specifically
+     *     the "default" matching case, and the "is a template rule" cases).
+     *
+     * @param {string} proposedMatchPattern
+     *   A string, representing a possible match pattern.
+     *
+     * @return {[boolean, ?string]}
+     *   An array of length two.  The first value is a boolean describing
+     *   whether the given string is a valid match pattern.  If true,
+     *   then the second value will be undefined.  Otherwise, the second
+     *   value will be a string describing why the given match pattern
+     *   is invalid.
+     */
+    const isValidMatchPattern = proposedMatchPattern => {
+        const trimmedPattern = proposedMatchPattern.trim();
+        const {defaultPattern, templatePattern} = constants;
+
+        if (trimmedPattern === "") {
+            return [false, "Match patterns cannot be empty strings."];
+        }
+
+        if  (trimmedPattern === defaultPattern) {
+            return [
+                false,
+                `${defaultPattern} cannot be used as a pattern because its used to indicate the fallback rule.`,
+            ];
+        }
+
+        if (trimmedPattern === templatePattern)  {
+            return [
+                false,
+                `${templatePattern} cannot be used as a pattern because its used to indicate the template rule.`,
+            ];
+        }
+
+        return [true, undefined];
+    };
+
     window.WEB_API_MANAGER.blockRulesLib = {
         init,
         fromData,
         fromJSON,
+        isValidMatchPattern,
     };
 }());

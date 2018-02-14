@@ -157,7 +157,7 @@
         uniqueHosts.forEach(aHost => {
             const blockRule = preferences.getRuleForHost(aHost);
             const stdIdsForRule = blockRule.getStandardIds();
-            const rowElm = ruleToTr(aHost, blockRule.pattern, stdIdsForRule.length);
+            const rowElm = ruleToTr(aHost, blockRule.getPattern(), stdIdsForRule.length);
             rulesTableBody.appendChild(rowElm);
         });
 

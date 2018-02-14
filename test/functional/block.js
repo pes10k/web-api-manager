@@ -68,6 +68,7 @@ describe("Basic functionality", function () {
                     driverRef = driver;
                     return utils.promiseExtensionConfigPage(driverRef);
                 })
+                .then(() => utils.pause(250))
                 .then(() => utils.promiseSetBlockedStandards(driverRef, standardsToBlock))
                 .then(() => driverRef.get(testUrl))
                 .then(() => driverRef.executeAsyncScript(svgTestScript))

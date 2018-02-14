@@ -190,12 +190,12 @@ const assertMigratedPreferences = (prefs, testExpections = {}) => {
         assert.equal(
             JSON.stringify(foundStdIds),
             JSON.stringify(expectedStdIds),
-            `Unexpected standard ids for the '${rule.pattern}' rule in migrated preferences.`
+            `Unexpected standard ids for the '${rule.getPattern()}' rule in migrated preferences.`
         );
         assert.equal(
             JSON.stringify(foundBlockedFeatures),
             JSON.stringify(expectedBlockedFeatures),
-            `Unexpected blocked features for the '${rule.pattern}' rule in migrated preferences.`
+            `Unexpected blocked features for the '${rule.getPattern()}' rule in migrated preferences.`
         );
     };
 

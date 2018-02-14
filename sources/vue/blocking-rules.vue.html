@@ -64,7 +64,8 @@
         
             <div class="form-group" :class="{ 'has-error': errorMessage }">
                 <label for="newPattern" class="sr-only">Add new pattern:</label>
-                <input class="form-control"
+                <input
+                    :class="['form-control', { 'is-invalid': errorMessage }]"
                 v-model.trim="newPattern"
                     placeholder="*.example.org">
             </div>

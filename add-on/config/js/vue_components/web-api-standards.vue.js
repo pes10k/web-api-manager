@@ -2,8 +2,56 @@
     "use strict";
 
     const standardsDefaults = window.WEB_API_MANAGER.defaults;
-    const {standardsLib, categoriesLib, stateLib, blockRulesLib, enums} = window.WEB_API_MANAGER;
+    const {standardsLib, categoriesLib, stateLib} = window.WEB_API_MANAGER;
+    const {enums, constants, blockRulesLib} = window.WEB_API_MANAGER;
     const Vue = window.Vue;
+
+    /**
+     * Checks to see if a given match pattern is valid to replace the match
+     * pattern for the currently selected rule.
+     *
+     * @param {string} proposedPattern
+     *   A possible match pattern, proposed to replace the match pattern
+     *   for the currently selected rule.
+     * @param {Preferences} prefs
+     *   The preferences for the user, including, most relevantly, the
+     *   other blocking rules the user has stored.
+     *
+     * @return {[boolean, ?string]}
+     *   An array of length two.  The first value is a boolean describing
+     *   whether the given string is a valid match pattern.  If true,
+     *   then the second value will be undefined.  Otherwise, the second
+     *   value will be a string describing why the given match pattern
+     *   is invalid.
+     */
+    const isNewPatternValid = (proposedPattern, prefs) => {
+        if (proposedPattern.trim() === "")  {
+            return [
+                false,
+                "Match patterns cannot be empty.",
+            ];
+        }
+
+        const [isValid, error] = blockRulesLib.isValidMatchPattern(proposedPattern);
+        if (isValid === false) {
+            return [false, error];
+        }
+
+        const ruleForProposedPattern = prefs.getRuleForPattern(proposedPattern);
+        // If there is a rule in the user's preferences for the pattern
+        // in the edit field, and that rule isn't for the currnetly
+        // selected pattern (as checked above), then send an error,
+        // since it means the user would be changing the pattern
+        // for the current rule to match a rule that already exists.
+        if (ruleForProposedPattern !== undefined)  {
+            return [
+                false,
+                `There is already a rule for '${proposedPattern}'`,
+            ];
+        }
+
+        return [true, undefined];
+    };
 
     Vue.component("web-api-standards", {
         props: ["dataCurrentStandardIds", "dataSelectedPattern",
@@ -13,7 +61,11 @@
         staticRenderFns: window.WEB_API_MANAGER.vueComponents["web-api-standards"].staticRenderFns,
         data: function () {
             return {
-                customConfigurationsHidden: true,
+                isCustomConfigurationsHidden: true,
+                isEditingRulePattern: false,
+                defaultPattern: constants.defaultPattern,
+                dataEditError: "",
+                proposedNewPattern: "",
             };
         },
         computed: {
@@ -141,6 +193,52 @@
             },
             toggleCustomConfigurations: function () {
                 this.customConfigurationsHidden = !this.customConfigurationsHidden;
+            },
+            changePatternSubmitted: function () {
+                const state = this.$root.$data;
+                const proposedPattern = String(this.proposedNewPattern).trim();
+
+                if (proposedPattern === this.dataSelectedPattern) {
+                    this.dataEditError = "No change made to the match pattern.";
+                    return;
+                }
+
+                const prefs = state.preferences;
+                const [isValid, error] = isNewPatternValid(proposedPattern, prefs);
+                if (isValid === false) {
+                    this.dataEditError = error;
+                    return;
+                }
+
+                stateLib.changePatternForRule(state, proposedPattern, this.dataSelectedPattern);
+                this.dataEditError = "";
+                this.isEditingRulePattern = false;
+            },
+            newPatternChanged: function ()  {
+                const fieldValue = String(this.proposedNewPattern).trim();
+                // If the pattern in the input field hasn't changed, or is equal
+                // to the pattern for the currently selected rule, then
+                // its a NOOP, so no error to display.
+                if (fieldValue === this.dataSelectedPattern) {
+                    this.dataEditError = "";
+                    return;
+                }
+
+                const prefs = this.$root.$data.preferences;
+                const [isValid, error] = isNewPatternValid(fieldValue, prefs);
+                if (isValid === false) {
+                    this.dataEditError = error;
+                    return;
+                }
+
+                // Otherwise, things look good, and there is no error to display.
+                this.dataEditError = "";
+            },
+        },
+        watch: {
+            dataSelectedPattern: function () {
+                this.dataEditError = "";
+                this.isEditingRulePattern = false;
             },
         },
     });

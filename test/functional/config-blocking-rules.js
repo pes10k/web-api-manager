@@ -7,6 +7,7 @@
 
 const assert = require("assert");
 const utils = require("./lib/utils");
+const ruleEditingUtils = require("./lib/rule-editing");
 const webdriver = require("selenium-webdriver");
 const by = webdriver.By;
 const until = webdriver.until;
@@ -144,6 +145,184 @@ describe("Config panel: Blocking rules", function () {
                     return driverRef.wait(until.elementLocated(by.css(query)), 1000);
                 })
                 .then(() => {
+                    driverRef.quit();
+                    done();
+                })
+                .catch(e => {
+                    driverRef.quit();
+                    done(e);
+                });
+        });
+    });
+
+    describe("Changing patterns for existing rules", function () {
+        this.timeout = () => 20000;
+
+        it("Visibility of 'Edit' button", function (done) {
+            const newRulePattern = "example.org";
+            let driverRef;
+            utils.promiseGetDriver()
+                .then(driver => {
+                    driverRef = driver;
+                    return utils.promiseExtensionConfigPage(driverRef);
+                })
+                .then(() => ruleEditingUtils.promiseGetPatternEditButton(driverRef))
+                .then(possibleButton => {
+                    assert.equal(
+                        possibleButton,
+                        undefined,
+                        "There should be no 'Edit' button visible initially."
+                    );
+                    return utils.promiseCreateBlockRule(driverRef, newRulePattern);
+                })
+                .then(() => utils.promiseSelectBlockRule(driverRef, newRulePattern))
+                .then(() => ruleEditingUtils.promiseGetPatternEditButton(driverRef))
+                .then(possibleButton => {
+                    assert.equal(
+                        possibleButton === undefined,
+                        false,
+                        "The 'Edit' button should be visible when selecting the new rule."
+                    );
+                    return utils.promiseSelectBlockRule(driverRef, defaultPattern);
+                })
+                .then(() => ruleEditingUtils.promiseGetPatternEditButton(driverRef))
+                .then(possibleButton => {
+                    assert.equal(
+                        possibleButton,
+                        undefined,
+                        "The 'Edit' button should not be visible after reselecting the default rule."
+                    );
+                    driverRef.quit();
+                    done();
+                })
+                .catch(e => {
+                    driverRef.quit();
+                    done(e);
+                });
+        });
+
+        it("Changing 'example.org' to 'example.com'", function (done) {
+            let driverRef;
+            const firstStdIdsToBlock = [1, 2, 3];
+            const secondStdIdsToBlock = [4, 5];
+            utils.promiseGetDriver()
+                .then(driver => {
+                    driverRef = driver;
+                    return utils.promiseExtensionConfigPage(driverRef);
+                })
+                .then(() => utils.promiseCreateBlockRule(driverRef, "example.org"))
+                .then(() => utils.promiseGetBlockedStandards(driverRef))
+                .then(blockedStandards => {
+                    assert.equal(
+                        blockedStandards.length,
+                        0,
+                        "'example.org' should initially have no standards blocked."
+                    );
+                })
+                .then(() => utils.promiseCreateBlockRule(driverRef, "other-example.org"))
+                .then(() => utils.promiseGetBlockedStandards(driverRef))
+                .then(blockedStandards => {
+                    assert.equal(
+                        blockedStandards.length,
+                        0,
+                        "'other-example.org' should also initially have no standards blocked."
+                    );
+                })
+                .then(() => utils.promiseSetBlockedStandards(driverRef, secondStdIdsToBlock))
+                .then(() => utils.promiseGetBlockedStandards(driverRef))
+                .then(blockedStandards => {
+                    assert.equal(
+                        JSON.stringify(blockedStandards.sort()),
+                        JSON.stringify(secondStdIdsToBlock),
+                        "'other-example.org' should now have two standards blocked."
+                    );
+                })
+                .then(() => utils.promiseSelectBlockRule(driverRef, "example.org"))
+                .then(() => utils.promiseSetBlockedStandards(driverRef, firstStdIdsToBlock))
+                .then(() => utils.promiseGetBlockedStandards(driverRef))
+                .then(blockedStandards => {
+                    assert.equal(
+                        JSON.stringify(blockedStandards.sort()),
+                        JSON.stringify(firstStdIdsToBlock),
+                        "'example.org' should have three standards blocked."
+                    );
+                })
+                .then(() => ruleEditingUtils.promiseGetPatternEditButton(driverRef))
+                .then(editButton => editButton.click())
+                .then(() => utils.pause(250))
+                .then(() => ruleEditingUtils.promiseSetPatternInput(driverRef, "example.net"))
+                .then(() => utils.pause(250))
+                .then(() => ruleEditingUtils.promiseGetPatternSaveButton(driverRef))
+                .then(saveButton => saveButton.click())
+                .then(() => utils.promiseSelectBlockRule(driverRef, "other-example.org"))
+                .then(() => utils.promiseGetBlockedStandards(driverRef))
+                .then(blockedStandards => {
+                    assert.equal(
+                        JSON.stringify(blockedStandards.sort()),
+                        JSON.stringify(secondStdIdsToBlock),
+                        "'other-example.org' should still have two standards blocked."
+                    );
+                })
+                .then(() => utils.promiseSelectBlockRule(driverRef, "example.net"))
+                .then(() => utils.promiseGetBlockedStandards(driverRef))
+                .then(blockedStandards => {
+                    assert.equal(
+                        JSON.stringify(blockedStandards.sort()),
+                        JSON.stringify(firstStdIdsToBlock),
+                        "'example.net' should have the three standards blocked that were set for 'example.org'."
+                    );
+                    driverRef.quit();
+                    done();
+                })
+                .catch(e => {
+                    driverRef.quit();
+                    done(e);
+                });
+        });
+
+        it("Changing rules with the edit field open", function (done) {
+            let driverRef;
+            const firstStdIdsToBlock = [1, 2, 3];
+            const secondStdIdsToBlock = [4, 5];
+            utils.promiseGetDriver()
+                .then(driver => {
+                    driverRef = driver;
+                    return utils.promiseExtensionConfigPage(driverRef);
+                })
+                .then(() => utils.promiseCreateBlockRule(driverRef, "example.org"))
+                .then(() => utils.promiseSetBlockedStandards(driverRef, firstStdIdsToBlock))
+                .then(() => utils.promiseCreateBlockRule(driverRef, "other-example.org"))
+                .then(() => utils.promiseSetBlockedStandards(driverRef, secondStdIdsToBlock))
+                .then(() => ruleEditingUtils.promiseGetPatternEditButton(driverRef))
+                .then(editButton => editButton.click())
+                .then(() => utils.pause(250))
+                .then(() => ruleEditingUtils.promiseGetPatternInputValue(driverRef))
+                .then(inputText => {
+                    assert.equal(
+                        inputText,
+                        "other-example.org",
+                        "Edit pattern field should contain the selected block rule."
+                    );
+                    return utils.promiseSelectBlockRule(driverRef, "example.org");
+                })
+                .then(() => ruleEditingUtils.promiseGetPatternInputValue(driverRef))
+                .then(inputText => {
+                    assert.equal(
+                        inputText,
+                        undefined,
+                        "The input field should be hidden when changing blocking rules."
+                    );
+                    return ruleEditingUtils.promiseGetPatternEditButton(driverRef);
+                })
+                .then(editButton => editButton.click())
+                .then(() => utils.pause(250))
+                .then(() => ruleEditingUtils.promiseGetPatternInputValue(driverRef))
+                .then(inputText => {
+                    assert.equal(
+                        inputText,
+                        "example.org",
+                        "The edit field should be updated with the value of the new blocking rule."
+                    );
                     driverRef.quit();
                     done();
                 })

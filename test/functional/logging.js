@@ -174,8 +174,8 @@ describe("Logging", function () {
                 const [server, url] = testServer.startWithFile("embedded-frames.html");
                 const testUrl = url;
                 const httpServer = server;
-                const webCryptoStandardId = 71;
-                const svgAndCryptoStandardIds = stdIdsToBlock.concat([webCryptoStandardId]);
+                const webCryptoStdId = 71;
+                const svgAndCryptoStdIds = stdIdsToBlock.concat([webCryptoStdId]);
                 let driverRef;
 
                 utils.promiseGetDriver()
@@ -183,7 +183,7 @@ describe("Logging", function () {
                         driverRef = driver;
                         return utils.promiseExtensionConfigPage(driverRef);
                     })
-                    .then(() => utils.promiseSetBlockedStandards(driverRef, svgAndCryptoStandardIds))
+                    .then(() => utils.promiseSetBlockedStandards(driverRef, svgAndCryptoStdIds))
                     .then(() => utils.promiseSetShouldLog(driverRef, enums.ShouldLogVal.STANDARD))
                     .then(() => driverRef.get(testUrl))
                     .then(() => driverRef.executeAsyncScript(svgTestScript))

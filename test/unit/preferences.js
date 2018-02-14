@@ -45,7 +45,7 @@ describe("Preferences management", function () {
         it("Default rule", function (done) {
             const prefs = preferencesLib.initNew();
             const defaultRule = prefs.getDefaultRule();
-            assert.equal(defaultRule.pattern, constants.defaultPattern, "getDefaultRule should return default pattern.");
+            assert.equal(defaultRule.getPattern(), constants.defaultPattern, "getDefaultRule should return default pattern.");
 
             assert.equal(defaultRule.getStandardIds().length, 0, "Default rule should initially not block any standards.");
             done();
@@ -63,7 +63,7 @@ describe("Preferences management", function () {
             assert.equal(numRulesPostAdd, 2, "Preferences should have two rules, default rule and added rule.");
 
             const newRule = prefs.getNonDefaultRules()[0];
-            assert.equal(newRule.pattern, testPattern, "Pattern on rule should match created rule's pattern.");
+            assert.equal(newRule.getPattern(), testPattern, "Pattern on rule should match created rule's pattern.");
 
             const areStandardIdsEqual = areArraysEqual(newRule.getStandardIds(), testStandardIds);
             assert.equal(areStandardIdsEqual, true, "Standard ids on rule should match created rule's ids.");
@@ -76,14 +76,14 @@ describe("Preferences management", function () {
             const testStandardIds = [1, 2, 3];
             const blockRule = blockRulesLib.init(testPattern, testStandardIds);
 
-            const wasDeletedPre = prefs.deleteRule(testPattern);
+            const wasDeletedPre = prefs.deleteRuleForPattern(testPattern);
             assert.equal(wasDeletedPre, false, "Attempting to delete a rule that does not exist should return false.");
 
             prefs.addRule(blockRule);
             const nonDefaultRulesPreDelete = prefs.getNonDefaultRules();
             assert.equal(nonDefaultRulesPreDelete.length, 1, "There should be one non-default rules after adding.");
 
-            const wasDeletedPost = prefs.deleteRule(testPattern);
+            const wasDeletedPost = prefs.deleteRuleForPattern(testPattern);
             assert.equal(wasDeletedPost, true, "Attempting to delete a rule that does exist should return true.");
 
             const nonDefaultRulesPostDelete = prefs.getNonDefaultRules();
@@ -99,7 +99,7 @@ describe("Preferences management", function () {
             assert.equal(areArraysEqual(standardIdsForDefaultRuleStart, []), true, "By default, standard rule should block no standards.");
 
             const updateStandardIds = [1, 2, 3];
-            prefs.upcertRuleStandardIds(preDefaultRule.pattern, updateStandardIds);
+            prefs.upcertRuleStandardIds(preDefaultRule.getPattern(), updateStandardIds);
             const postDefaultRule = prefs.getDefaultRule();
             const postStandardIds = postDefaultRule.getStandardIds();
             assert.equal(areArraysEqual(postStandardIds, updateStandardIds), true, "After upcert, the default rule should reflect new standards.");
@@ -139,7 +139,7 @@ describe("Preferences management", function () {
             assert.equal(postNonDefaultRules.length, 1, "Deserailized preferences should have one non-default rule");
 
             const postNonDefaultRule = postNonDefaultRules[0];
-            assert.equal(postNonDefaultRule.pattern, testNewPattern, "Deserialized non-default rule should match serialized pattern.");
+            assert.equal(postNonDefaultRule.getPattern(), testNewPattern, "Deserialized non-default rule should match serialized pattern.");
 
             const postNonDefaultStdIds = postNonDefaultRule.getStandardIds();
             const arePostStdIdsMatching = areArraysEqual(postNonDefaultStdIds, testNewRuleStdIds);

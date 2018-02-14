@@ -77,7 +77,7 @@
                 this.importLog = "";
 
                 const logMessages = newRules.map(newRule => {
-                    const newPattern = newRule.pattern;
+                    const newPattern = newRule.getPattern();
                     const currentRule = preferences.getRuleForPattern(newPattern);
                     if (currentRule !== undefined && shouldOverwrite === false) {
                         return ` ! ${newPattern}: Skipped. Set to not override.\n`;

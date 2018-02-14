@@ -29,6 +29,7 @@
                 }
 
                 stateLib.addPattern(state, this.newPattern);
+                this.errorMessage = "";
                 this.newPattern = "";
             },
             onRadioChange: function () {

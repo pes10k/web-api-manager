@@ -32,7 +32,7 @@ describe("Block rules managing", function () {
             it("Positive: input 'www.uic.edu' gives pattern 'www.uic.edu'", function (done) {
                 const testHost = "www.uic.edu";
                 const matchingRule = findMatchingRule(testHost);
-                assert.equal(matchingRule.pattern, "www.uic.edu");
+                assert.equal(matchingRule.getPattern(), "www.uic.edu");
                 done();
             });
 
@@ -48,7 +48,7 @@ describe("Block rules managing", function () {
             it("Positive: input 'www.example.com' gives pattern '*.example.com'", function (done) {
                 const testHost = "www.example.com";
                 const matchingRule = findMatchingRule(testHost);
-                assert.equal(matchingRule.pattern, "*.example.com");
+                assert.equal(matchingRule.getPattern(), "*.example.com");
                 done();
             });
 
@@ -64,7 +64,7 @@ describe("Block rules managing", function () {
             it("Positive: input 'example.com' gives pattern '*.example.com'", function (done) {
                 const testHost = "example.com";
                 const matchingRule = findMatchingRule(testHost);
-                assert.equal(matchingRule.pattern, "*.example.com");
+                assert.equal(matchingRule.getPattern(), "*.example.com");
                 done();
             });
         });

@@ -69,7 +69,7 @@
  *   Adds a blocking rule to the set of rules the user has set to block.
  *   This will not overwrite any rules, and returns false if there is
  *   already a rule in place for this pattern.  Otherwise returns true.
- * @property {function(MatchPattern): boolean} deleteRule
+ * @property {function(MatchPattern): boolean} deleteRuleForPattern
  *   Attempts to delete a blocking rule for the system, by looking to see
  *   if there is a BlockRule that matches the given pattern match.
  * @property {function(MatchPattern, Array.number): boolean} upcertRuleStandardIds
@@ -127,6 +127,8 @@
  *   be applied to a host.
  * @property {MatchPattern} pattern
  *   Read only reference to the match pattern this rule applies to.
+ * @property {function(MatchPattern): undefined} setPattern
+ *   Sets a new pattern that this rule should match against.
  * @property {function(): Array.number} getStandardIds
  *   Returns a new array of the standard ids being blocked by this rule.
  * @property {function(Array.number): undefined} setStandardIds

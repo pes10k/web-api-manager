@@ -18,7 +18,7 @@
             const {operation, ruleJSON} = data;
             const rule = blockRulesLib.fromJSON(ruleJSON);
             if (operation === "delete") {
-                preferences.deleteRule(rule.pattern);
+                preferences.deleteRuleForPattern(rule.getPattern());
                 return;
             }
             if (operation === "add") {
@@ -26,9 +26,9 @@
                 return;
             }
             if (operation === "update") {
-                preferences.upcertRuleStandardIds(rule.pattern, rule.getStandardIds());
+                preferences.upcertRuleStandardIds(rule.getPattern(), rule.getStandardIds());
                 preferences.upcertRuleCustomBlockedFeatures(
-                    rule.pattern,
+                    rule.getPattern(),
                     rule.getCustomBlockedFeatures()
                 );
                 return;
@@ -41,6 +41,9 @@
             return;
         }
 
+        // Message sent from the preferences page, instructing the background
+        // process that the user has changed her "should log" preference,
+        // and that persistant storage needs to be updated to track that.
         if (label === "updatePreferencesShouldLog") {
             const {shouldLog} = data;
             preferences.setShouldLog(shouldLog);
@@ -54,6 +57,17 @@
             const {templateRuleJSON} = data;
             const templateRule = blockRulesLib.fromJSON(templateRuleJSON);
             preferences.setTemplateRule(templateRule);
+            return;
+        }
+
+        // Message sent from the configuration page, indicating that the
+        // user has to changed the match pattern for an existing rule.
+        if (label === "updatePreferencesReplacePattern") {
+            const {currentPattern, newPattern} = data;
+            const existingRule = preferences.getRuleForPattern(currentPattern);
+            preferences.deleteRuleForPattern(newPattern);
+            existingRule.setPattern(newPattern);
+            preferences.addRule(existingRule);
             return;
         }
 
@@ -112,7 +126,7 @@
             const {action, hostName} = data;
             let numBlockedStandardsForHost;
             if (action === "block") {
-                preferences.deleteRule(hostName);
+                preferences.deleteRuleForPattern(hostName);
                 const defaultStdIds = preferences.getDefaultRule().getStandardIds();
                 numBlockedStandardsForHost = defaultStdIds.length;
             } else if (action === "allow") {

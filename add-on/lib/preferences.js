@@ -88,7 +88,7 @@
         let defaultRule;
         const nonDefaultRules = [];
         blockRulesRaw.map(blockRulesLib.fromData).forEach(rule => {
-            if (rule.pattern === defaultPattern) {
+            if (rule.getPattern() === defaultPattern) {
                 defaultRule = rule;
                 return;
             }
@@ -105,7 +105,7 @@
         // blocking rule itself.
         const patternsToRulesMap = nonDefaultRules
             .reduce((collection, rule) => {
-                collection[rule.pattern] = rule;
+                collection[rule.getPattern()] = rule;
                 return collection;
             }, Object.create(null));
 
@@ -133,7 +133,7 @@
             return patternsToRulesMap[pattern];
         };
 
-        const deleteRule = matchPattern => {
+        const deleteRuleForPattern = matchPattern => {
             if (patternsToRulesMap[matchPattern] === undefined) {
                 return false;
             }
@@ -143,15 +143,15 @@
         };
 
         const addRule = blockRule => {
-            if (blockRule.pattern === constants.defaultPattern) {
+            if (blockRule.getPattern() === constants.defaultPattern) {
                 return false;
             }
 
-            if (patternsToRulesMap[blockRule.pattern] !== undefined) {
+            if (patternsToRulesMap[blockRule.getPattern()] !== undefined) {
                 return false;
             }
 
-            patternsToRulesMap[blockRule.pattern] = blockRule;
+            patternsToRulesMap[blockRule.getPattern()] = blockRule;
             return true;
         };
 
@@ -241,7 +241,7 @@
             getAllRules,
             getRuleForUrl,
             getRuleForHost,
-            deleteRule,
+            deleteRuleForPattern,
             addRule,
             upcertRuleStandardIds,
             upcertRuleCustomBlockedFeatures,
@@ -256,7 +256,7 @@
         };
 
         if (syncWithDb === true) {
-            const modifyingMethods = ["deleteRule", "addRule",
+            const modifyingMethods = ["deleteRuleForPattern", "addRule",
                 "upcertRuleStandardIds", "upcertRuleCustomBlockedFeatures",
                 "setShouldLog", "setBlockCrossFrame", "setTemplateRule"];
             modifyingMethods.forEach(methodName => {
