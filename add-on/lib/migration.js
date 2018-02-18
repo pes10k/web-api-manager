@@ -189,6 +189,33 @@
     };
 
     /**
+     * Creates a new object, with the settings stored in the extensions version
+     * 6 preferences, but updated to support the version 7 schema.
+     *
+     * This function will migrate the current "block cross frame DOM access"
+     * setting to be rule (and template) specific.
+     *
+     * @param {object} data
+     *   Persistent data loaded from the storage API in the extension.
+     *
+     * @return {object}
+     *   A new read only object, describing the same preferences, but in the
+     *   schema 7 format.
+     */
+    const sixToSeven = data => {
+        const migratedData = JSON.parse(JSON.stringify(data));
+        migratedData.webApiManager.schema = 7;
+        const globalBlockCrossFrame = data.webApiManager.blockCrossFrame;
+        const rules = migratedData.webApiManager.rules;
+        migratedData.webApiManager.rules = rules.map(aRule => {
+            aRule.b = globalBlockCrossFrame;
+            return aRule;
+        });
+        migratedData.webApiManager.template.b = globalBlockCrossFrame;
+        return Object.freeze(migratedData);
+    };
+
+    /**
      * Apply any needed migrations to bring the structure of the given
      * stored preferences data to the current version.
      *
@@ -217,6 +244,7 @@
             threeToFour,
             fourToFive,
             fiveToSix,
+            sixToSeven,
         ];
 
         let currentMigratedVersion = foundDataVersion;
@@ -229,7 +257,10 @@
                 const migrationFunc = migrations[currentMigratedVersion - 1];
                 currentMigratedData = migrationFunc(currentMigratedData);
             } catch (e) {
-                return [false, `Invalid data: v: ${currentMigratedVersion}, data ${JSON.stringify(currentMigratedData)}, e: ${e}`];
+                const dataAsStr = JSON.stringify(currentMigratedData);
+                const version = currentMigratedVersion;
+                const msg = `Invalid data: v: ${version}, data ${dataAsStr}, e: ${e}`;
+                return [false, msg];
             }
             currentMigratedVersion += 1;
         }

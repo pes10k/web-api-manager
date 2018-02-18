@@ -106,8 +106,8 @@
         const matchingRule = prefs.getRuleForUrl(url);
         const standardIdsToBlock = matchingRule.getStandardIds();
         const customBlockedFeatures = matchingRule.getCustomBlockedFeatures();
+        const blockCrossFrame = matchingRule.getBlockCrossFrame();
         const shouldLog = prefs.getShouldLog();
-        const blockCrossFrame = prefs.getBlockCrossFrame();
 
         const randBytes = sjcl.random.randomWords(4);
         const randNonce = sjcl.codec.base64.fromBits(randBytes);

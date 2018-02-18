@@ -142,7 +142,9 @@ gulp.task("default", () => {
         fs.mkdirSync(vueTemplatesDestPath);
     }
 
-    fs.readdirSync(vueTemplatesSourcePath).forEach(filepath => {
+    const filesInVueTemplatesDir = fs.readdirSync(vueTemplatesSourcePath);
+    const vueTemplatesToCompile = filesInVueTemplatesDir.filter(path => path.endsWith(".html"));
+    vueTemplatesToCompile.forEach(filepath => {
         const absolutePath = path.join(__dirname, vueTemplatesSourcePath, filepath);
         const fileSource = fs.readFileSync(absolutePath, utf8Enc);
 

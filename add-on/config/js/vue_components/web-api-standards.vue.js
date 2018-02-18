@@ -46,7 +46,7 @@
         if (ruleForProposedPattern !== undefined)  {
             return [
                 false,
-                `There is already a rule for '${proposedPattern}'`,
+                `There is already a rule for '${proposedPattern}'.`,
             ];
         }
 
@@ -61,11 +61,11 @@
         staticRenderFns: window.WEB_API_MANAGER.vueComponents["web-api-standards"].staticRenderFns,
         data: function () {
             return {
-                isCustomConfigurationsHidden: true,
                 isEditingRulePattern: false,
                 defaultPattern: constants.defaultPattern,
                 dataEditError: "",
                 proposedNewPattern: "",
+                visibleSections: {},
             };
         },
         computed: {
@@ -191,9 +191,6 @@
                     : trimmedText.split("\n").map(elm => elm.trim());
                 stateLib.setCustomBlockedFeatures(state, blockedFeaturePaths);
             },
-            toggleCustomConfigurations: function () {
-                this.customConfigurationsHidden = !this.customConfigurationsHidden;
-            },
             changePatternSubmitted: function () {
                 const state = this.$root.$data;
                 const proposedPattern = String(this.proposedNewPattern).trim();
@@ -233,6 +230,10 @@
 
                 // Otherwise, things look good, and there is no error to display.
                 this.dataEditError = "";
+            },
+            toggleVisibleSection: function (categoryId) {
+                const currentVal = !!this.visibleSections[categoryId];
+                Vue.set(this.visibleSections, categoryId, !currentVal);
             },
         },
         watch: {

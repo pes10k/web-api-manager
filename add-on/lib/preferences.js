@@ -16,6 +16,7 @@
     const emptyTemplate = {
         s: [],
         f: [],
+        b: false,
     };
 
     /**
@@ -63,9 +64,6 @@
      * @param {?object} templateData
      *   An optional object specifying the standards and features that should
      *   be used for a template rule.
-     * @param {?boolean} blockCrossFrame
-     *   A boolean value, describing whether cross frame access should be
-     *   blocked.  Defaults to false.
      * @param {?boolean} syncWithDb
      *   A boolean value, describing whether the given preferences object
      *   should automatically be kept in sync with the underlying, persistant
@@ -74,7 +72,7 @@
      * @return {Preferences}
      *   An initilized, preferences object.
      */
-    const init = (blockRulesRaw = [], shouldLog, templateData, blockCrossFrame, syncWithDb) => {
+    const init = (blockRulesRaw = [], shouldLog, templateData, syncWithDb) => {
         let shouldLogLocal = shouldLog || enums.ShouldLogVal.NONE;
         const defaultTemplateValue = {
             p: templatePattern,
@@ -83,7 +81,6 @@
         };
 
         const templateDataLocal = JSON.parse(JSON.stringify(templateData)) || defaultTemplateValue;
-        let blockCrossFrameLocal = !!blockCrossFrame;
 
         let defaultRule;
         const nonDefaultRules = [];
@@ -207,12 +204,6 @@
             templateDataLocal.f = blockRule.getCustomBlockedFeatures();
         };
 
-        const getBlockCrossFrame = () => blockCrossFrameLocal;
-
-        const setBlockCrossFrame = blockCrossFrame => {
-            blockCrossFrameLocal = !!blockCrossFrame;
-        };
-
         const toJSON = () => {
             const rulesData = getAllRules().map(rule => rule.toData());
 
@@ -220,7 +211,6 @@
                 rules: rulesData,
                 shouldLog: getShouldLog(),
                 template: templateDataLocal,
-                blockCrossFrame: getBlockCrossFrame(),
             });
         };
 
@@ -230,7 +220,6 @@
                 rules: getAllRules().map(rule => rule.toData()),
                 shouldLog: getShouldLog(),
                 template: templateDataLocal,
-                blockCrossFrame: getBlockCrossFrame(),
             };
         };
 
@@ -249,8 +238,6 @@
             getShouldLog,
             getTemplateRule,
             setTemplateRule,
-            getBlockCrossFrame,
-            setBlockCrossFrame,
             toStorage,
             toJSON,
         };
@@ -258,7 +245,7 @@
         if (syncWithDb === true) {
             const modifyingMethods = ["deleteRuleForPattern", "addRule",
                 "upcertRuleStandardIds", "upcertRuleCustomBlockedFeatures",
-                "setShouldLog", "setBlockCrossFrame", "setTemplateRule"];
+                "setShouldLog", "setTemplateRule"];
             modifyingMethods.forEach(methodName => {
                 response[methodName] = resync(response[methodName]);
             });
@@ -298,7 +285,6 @@
             let blockRulesRaw = [];
             let template = emptyTemplate;
             let shouldLog = enums.ShouldLogVal.NONE;
-            let blockCrossFrame = false;
 
             if (migratedData &&
                     migratedData[storageKey] &&
@@ -306,10 +292,9 @@
                 blockRulesRaw = migratedData[storageKey].rules;
                 shouldLog = migratedData[storageKey].shouldLog;
                 template = migratedData[storageKey].template;
-                blockCrossFrame = !!migratedData[storageKey].blockCrossFrame;
             }
 
-            instance = init(blockRulesRaw, shouldLog, template, blockCrossFrame, true);
+            instance = init(blockRulesRaw, shouldLog, template, true);
 
             if (callback !== undefined) {
                 callback(instance);
@@ -371,8 +356,8 @@
             throw `Invalid preferences JSON: ${jsonString} does not have an array for the features in the template.`;
         }
 
-        const {rules, shouldLog, template, blockCrossFrame} = data;
-        return init(rules, shouldLog, template, blockCrossFrame, false);
+        const {rules, shouldLog, template} = data;
+        return init(rules, shouldLog, template, false);
     };
 
     /**

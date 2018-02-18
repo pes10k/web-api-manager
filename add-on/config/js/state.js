@@ -118,7 +118,7 @@
         state.dataTemplateStandards = templateRule.getStandardIds();
         state.dataTemplateCustomBlockedFeatures = templateRule.getCustomBlockedFeatures();
 
-        state.dataBlockCrossFrame = preferences.getBlockCrossFrame();
+        // state.dataBlockCrossFrame = preferences.getBlockCrossFrame();
         state.preferences = preferences;
         return state;
     };
@@ -137,7 +137,7 @@
         state.dataCurrentStandardIds = currentRule.getStandardIds();
         state.dataShouldLog = state.preferences.getShouldLog();
         state.dataCurrentCustomBlockedFeatures = currentRule.getCustomBlockedFeatures().join("\n");
-        state.dataBlockCrossFrame = state.preferences.getBlockCrossFrame();
+        // state.dataBlockCrossFrame = state.preferences.getBlockCrossFrame();
         state.dataAllowingAllPatterns = state.preferences.getAllRules()
             .filter(rule => rule.isBlockingAnyFeatures() === false)
             .map(rule => rule.getPattern());

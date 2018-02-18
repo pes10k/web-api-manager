@@ -23,7 +23,9 @@
 
     try {
         domainPref = cookies2.get(standardsCookieName);
-        cookies2.remove(standardsCookieName, {path: window.document.location.pathname});
+        cookies2.remove(standardsCookieName, {
+            path: window.document.location.pathname,
+        });
     } catch (e) {
         // This can happen if an iframe tries to read the cookie created from
         // a parent request without the allow-same-origin attribute.
@@ -43,7 +45,9 @@
     }
 
     if (!domainPref) {
-        consoleLog.call(console, `Unable to find Web API Manager settings: ${doc.location.href}`);
+        const currentUrl = doc.location.href;
+        const error = `Unable to find Web API Manager settings: ${currentUrl}`;
+        consoleLog.call(console, error);
         return;
     }
 
@@ -63,7 +67,8 @@
 
     const eventName = "__wamEvent" + blockingSettings.randNonce;
     doc.addEventListener(eventName, event => {
-        browserLib.getRootObject().runtime.sendMessage(["blockedFeature", event.detail]);
+        const message = ["blockedFeature", event.detail];
+        browserLib.getRootObject().runtime.sendMessage(message);
     });
 
     script.appendChild(doc.createTextNode(scriptToInject));

@@ -93,12 +93,6 @@
  * @property {function(): ShouldLogVal} getShouldLog
  *   Returns whether the system is currently configured to log
  *   what standards / features are blocked.
- * @property {function(): boolean} getBlockCrossFrame
- *   Gets whether the system should block frames from access the DOM of other
- *   frames.
- * @property {function(boolean): undefined} setBlockCrossFrame
- *   Sets whether the system should block frames from access the DOM of other
- *   frames.
  * @property {function(): object} toStorage
  *   Returns an encoding of the preferences object that can be saved
  *   using the storage API.
@@ -125,7 +119,7 @@
  * @property {function(string): boolean} isMatchingHost
  *   Returns a boolean description of whether this block rule should
  *   be applied to a host.
- * @property {MatchPattern} pattern
+ * @property {MatchPattern} getPattern
  *   Read only reference to the match pattern this rule applies to.
  * @property {function(MatchPattern): undefined} setPattern
  *   Sets a new pattern that this rule should match against.
@@ -146,6 +140,10 @@
  * @property {function(): boolean} isBlockingAnyFeatures
  *   Returns true if this rule is blocking any features, either b/c of blocking
  *   a standard, or because of a custom blocking rule.
+ * @property {function(): boolean} getBlockCrossFrame
+ *   Gets whether this rule says that cross-frame DOM access should be blocked.
+ * @property {function(boolean): undefined} setBlockCrossFrame
+ *    Sets whether this rule says that cross-frame DOM access should be blocked.
  */
 
 /**

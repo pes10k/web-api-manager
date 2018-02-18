@@ -2,22 +2,18 @@ body {
     min-width: 800px;
 }
 
-.list-group-item .badge a {
-    color: white;
+.list-group-item-header {
+    margin-bottom: 0;
+    overflow: hidden;
 }
 
-.web-api-standards-container h3 {
-    margin-top: 0;
+.list-group-item-body {
+    clear: both;
 }
 
-section p:first-child {
-    padding-top: 1em;
-}
-
-section.container {
-    margin-top: 2em;
-}
-
-section {
-    margin-bottom: 5em;
+.standard-name {
+    position: relative;
+    /* Offset the standards title to make it vertically align
+     * with the buttons in the row. */
+    top: .25em;
 }
