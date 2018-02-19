@@ -9,9 +9,10 @@ body {
 
 .list-group-item-body {
     clear: both;
+    margin-top: .5rem;
 }
 
-.standard-name {
+.list-group-item-header > span {
     position: relative;
     /* Offset the standards title to make it vertically align
      * with the buttons in the row. */

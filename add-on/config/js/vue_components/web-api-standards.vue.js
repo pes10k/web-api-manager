@@ -55,8 +55,9 @@
 
     Vue.component("web-api-standards", {
         props: ["dataCurrentStandardIds", "dataSelectedPattern",
-            "dataShouldLog", "dataTemplate", "dataCurrentCustomBlockedFeatures",
-            "dataTemplateStandards", "dataTemplateCustomBlockedFeatures"],
+            "dataShouldBlockCrossFrame", "dataShouldLog", "dataTemplate",
+            "dataCurrentCustomBlockedFeatures", "dataTemplateStandards",
+            "dataTemplateCustomBlockedFeatures"],
         render: window.WEB_API_MANAGER.vueComponents["web-api-standards"].render,
         staticRenderFns: window.WEB_API_MANAGER.vueComponents["web-api-standards"].staticRenderFns,
         data: function () {

@@ -35,12 +35,6 @@
             }
         }
 
-        if (label === "updatePreferencesBlockCrossFrame") {
-            const {blockCrossFrame} = data;
-            preferences.setBlockCrossFrame(blockCrossFrame);
-            return;
-        }
-
         // Message sent from the preferences page, instructing the background
         // process that the user has changed her "should log" preference,
         // and that persistant storage needs to be updated to track that.

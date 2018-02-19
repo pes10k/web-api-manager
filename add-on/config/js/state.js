@@ -48,22 +48,6 @@
     };
 
     /**
-     * Sends a message to the background script, telling that "true" version
-     * of the user's preferences that the user has changed their
-     * "block cross frame"  setting.
-     *
-     * @param {boolean} blockCrossFrame
-     *   Whether the user wants to block cross-frame access.
-     *
-     * @return {undefined}
-     */
-    const updateBackgroundProcessOfBlockCrossFrameChange = blockCrossFrame => {
-        rootObject.runtime.sendMessage(["updatePreferencesBlockCrossFrame", {
-            blockCrossFrame,
-        }]);
-    };
-
-    /**
      * Sends a message to the background script that the user's template value
      * has been updated.
      *
@@ -165,23 +149,22 @@
             .sort();
     };
 
-    const setTemplateData = (state, standardIds, customBlockedFeatures) => {
+    const setTemplateData = (state, standardIds, customBlockedFeatures, blockCrossFrame) => {
         const templateRule = state.preferences.getTemplateRule();
         templateRule.setStandardIds(standardIds);
         templateRule.setCustomBlockedFeatures(customBlockedFeatures);
+        templateRule.setBlockCrossFrame(blockCrossFrame);
         state.preferences.setTemplateRule(templateRule);
         resyncWithPrefs(state);
         notifyBackgroundProcessOfTemplateChange(templateRule);
     };
 
     const setCurrentStandardIds = (state, standardIds) => {
-        state.preferences.upcertRuleStandardIds(
-            state.dataSelectedPattern,
-            arrayStrsToNums(standardIds)
-        );
+        const currentRule = getCurrentRule(state);
+        currentRule.setStandardIds(arrayStrsToNums(standardIds));
         resyncWithPrefs(state);
         // Notify background process to keep preferences in sync.
-        notifyBackgroundProcessOfRuleChange("update", getCurrentRule(state));
+        notifyBackgroundProcessOfRuleChange("update", currentRule);
     };
 
     const deletePattern = (state, pattern) => {
@@ -212,17 +195,12 @@
         updateBackgroundProcessOfShouldLogChange(shouldLog);
     };
 
-    const setStandardIdsForPattern = (state, pattern, standardIds) => {
-        state.preferences.upcertRuleStandardIds(pattern, arrayStrsToNums(standardIds));
-        resyncWithPrefs(state);
-        // Notify background process to keep preferences in sync
-        notifyBackgroundProcessOfRuleChange("update", state.preferences.getRuleForPattern(pattern));
-    };
-
-    const setBlockCrossFrame = (state, blockCrossFrame) => {
-        state.preferences.setBlockCrossFrame(blockCrossFrame);
-        resyncWithPrefs(state);
-        updateBackgroundProcessOfBlockCrossFrameChange(state.preferences.getBlockCrossFrame());
+    const upcertRule = (state, newRule, sync = true) => {
+        state.preferences.upcertRule(newRule);
+        if (sync === true) {
+            resyncWithPrefs(state);
+            notifyBackgroundProcessOfRuleChange("update", newRule);
+        }
     };
 
     const setCustomBlockedFeatures = (state, customBlockedFeatures) => {
@@ -259,11 +237,10 @@
         patternsBlockingStandards,
         setTemplateData,
         setCurrentStandardIds,
+        upcertRule,
         deletePattern,
         addPattern,
         setShouldLog,
-        setStandardIdsForPattern,
-        setBlockCrossFrame,
         setCustomBlockedFeatures,
         changePatternForRule,
     };

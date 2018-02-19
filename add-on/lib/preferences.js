@@ -152,40 +152,31 @@
             return true;
         };
 
-        const upcertRuleStandardIds = (pattern, standardIds) => {
+        const upcertRule = rule => {
+            const pattern = rule.getPattern();
+
+            const standardIds = rule.getStandardIds();
+            const features = rule.getCustomBlockedFeatures();
+            const blockCrossFrame = rule.getBlockCrossFrame();
+
             if (pattern === defaultPattern) {
                 defaultRule.setStandardIds(standardIds);
+                defaultRule.setCustomBlockedFeatures(features);
+                defaultRule.setBlockCrossFrame(blockCrossFrame);
                 return false;
             }
 
             const isNewRule = patternsToRulesMap[pattern] === undefined;
-
             if (isNewRule) {
-                addRule(blockRulesLib.init(pattern, standardIds, []));
-            } else {
-                const existingRule = patternsToRulesMap[pattern];
-                existingRule.setStandardIds(standardIds);
+                addRule(rule);
+                return true;
             }
 
-            return isNewRule;
-        };
-
-        const upcertRuleCustomBlockedFeatures = (pattern, customBlockedFeatures) => {
-            if (pattern === defaultPattern) {
-                defaultRule.setCustomBlockedFeatures(customBlockedFeatures);
-                return false;
-            }
-
-            const isNewRule = patternsToRulesMap[pattern] === undefined;
-
-            if (isNewRule) {
-                addRule(blockRulesLib.init(pattern, [], customBlockedFeatures));
-            } else {
-                const existingRule = patternsToRulesMap[pattern];
-                existingRule.setCustomBlockedFeatures(customBlockedFeatures);
-            }
-
-            return isNewRule;
+            const existingRule = patternsToRulesMap[pattern];
+            existingRule.setStandardIds(standardIds);
+            existingRule.setCustomBlockedFeatures(features);
+            existingRule.setBlockCrossFrame(blockCrossFrame);
+            return false;
         };
 
         const setShouldLog = newShouldLog => {
@@ -232,8 +223,7 @@
             getRuleForHost,
             deleteRuleForPattern,
             addRule,
-            upcertRuleStandardIds,
-            upcertRuleCustomBlockedFeatures,
+            upcertRule,
             setShouldLog,
             getShouldLog,
             getTemplateRule,
@@ -244,8 +234,7 @@
 
         if (syncWithDb === true) {
             const modifyingMethods = ["deleteRuleForPattern", "addRule",
-                "upcertRuleStandardIds", "upcertRuleCustomBlockedFeatures",
-                "setShouldLog", "setTemplateRule"];
+                "upcertRule", "setShouldLog", "setTemplateRule"];
             modifyingMethods.forEach(methodName => {
                 response[methodName] = resync(response[methodName]);
             });

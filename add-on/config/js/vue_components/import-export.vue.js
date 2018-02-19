@@ -5,6 +5,46 @@
     const Vue = window.Vue;
 
     /**
+     * A function for reducing an array of BlockRule objects into
+     * two arrays, one containing BlockRule objects that should not
+     * be imported (b/c they match and existing rule and the "should overwrite"
+     * option was not checked), and the other an array of BlockRule objects
+     * that should be imported.
+     *
+     * Note that this function assumes that the user has *not* checked the
+     * "should overwrite" option, since if they have, there is no reason to
+     * perform any filtering (every rule will be imported).
+     *
+     * @param {Preferences} prefs
+     *   The preferences object, describing which rules the user has configured
+     *   so far.
+     * @param {Array.<?Array.BlockRule, ?Array.BlockRule>} collection
+     *   The existing two arrays of block rules.  The incoming `rule`
+     *   will be placed into one of these two bins.
+     * @param {BlockRule} rule
+     *   A block rule that will either be sorted into the "should ignore"
+     *   bin (collection[0]) or the "should import" bin (collection[1]).
+     *
+     * @return {Array.<?Array.BlockRule, ?Array.BlockRule>}
+     *   The `collection` array, with the `rule` object added to one of the
+     *   two child arrays.
+     */
+    const reduceNewRules = (prefs, collection, rule) => {
+        const newPattern = rule.getPattern();
+        const currentRule = prefs.getRuleForPattern(newPattern);
+        const isExistingRule = currentRule !== undefined;
+
+        const [rulesToSkip, rulesToImport] = collection;
+        if (isExistingRule === true) {
+            rulesToSkip.push(rule);
+        } else {
+            rulesToImport.push(rule);
+        }
+
+        return collection;
+    };
+
+    /**
      * Checks to make sure the given string is a valid set of data to import
      * as block rules.
      *
@@ -76,20 +116,45 @@
                 const newRules = this.dataToImport;
                 this.importLog = "";
 
-                const logMessages = newRules.map(newRule => {
-                    const newPattern = newRule.getPattern();
-                    const currentRule = preferences.getRuleForPattern(newPattern);
-                    if (currentRule !== undefined && shouldOverwrite === false) {
-                        return ` ! ${newPattern}: Skipped. Set to not override.\n`;
-                    }
+                // In order to limit the amount of cross-boundary (content
+                // script to background script) serializaton needed, we
+                // want to only sync with the backed on the the last rule
+                // imported.  In order to do this, we need to
+                //   1) Identify which rules will cause changes (ie
+                //      filter out rules that match existing rules and will
+                //      be skipped b/c the "should overwrite" checkbox is
+                //      not checked).
+                //   2) Update the local (config page) copy of the preferences
+                //      for every imported rule
+                //   3) On the last imported rule, instruct the local version
+                //      of the preferences object to syncronize with the
+                //      background / true one.
+                let rulesToSkip;
+                let rulesToImport;
 
-                    const newStandardIds = newRule.getStandardIds();
-                    stateLib.setStandardIdsForPattern(state, newPattern, newStandardIds);
-                    return ` * ${newPattern}: Blocking ${newStandardIds.length} standards.\n`;
+                if (shouldOverwrite === true) {
+                    rulesToSkip = [];
+                    rulesToImport = newRules;
+                } else {
+                    const reducer = reduceNewRules.bind(undefined, preferences);
+                    [rulesToSkip, rulesToImport] = newRules.reduce(reducer, [[], []]);
+                }
+
+                const logMessagesReSkippedRules = rulesToSkip.map(rule => {
+                    return ` ! ${rule.getPattern()}: Skipped. Set to not override.`;
+                });
+
+                const numRulesToImport = rulesToImport.length;
+                const indexOfFinalRule = numRulesToImport - 1;
+                const logMessagesReImportedRules = rulesToImport.map((rule, index) => {
+                    const isFinalRule = indexOfFinalRule === index;
+                    stateLib.upcertRule(state, rule, isFinalRule);
+                    const numStandards = rule.getStandardIds().length;
+                    return ` * ${rule.getPattern()}: Blocking ${numStandards} standards.`;
                 });
 
                 this.importError = false;
-                this.importLog = logMessages.join("\n");
+                this.importLog = logMessagesReSkippedRules.concat(logMessagesReImportedRules).join("\n");
 
                 event.stopPropagation();
                 event.preventDefault();
