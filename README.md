@@ -1,6 +1,9 @@
 Web API Manager
 ===
 
+*This project is not currently maintained*. I no longer have the time to keep
+it supported.  I would welcome a co-maintainer to work with though, if someone
+might be interested. If so, please contact me over email.
 
 Running the Extension
 ---
