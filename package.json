@@ -4,7 +4,9 @@
     "description": "Tools to generate Web API managing browser extensions for Firefox and Chrome.",
     "author": "Peter Snyder <psnyde2@uic.edu> (https://www.cs.uic.edu/~psnyder/)",
     "license": "GPL-3.0",
-    "dependencies": {},
+    "dependencies": {
+        "tar": "^4.4.8"
+    },
     "homepage": "https://github.com/snyderp/web-api-manager",
     "bugs": {
         "url": "https://github.com/snyderp/web-api-manager/issues",
@@ -39,9 +41,9 @@
     "devDependencies": {
         "assert": "^1.4.1",
         "cross-env": "^5.2.0",
-        "eslint": "^4.19.1",
-        "geckodriver": "^1.11.0",
-        "gulp": "^3.9.1",
+        "eslint": "^5.16.0",
+        "geckodriver": "^1.16.2",
+        "gulp": "^4.0.2",
         "mocha": "^4.1.0",
         "pre-commit": "^1.2.2",
         "selenium-webdriver": "^3.6.0",
@@ -49,6 +51,6 @@
         "uri-js": "^3.0.2",
         "vue": "^2.5.16",
         "vue-template-compiler": "^2.5.16",
-        "web-ext": "^2.7.0"
+        "web-ext": "^3.0.0"
     }
 }
